@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/background">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/navigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@color/navigateBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/settingsButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/settings_navigationbar"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/findCountryButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/findcountry_navigationbar"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/topButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="47dp"
+            android:layout_marginBottom="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/settingsButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/top_navigationbar" />
+
+        <ImageView
+            android:id="@+id/saveButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="47dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/findCountryButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/save_navigationbar" />
+
+        <ImageView
+            android:id="@+id/homeButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="46dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="47dp"
+            android:layout_marginBottom="23dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/topButton"
+            app:layout_constraintStart_toEndOf="@+id/saveButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/selectedhome_navigationbar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentMenuView"
+        android:name="by.roman.worldradio2.HomeFragment"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/navigationBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="877dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
