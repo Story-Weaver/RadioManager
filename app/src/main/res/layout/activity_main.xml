@@ -37,8 +37,10 @@
             android:layout_height="30dp"
             android:layout_marginStart="45dp"
             android:layout_marginTop="22dp"
+            android:layout_marginEnd="47dp"
             android:layout_marginBottom="23dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/saveButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/findcountry_navigationbar"
@@ -87,10 +89,11 @@
         android:id="@+id/fragmentMenuView"
         android:name="by.roman.worldradio2.HomeFragment"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="75dp"
         app:layout_constraintBottom_toTopOf="@+id/navigationBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="877dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
