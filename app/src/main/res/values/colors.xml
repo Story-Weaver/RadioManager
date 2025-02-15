@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#100E1B</color>
     <color name="navigateBar">#080613</color>
+    <color name="backgroundcard">#231D30</color>
 </resources>
