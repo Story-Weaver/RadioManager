@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void change(Fragment f){
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.fragment_fade_in,R.anim.fragment_fade_out);
         ft.replace(R.id.fragmentMenuView,f);
         ft.commit();
     }
