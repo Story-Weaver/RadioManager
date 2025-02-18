@@ -1,7 +1,6 @@
 package by.roman.worldradio2.dataclasses;
 
-public class HomeCardItem {
-    private String logoURL;
+public class HomeCardItem {    private String logoURL;
     private String nameStation;
     private boolean isPlaying;
 
