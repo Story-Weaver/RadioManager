@@ -87,7 +87,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentMenuView"
-        android:name="by.roman.worldradio2.HomeFragment"
+        android:name="by.roman.worldradio2.fragments.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="75dp"

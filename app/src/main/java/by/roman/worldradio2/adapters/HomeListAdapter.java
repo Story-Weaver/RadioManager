@@ -1,7 +1,6 @@
-package by.roman.worldradio2;
+package by.roman.worldradio2.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+import by.roman.worldradio2.R;
+import by.roman.worldradio2.dataclasses.HomeCardItem;
+
+public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
     private List<HomeCardItem> cards;
     private Context context;
     private OnItemClickListener listener;
-    private int selectedPosition = RecyclerView.NO_POSITION;
 
-    public ListAdapter(Context context, List<HomeCardItem> cards, OnItemClickListener listener) {
+    public HomeListAdapter(Context context, List<HomeCardItem> cards, OnItemClickListener listener) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
@@ -43,7 +44,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         // Устанавливаем текст
         holder.nameStation.setText(card.getNameStation());
-        holder.nameSong.setText(card.getNameSong());
 
         // Загружаем картинку с помощью Glide
         Glide.with(context)
@@ -67,14 +67,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition(); // Берём актуальную позицию
             if (adapterPosition == RecyclerView.NO_POSITION) return;
-            // Сбрасываем флаг isPlaying у всех элементов
+
             for (HomeCardItem item : cards) {
                 item.setPlaying(false);
-            }
-            cards.get(adapterPosition).setPlaying(true);
+            }cards.get(adapterPosition).setPlaying(true);
             notifyDataSetChanged();
             if(listener != null){
-                listener.onItemClick(selectedPosition);
+                listener.onItemClick(position);
             }
         });
     }
@@ -85,13 +84,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameStation, nameSong;
+        TextView nameStation;
         ImageView logoStation, sound;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameStation = itemView.findViewById(R.id.nameStationView);
-            nameSong = itemView.findViewById(R.id.nameSongView);
             logoStation = itemView.findViewById(R.id.logoStationView);
             sound = itemView.findViewById(R.id.soundView);
         }

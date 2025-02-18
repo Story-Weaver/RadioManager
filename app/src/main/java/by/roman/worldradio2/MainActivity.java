@@ -2,7 +2,6 @@ package by.roman.worldradio2;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +12,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import by.roman.worldradio2.fragments.FindCountryFragment;
+import by.roman.worldradio2.fragments.HomeFragment;
+import by.roman.worldradio2.fragments.SaveFragment;
+import by.roman.worldradio2.fragments.SettingsFragment;
+import by.roman.worldradio2.fragments.TopFragment;
 
 public class MainActivity extends AppCompatActivity {
 
