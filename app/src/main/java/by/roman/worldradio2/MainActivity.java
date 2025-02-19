@@ -1,7 +1,9 @@
 package by.roman.worldradio2;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import by.roman.worldradio2.dataclasses.RadioStations;
 import by.roman.worldradio2.fragments.FindCountryFragment;
 import by.roman.worldradio2.fragments.HomeFragment;
 import by.roman.worldradio2.fragments.SaveFragment;
@@ -21,6 +27,7 @@ import by.roman.worldradio2.fragments.TopFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int frame = 2;
     private ImageView button_country;
     private ImageView button_settings;
     private ImageView button_save;
@@ -38,33 +45,56 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        List<RadioStations> radioStationsList = new ArrayList<>();
+        radioStationsList.add(new RadioStations("","Radio Country Live New York","https://streaming.radiostreamlive.com/radiocountrylive_devices","usa",null,0,0,"en"));
+        radioStationsList.add(new RadioStations("https://upload.wikimedia.org/wikipedia/commons/5/51/RTL_logo.svg","RTL","http://streaming.radio.rtl.fr/rtl-1-44-128","france",null,0,0,"fr"));
         initObjects();
+        RadioMeneger radioMeneger = new RadioMeneger(this);
 
         button_country.setOnClickListener(v ->{
-            change(new FindCountryFragment());
-            resetIcons();
-            button_country.setImageDrawable(getDrawable(R.drawable.selectedfindcountry_navigationbar));
+            if(frame != 0){
+                change(new FindCountryFragment());
+                resetIcons();
+                frame = 0;
+                RadioStations r = radioStationsList.get(0);
+                radioMeneger.play(r.getStreamUrl());
+                button_country.setImageDrawable(getDrawable(R.drawable.selectedfindcountry_navigationbar));
+            }
+
         });
         button_save.setOnClickListener(v ->{
-            change(new SaveFragment());
-            resetIcons();
-            button_save.setImageDrawable(getDrawable(R.drawable.selectedsave_navigationbar));
+            if(frame != 1){
+                change(new SaveFragment());
+                resetIcons();
+                frame = 1;
+                button_save.setImageDrawable(getDrawable(R.drawable.selectedsave_navigationbar));
+            }
         });
         button_home.setOnClickListener(v ->{
-            change(new HomeFragment());
-            resetIcons();
-            button_home.setImageDrawable(getDrawable(R.drawable.selectedhome_navigationbar));
+            if(frame != 2){
+                change(new HomeFragment());
+                resetIcons();
+                frame = 2;
+                button_home.setImageDrawable(getDrawable(R.drawable.selectedhome_navigationbar));
+            }
         });
-        button_top.setOnClickListener(v ->{
-            change(new TopFragment());
-            resetIcons();
-            button_top.setImageDrawable(getDrawable(R.drawable.selectedtop_navigationbar));
+
+        button_top.setOnClickListener(v -> {
+            if(frame != 3){
+                change(new TopFragment());
+                resetIcons();
+                frame = 3;
+                button_top.setImageDrawable(getDrawable(R.drawable.selectedtop_navigationbar));
+            }
         });
+
         button_settings.setOnClickListener(v ->{
-            change(new SettingsFragment());
-            resetIcons();
-            button_settings.setImageDrawable(getDrawable(R.drawable.selectedsettings_navigationbar));
+            if(frame != 4){
+                frame = 4;
+                change(new SettingsFragment());
+                resetIcons();
+                button_settings.setImageDrawable(getDrawable(R.drawable.selectedsettings_navigationbar));
+            }
         });
 
     }

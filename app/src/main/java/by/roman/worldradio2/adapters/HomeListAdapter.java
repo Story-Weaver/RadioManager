@@ -16,17 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.RadioMeneger;
 import by.roman.worldradio2.dataclasses.HomeCardItem;
+import by.roman.worldradio2.dataclasses.RadioStations;
 
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
-    private List<HomeCardItem> cards;
     private Context context;
+    RadioMeneger radioMeneger;
+    private List<HomeCardItem> cards;
     private OnItemClickListener listener;
-
     public HomeListAdapter(Context context, List<HomeCardItem> cards, OnItemClickListener listener) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
+        this.radioMeneger = new RadioMeneger(context);
     }
     @Override
     @NonNull
@@ -36,6 +39,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     }
     public interface OnItemClickListener {
         void onItemClick(int position);
+
     }
 
     @Override
@@ -67,6 +71,9 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         holder.itemView.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition(); // Берём актуальную позицию
             if (adapterPosition == RecyclerView.NO_POSITION) return;
+            radioMeneger.stop();
+            radioMeneger.release();
+            radioMeneger.play(cards.get(adapterPosition).getStreamUrl());
 
             for (HomeCardItem item : cards) {
                 item.setPlaying(false);
