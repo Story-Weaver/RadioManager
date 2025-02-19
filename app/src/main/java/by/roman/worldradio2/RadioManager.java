@@ -11,11 +11,11 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 
-public class RadioMeneger {
+public class RadioManager {
     private final Context context;
     private ExoPlayer player;
 
-    public RadioMeneger(Context context) {
+    public RadioManager(Context context) {
         this.context = context.getApplicationContext(); // Используем Application Context
         initializePlayer();
     }

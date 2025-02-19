@@ -1,9 +1,7 @@
 package by.roman.worldradio2;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -12,7 +10,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
@@ -45,19 +42,13 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        List<RadioStations> radioStationsList = new ArrayList<>();
-        radioStationsList.add(new RadioStations("","Radio Country Live New York","https://streaming.radiostreamlive.com/radiocountrylive_devices","usa",null,0,0,"en"));
-        radioStationsList.add(new RadioStations("https://upload.wikimedia.org/wikipedia/commons/5/51/RTL_logo.svg","RTL","http://streaming.radio.rtl.fr/rtl-1-44-128","france",null,0,0,"fr"));
-        initObjects();
-        RadioMeneger radioMeneger = new RadioMeneger(this);
+         initObjects();
 
         button_country.setOnClickListener(v ->{
             if(frame != 0){
                 change(new FindCountryFragment());
                 resetIcons();
                 frame = 0;
-                RadioStations r = radioStationsList.get(0);
-                radioMeneger.play(r.getStreamUrl());
                 button_country.setImageDrawable(getDrawable(R.drawable.selectedfindcountry_navigationbar));
             }
 

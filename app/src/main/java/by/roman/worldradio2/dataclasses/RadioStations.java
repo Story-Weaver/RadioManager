@@ -1,5 +1,7 @@
 package by.roman.worldradio2.dataclasses;
 
+import by.roman.worldradio2.RadioManager;
+
 public class RadioStations {
     private String logoUrl;
     private String nameStantion;
@@ -10,8 +12,9 @@ public class RadioStations {
     private double lat;
     private String lang;
     private boolean isPlaying;
+    RadioManager radioManager;
 
-    public RadioStations(String logoUrl,String nameStantion, String streamUrl, String country, String style, double lon,double lat, String lang){
+    public RadioStations(String logoUrl,String nameStantion, String streamUrl, String country, String style, double lon,double lat, String lang, RadioManager radioManager){
         this.logoUrl = logoUrl;
         this.nameStantion = nameStantion;
         this.streamUrl = streamUrl;
@@ -21,7 +24,15 @@ public class RadioStations {
         this.lat = lat;
         this.lang = lang;
         this.isPlaying = false;
+
+        this.radioManager = radioManager;
     }
+
+    public void play(String song) {
+        radioManager.play(streamUrl);
+        isPlaying = true;
+    }
+
     public String getLogoUrl(){
         return logoUrl;
     }
@@ -48,5 +59,8 @@ public class RadioStations {
     }
     public void setPlaying(boolean flag){
         this.isPlaying = flag;
+    }
+    public boolean getIsPlaying(){
+        return isPlaying;
     }
 }

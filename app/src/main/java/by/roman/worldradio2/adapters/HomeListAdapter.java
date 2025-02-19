@@ -16,20 +16,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import by.roman.worldradio2.R;
-import by.roman.worldradio2.RadioMeneger;
-import by.roman.worldradio2.dataclasses.HomeCardItem;
+import by.roman.worldradio2.RadioManager;
 import by.roman.worldradio2.dataclasses.RadioStations;
 
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
     private Context context;
-    RadioMeneger radioMeneger;
-    private List<HomeCardItem> cards;
+    RadioManager radioManager;
+    private List<RadioStations> cards;
     private OnItemClickListener listener;
-    public HomeListAdapter(Context context, List<HomeCardItem> cards, OnItemClickListener listener) {
+    public HomeListAdapter(Context context, List<RadioStations> cards, OnItemClickListener listener) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
-        this.radioMeneger = new RadioMeneger(context);
+        this.radioManager = new RadioManager(context);
     }
     @Override
     @NonNull
@@ -44,18 +43,18 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HomeCardItem card = cards.get(position);
+        RadioStations card = cards.get(position);
 
         // Устанавливаем текст
-        holder.nameStation.setText(card.getNameStation());
+        holder.nameStation.setText(card.getNameStantion());
 
         // Загружаем картинку с помощью Glide
         Glide.with(context)
-                .load(card.getLogoURL())
+                .load(card.getLogoUrl())
                 .into(holder.logoStation);
 
         // Показываем или скрываем иконку в зависимости от выбранной позиции
-        if (card.isPlaying()) {
+        if (card.getIsPlaying()) {
             // Загружаем GIF с помощью Glide
             Glide.with(context)
                     .asGif()
@@ -71,11 +70,11 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         holder.itemView.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition(); // Берём актуальную позицию
             if (adapterPosition == RecyclerView.NO_POSITION) return;
-            radioMeneger.stop();
-            radioMeneger.release();
-            radioMeneger.play(cards.get(adapterPosition).getStreamUrl());
+            radioManager.stop();
+            radioManager.release();
+            radioManager.play(cards.get(adapterPosition).getStreamUrl());
 
-            for (HomeCardItem item : cards) {
+            for (RadioStations item : cards) {
                 item.setPlaying(false);
             }cards.get(adapterPosition).setPlaying(true);
             notifyDataSetChanged();
