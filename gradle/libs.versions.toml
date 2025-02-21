@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -22,6 +22,7 @@ glide-compiler = "com.github.bumptech.glide:compiler:4.16.0"
 exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version = "2.19.1" }
 exoplayer-ui = { module = "com.google.android.exoplayer:exoplayer-ui", version = "2.19.1" }
 exoplayer-hls = { module = "com.google.android.exoplayer:exoplayer-hls", version = "2.19.1" }
+localbroadcastmanager = { group = "androidx.localbroadcastmanager", name = "localbroadcastmanager", version = "1.1.0" }
 
 
 [plugins]

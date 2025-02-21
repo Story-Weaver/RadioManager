@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -146,7 +148,11 @@ public class TimerActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 circularTimerView.setCurrentTimeMillis(0);
-                // Можно добавить уведомление о завершении таймера
+                // Отправляем Broadcast об окончании таймера
+                Intent intent = new Intent("by.roman.worldradio2.TIMER_FINISHED");
+                intent.putExtra("time", timeRemaining);
+                LocalBroadcastManager.getInstance(TimerActivity.this).sendBroadcast(intent);
+                finish(); // Закрыть активность
             }
         };
     }
@@ -168,7 +174,6 @@ public class TimerActivity extends AppCompatActivity {
             recyclerView.scrollToPosition(middlePosition);
             adapter.setSelectedPosition(middlePosition);
         });
-
         // Отслеживаем остановку прокрутки, чтобы определить выбранный элемент
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -239,4 +244,3 @@ public class TimerActivity extends AppCompatActivity {
         animator.start(); // Запускаем анимацию
     }
 }
-

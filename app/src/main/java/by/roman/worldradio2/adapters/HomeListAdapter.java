@@ -24,12 +24,13 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     RadioManager radioManager;
     private List<RadioStations> cards;
     private OnItemClickListener listener;
-    public HomeListAdapter(Context context, List<RadioStations> cards, OnItemClickListener listener) {
+    public HomeListAdapter(Context context, List<RadioStations> cards, OnItemClickListener listener, RadioManager radioManager) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
-        this.radioManager = new RadioManager(context);
+        this.radioManager = radioManager;
     }
+
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){

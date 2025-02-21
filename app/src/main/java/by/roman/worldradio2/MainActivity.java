@@ -113,5 +113,4 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.fragmentMenuView,f);
         ft.commit();
     }
-
 }
