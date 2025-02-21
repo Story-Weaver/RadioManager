@@ -12,13 +12,13 @@ import java.util.Locale;
 
 import by.roman.worldradio2.R;
 
-public class WheelAdapter extends RecyclerView.Adapter<WheelAdapter.ViewHolder> {
+public class TimerWheelAdapter extends RecyclerView.Adapter<TimerWheelAdapter.ViewHolder> {
     private final Context context;
     private final int baseCount;       // Кол-во уникальных элементов (24 или 60)
     private final int repeatFactor;    // Во сколько раз повторяем
     private int selectedPosition = -1; // Индекс выбранного элемента в общей "повторённой" последовательности
 
-    public WheelAdapter(Context context, int baseCount) {
+    public TimerWheelAdapter(Context context, int baseCount) {
         this.context = context;
         this.baseCount = baseCount;
         this.repeatFactor = 1000; // Просто большое число
@@ -31,13 +31,13 @@ public class WheelAdapter extends RecyclerView.Adapter<WheelAdapter.ViewHolder> 
 
     @NonNull
     @Override
-    public WheelAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TimerWheelAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_item_wheel, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WheelAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TimerWheelAdapter.ViewHolder holder, int position) {
         int realValue = position % baseCount; // Вычисляем реальное значение (0..baseCount-1)
         holder.textItem.setText(String.format(Locale.getDefault(), "%02d", realValue));
 

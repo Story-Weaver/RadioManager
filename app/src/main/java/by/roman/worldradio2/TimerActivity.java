@@ -20,20 +20,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import by.roman.worldradio2.adapters.WheelAdapter;
+import by.roman.worldradio2.adapters.TimerWheelAdapter;
 import by.roman.worldradio2.view.CircularTimerView;
 
 
 public class TimerActivity extends AppCompatActivity {
     private RecyclerView recyclerHour, recyclerMinute, recyclerSecond;
-    private WheelAdapter hourAdapter, minuteAdapter, secondAdapter;
+    private TimerWheelAdapter hourAdapter, minuteAdapter, secondAdapter;
     private CircularTimerView circularTimerView;
     private ImageView pauseButton;
     private ImageView playButton;
     private ImageView startButton;
     private ImageView stopButton;
+    private ImageView backButton;
     private CountDownTimer countDownTimer;
-    long totalTime; //
+    private long totalTime; //
+    private boolean isStart = false;
     private boolean isPaused = false; // Отслеживание состояния паузы
     private long timeRemaining; // Оставшееся время при паузе
     private boolean useSeconds = true;  //используем столбец с секундами
@@ -60,13 +62,14 @@ public class TimerActivity extends AppCompatActivity {
         pauseButton = findViewById(R.id.pauseButtonView);
         playButton = findViewById(R.id.playButtonView);
         startButton = findViewById(R.id.startButtonView);
+        backButton = findViewById(R.id.backButtonView);
         stopButton = findViewById(R.id.stopButtonView);
         recyclerHour = findViewById(R.id.recyclerHour);
         recyclerMinute = findViewById(R.id.recyclerMinute);
         recyclerSecond = findViewById(R.id.recyclerSecond);
-        hourAdapter = new WheelAdapter(this, 24);  // 24 часа
-        minuteAdapter = new WheelAdapter(this, 60); // 60 минут
-        secondAdapter = new WheelAdapter(this, 60); // 60 секунд (или тоже минуты, если нужно)
+        hourAdapter = new TimerWheelAdapter(this, 24);  // 24 часа
+        minuteAdapter = new TimerWheelAdapter(this, 60); // 60 минут
+        secondAdapter = new TimerWheelAdapter(this, 60); // 60 секунд (или тоже минуты, если нужно)
         setupRecyclerView(recyclerHour, hourAdapter);
         setupRecyclerView(recyclerMinute, minuteAdapter);
         setupRecyclerView(recyclerSecond, secondAdapter);
@@ -80,6 +83,9 @@ public class TimerActivity extends AppCompatActivity {
             recyclerSecond.setVisibility(View.GONE);
             findViewById(R.id.dotDivider2).setVisibility(View.GONE);
         }
+        backButton.setOnClickListener(v ->{
+            finish();
+        });
         startButton.setOnClickListener(v ->{
             startTimer(totalTime);
             countDownTimer.start();
@@ -90,6 +96,10 @@ public class TimerActivity extends AppCompatActivity {
             stopButton.setEnabled(false);
             stopButton.setAlpha(0.5f);
             findViewById(R.id.setTime).setVisibility(INVISIBLE);
+            isStart = true;
+            animateMoveDown(circularTimerView);
+
+
         });
         pauseButton.setOnClickListener(v ->{
             pauseTimer();  // Приостановить таймер
@@ -97,6 +107,7 @@ public class TimerActivity extends AppCompatActivity {
             playButton.setVisibility(VISIBLE);
             stopButton.setEnabled(true);
             stopButton.setAlpha(1f);
+            isPaused = true;
         });
         playButton.setOnClickListener(v ->{
             resumeTimer(); // Возобновить таймер
@@ -105,6 +116,7 @@ public class TimerActivity extends AppCompatActivity {
             pauseButton.setImageDrawable(getDrawable(R.drawable.pausebutton_timer));
             stopButton.setEnabled(false);
             stopButton.setAlpha(0.5f);
+            isPaused = false;
         });
         stopButton.setOnClickListener(v->{
             countDownTimer.cancel(); // Останавливаем таймер
@@ -115,6 +127,10 @@ public class TimerActivity extends AppCompatActivity {
             stopButton.setVisibility(INVISIBLE); // Скрываем кнопку остановки
             fadeInOnResume();
             findViewById(R.id.setTime).setVisibility(VISIBLE);
+            isStart = false;
+            isPaused = false;
+            updateTotalTime();
+            animateMoveUp(circularTimerView);
         });
     }
     private void startTimer(long time) {
@@ -134,7 +150,7 @@ public class TimerActivity extends AppCompatActivity {
             }
         };
     }
-    private void setupRecyclerView(RecyclerView recyclerView, WheelAdapter adapter) {
+    private void setupRecyclerView(RecyclerView recyclerView, TimerWheelAdapter adapter) {
         // Вертикальный список
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -171,14 +187,15 @@ public class TimerActivity extends AppCompatActivity {
         });
     }
     private void updateTotalTime() {
-        int hours = hourAdapter.getSelectedPosition() % 24; // Учитываем количество элементов
-        int minutes = minuteAdapter.getSelectedPosition() % 60;
-        int seconds = secondAdapter.getSelectedPosition() % 60;
-        totalTime = (hours * 3600000L) + (minutes * 60000L) + (seconds * 1000L);
-
-        // Обновляем отображение таймера
-        circularTimerView.setMaxTimeMillis(totalTime);
-        circularTimerView.setCurrentTimeMillis(totalTime);
+        if(!isStart){
+            int hours = hourAdapter.getSelectedPosition() % 24; // Учитываем количество элементов
+            int minutes = minuteAdapter.getSelectedPosition() % 60;
+            int seconds = secondAdapter.getSelectedPosition() % 60;
+            totalTime = (hours * 3600000L) + (minutes * 60000L) + (seconds * 1000L);
+            // Обновляем отображение таймера
+            circularTimerView.setMaxTimeMillis(totalTime);
+            circularTimerView.setCurrentTimeMillis(totalTime);
+        }
     }
     private void pauseTimer() {
         isPaused = true;
@@ -211,14 +228,14 @@ public class TimerActivity extends AppCompatActivity {
     }
     private void animateMoveDown(View view) {
         // Анимация движения вниз (сначала начальная позиция, потом конечная)
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0f, 154f);
-        animator.setDuration(500); // Устанавливаем продолжительность анимации
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 70f, 270f);
+        animator.setDuration(1250); // Устанавливаем продолжительность анимации
         animator.start(); // Запускаем анимацию
     }
     private void animateMoveUp(View view) {
         // Анимация движения вниз (сначала начальная позиция, потом конечная)
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 0f, -154f);
-        animator.setDuration(500); // Устанавливаем продолжительность анимации
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", 270f, 70f);
+        animator.setDuration(1250); // Устанавливаем продолжительность анимации
         animator.start(); // Запускаем анимацию
     }
 }

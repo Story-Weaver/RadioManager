@@ -76,9 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 change(new TopFragment());
                 resetIcons();
                 frame = 3;
-                Intent intent = new Intent(MainActivity.this, TimerActivity.class);
-                startActivity(intent);
-
                 button_top.setImageDrawable(getDrawable(R.drawable.selectedtop_navigationbar));
             }
         });
