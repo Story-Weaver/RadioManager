@@ -1,6 +1,7 @@
 package by.roman.worldradio2;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 change(new TopFragment());
                 resetIcons();
                 frame = 3;
+                Intent intent = new Intent(MainActivity.this, TimerActivity.class);
+                startActivity(intent);
+
                 button_top.setImageDrawable(getDrawable(R.drawable.selectedtop_navigationbar));
             }
         });
