@@ -14,7 +14,7 @@ public class RadioStations {
     private boolean isPlaying;
     RadioManager radioManager;
 
-    public RadioStations(String logoUrl,String nameStantion, String streamUrl, String country, String style, double lon,double lat, String lang, RadioManager radioManager){
+    public RadioStations(String logoUrl,String nameStantion, String streamUrl, String country, String style, double lon,double lat, String lang, RadioManager radioManager, boolean isPlaying){
         this.logoUrl = logoUrl;
         this.nameStantion = nameStantion;
         this.streamUrl = streamUrl;
@@ -23,7 +23,7 @@ public class RadioStations {
         this.lon = lon;
         this.lat = lat;
         this.lang = lang;
-        this.isPlaying = false;
+        this.isPlaying = isPlaying;
 
         this.radioManager = radioManager;
     }

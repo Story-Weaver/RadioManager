@@ -1,6 +1,8 @@
 package by.roman.worldradio2.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +67,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         } else {
             holder.sound.setVisibility(View.INVISIBLE);
         }
-
 
         // Обрабатываем нажатие на элемент списка
         holder.itemView.setOnClickListener(v -> {

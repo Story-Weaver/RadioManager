@@ -1,8 +1,12 @@
 package by.roman.worldradio2;
 
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
          initObjects();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         button_country.setOnClickListener(v ->{
             if(frame != 0){

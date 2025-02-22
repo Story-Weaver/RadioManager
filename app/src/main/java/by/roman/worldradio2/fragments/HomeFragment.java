@@ -6,7 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,29 +38,34 @@ public class HomeFragment extends Fragment {
     private HomeListAdapter adapter;
     private List<RadioStations> radioStationsList;
     RadioManager radioManager;
+    private  int position;
     private ImageView timerButton;
     private BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("by.roman.worldradio2.TIMER_FINISHED".equals(intent.getAction())) {
-                Toast.makeText(getContext(), "Таймер завершен!", Toast.LENGTH_SHORT).show();
-                radioManager.stop();
-
+                Toast.makeText(getContext(), "Таймер завершен через сервис!", Toast.LENGTH_SHORT).show();
+                if (radioManager != null) {
+                    radioManager.stop();
+                }
+                if (radioStationsList != null && position >= 0 && position < radioStationsList.size()) {
+                    radioStationsList.get(position).setPlaying(false);
+                    adapter.notifyItemChanged(position);
+                }
             }
         }
     };
 
+
     @Override
     public void onStart() {
         super.onStart();
-        // Регистрация приёмника с использованием LocalBroadcastManager
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(timerFinishedReceiver, new IntentFilter("by.roman.worldradio2.TIMER_FINISHED"));
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // Отмена регистрации приёмника
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(timerFinishedReceiver);
     }
     @Override
@@ -68,10 +76,11 @@ public class HomeFragment extends Fragment {
         radioManager = new RadioManager(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         radioStationsList = new ArrayList<>();
-        radioStationsList.add(new RadioStations("","-","https://sonic01.instainternet.com/8374/stream","france",null,0,0,"fr",radioManager));
-        radioStationsList.add(new RadioStations("https://cdn-radiotime-logos.tunein.com/s127108d.png","Radio Country Live New York","https://streaming.radiostreamlive.com/radiocountrylive_devices","usa",null,0,0,"en",radioManager));
+        radioStationsList.add(new RadioStations("","-","https://sonic01.instainternet.com/8374/stream","france",null,0,0,"fr",radioManager,false));
+        radioStationsList.add(new RadioStations("https://cdn-radiotime-logos.tunein.com/s127108d.png","Radio Country Live New York","https://streaming.radiostreamlive.com/radiocountrylive_devices","usa",null,0,0,"en",radioManager, false));
         adapter = new HomeListAdapter(getContext(), radioStationsList, position -> {
             Toast.makeText(getContext(), "Нажат элемент " + position, Toast.LENGTH_SHORT).show();
+            this.position = position;
         },radioManager);
         recyclerView.setAdapter(adapter);
         timerButton.setOnClickListener(v->{
@@ -83,5 +92,8 @@ public class HomeFragment extends Fragment {
 
     public List<RadioStations> getRadioStations() {
         return radioStationsList;
+    }
+    public RadioManager getRadioManager(){
+        return radioManager;
     }
 }

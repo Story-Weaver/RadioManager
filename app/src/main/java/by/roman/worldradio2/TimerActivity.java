@@ -3,11 +3,14 @@ package by.roman.worldradio2;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.util.Log;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -26,6 +29,7 @@ import by.roman.worldradio2.adapters.TimerWheelAdapter;
 import by.roman.worldradio2.view.CircularTimerView;
 
 
+
 public class TimerActivity extends AppCompatActivity {
     private RecyclerView recyclerHour, recyclerMinute, recyclerSecond;
     private TimerWheelAdapter hourAdapter, minuteAdapter, secondAdapter;
@@ -41,6 +45,7 @@ public class TimerActivity extends AppCompatActivity {
     private boolean isPaused = false; // Отслеживание состояния паузы
     private long timeRemaining; // Оставшееся время при паузе
     private boolean useSeconds = true;  //используем столбец с секундами
+    RadioManager radioManager;
 
     private void blinkAnimation() {
         // Аниматор: от 1f до 0.3f и обратно
@@ -139,6 +144,8 @@ public class TimerActivity extends AppCompatActivity {
         if (countDownTimer != null) {
             countDownTimer.cancel();  // Останавливаем предыдущий таймер
         }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        prefs.edit().putBoolean("timer_finished", false).apply();
         countDownTimer = new CountDownTimer(time, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -149,10 +156,16 @@ public class TimerActivity extends AppCompatActivity {
             public void onFinish() {
                 circularTimerView.setCurrentTimeMillis(0);
                 // Отправляем Broadcast об окончании таймера
-                Intent intent = new Intent("by.roman.worldradio2.TIMER_FINISHED");
-                intent.putExtra("time", timeRemaining);
-                LocalBroadcastManager.getInstance(TimerActivity.this).sendBroadcast(intent);
-                finish(); // Закрыть активность
+                if (timeRemaining > 0) {
+                    Intent intent = new Intent("by.roman.worldradio2.TIMER_FINISHED");
+                    intent.putExtra("time", timeRemaining);
+                    LocalBroadcastManager.getInstance(TimerActivity.this).sendBroadcast(intent);
+                } else {
+
+                }
+                finish();
+
+
             }
         };
     }
@@ -160,10 +173,8 @@ public class TimerActivity extends AppCompatActivity {
         // Вертикальный список
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
         // Подключаем адаптер
         recyclerView.setAdapter(adapter);
-
         // Подключаем SnapHelper для центрирования элемента
         LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
