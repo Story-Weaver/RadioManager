@@ -33,7 +33,6 @@ import by.roman.worldradio2.R;
 import by.roman.worldradio2.dataclasses.RadioStations;
 
 public class HomeFragment extends Fragment {
-
     private RecyclerView recyclerView;
     private HomeListAdapter adapter;
     private List<RadioStations> radioStationsList;
@@ -55,14 +54,11 @@ public class HomeFragment extends Fragment {
             }
         }
     };
-
-
     @Override
     public void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(timerFinishedReceiver, new IntentFilter("by.roman.worldradio2.TIMER_FINISHED"));
     }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -71,8 +67,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        timerButton = view.findViewById(R.id.timerButtonView);
-        recyclerView = view.findViewById(R.id.cardView);
+        findAllId(view);
         radioManager = new RadioManager(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         radioStationsList = new ArrayList<>();
@@ -89,7 +84,10 @@ public class HomeFragment extends Fragment {
         });
         return view;
     }
-
+    private void findAllId(View view){
+        timerButton = view.findViewById(R.id.timerButtonView);
+        recyclerView = view.findViewById(R.id.cardView);
+    }
     public List<RadioStations> getRadioStations() {
         return radioStationsList;
     }

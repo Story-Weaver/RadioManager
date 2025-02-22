@@ -47,52 +47,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-         initObjects();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        button_country.setOnClickListener(v ->{
-            if(frame != 0){
-                change(new FindCountryFragment());
-                resetIcons();
-                frame = 0;
-                button_country.setImageDrawable(getDrawable(R.drawable.selectedfindcountry_navigationbar));
-            }
-
-        });
-        button_save.setOnClickListener(v ->{
-            if(frame != 1){
-                change(new SaveFragment());
-                resetIcons();
-                frame = 1;
-                button_save.setImageDrawable(getDrawable(R.drawable.selectedsave_navigationbar));
-            }
-        });
-        button_home.setOnClickListener(v ->{
-            if(frame != 2){
-                change(new HomeFragment());
-                resetIcons();
-                frame = 2;
-                button_home.setImageDrawable(getDrawable(R.drawable.selectedhome_navigationbar));
-            }
-        });
-
-        button_top.setOnClickListener(v -> {
-            if(frame != 3){
-                change(new TopFragment());
-                resetIcons();
-                frame = 3;
-                button_top.setImageDrawable(getDrawable(R.drawable.selectedtop_navigationbar));
-            }
-        });
-
-        button_settings.setOnClickListener(v ->{
-            if(frame != 4){
-                frame = 4;
-                change(new SettingsFragment());
-                resetIcons();
-                button_settings.setImageDrawable(getDrawable(R.drawable.selectedsettings_navigationbar));
-            }
-        });
+        initObjects();
+        button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
+        button_save.setOnClickListener(v -> FragmentChange(new SaveFragment(), 1));
+        button_home.setOnClickListener(v -> FragmentChange(new HomeFragment(), 2));
+        button_top.setOnClickListener(v -> FragmentChange(new TopFragment(), 3));
+        button_settings.setOnClickListener(v -> FragmentChange(new SettingsFragment(), 4));
 
     }
 
@@ -111,7 +71,23 @@ public class MainActivity extends AppCompatActivity {
         button_top = findViewById(R.id.topButton);
         button_home = findViewById(R.id.homeButton);
     }
-
+    private void FragmentChange(Fragment fragment, int fragmentId) {
+        if (frame != fragmentId) {
+            change(fragment);
+            resetIcons();
+            frame = fragmentId;
+            setSelectedButtonIcon(fragmentId);
+        }
+    }
+    private void setSelectedButtonIcon(int fragmentId) {
+        switch (fragmentId) {
+            case 0: button_country.setImageDrawable(getDrawable(R.drawable.selectedfindcountry_navigationbar)); break;
+            case 1: button_save.setImageDrawable(getDrawable(R.drawable.selectedsave_navigationbar)); break;
+            case 2: button_home.setImageDrawable(getDrawable(R.drawable.selectedhome_navigationbar)); break;
+            case 3: button_top.setImageDrawable(getDrawable(R.drawable.selectedtop_navigationbar)); break;
+            case 4: button_settings.setImageDrawable(getDrawable(R.drawable.selectedsettings_navigationbar)); break;
+        }
+    }
     public void change(Fragment f){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.fragment_fade_in,R.anim.fragment_fade_out);

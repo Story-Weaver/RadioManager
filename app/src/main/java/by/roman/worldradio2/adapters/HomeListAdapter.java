@@ -32,7 +32,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         this.listener = listener;
         this.radioManager = radioManager;
     }
-
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
@@ -43,34 +42,24 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         void onItemClick(int position);
 
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RadioStations card = cards.get(position);
-
-        // Устанавливаем текст
         holder.nameStation.setText(card.getNameStantion());
-
-        // Загружаем картинку с помощью Glide
         Glide.with(context)
                 .load(card.getLogoUrl())
                 .into(holder.logoStation);
-
-        // Показываем или скрываем иконку в зависимости от выбранной позиции
         if (card.getIsPlaying()) {
-            // Загружаем GIF с помощью Glide
             Glide.with(context)
                     .asGif()
-                    .load(R.drawable.sound)  // Загружаем GIF (замени на свой файл)
+                    .load(R.drawable.sound)
                     .into(holder.sound);
             holder.sound.setVisibility(View.VISIBLE);
         } else {
             holder.sound.setVisibility(View.INVISIBLE);
         }
-
-        // Обрабатываем нажатие на элемент списка
         holder.itemView.setOnClickListener(v -> {
-            int adapterPosition = holder.getAdapterPosition(); // Берём актуальную позицию
+            int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition == RecyclerView.NO_POSITION) return;
             radioManager.stop();
             radioManager.release();
