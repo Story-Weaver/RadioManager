@@ -6,43 +6,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
-
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import by.roman.worldradio2.R;
-import by.roman.worldradio2.RadioManager;
 import by.roman.worldradio2.dataclasses.Database;
 import by.roman.worldradio2.dataclasses.model.RadioStations;
 
-public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
+public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHolder>{
+    private Database database;
     private Context context;
-    RadioManager radioManager;
-    Database database;
     private List<RadioStations> cards;
     private OnItemClickListener listener;
-    public HomeListAdapter(Context context, List<RadioStations> cards, OnItemClickListener listener, RadioManager radioManager) {
+
+    public TopListAdapter(Context context, List<RadioStations> cards, OnItemClickListener listener) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
-        this.radioManager = radioManager;
+
     }
     @Override
     @NonNull
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public TopListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_card_home,parent,false);
-        return new ViewHolder(view);
+        return new TopListAdapter.ViewHolder(view);//***************//
     }
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TopListAdapter.ViewHolder holder, int position) {
         database = new Database(context);
         RadioStations card = cards.get(position);
         holder.nameStation.setText(card.getNameStation());
@@ -61,9 +59,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         holder.itemView.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition == RecyclerView.NO_POSITION) return;
-            radioManager.stop();
-            radioManager.release();
-            radioManager.play(cards.get(adapterPosition).getStreamUrl());
 
             for (RadioStations item : cards) {
                 item.setPlaying(false);
@@ -78,8 +73,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
             }
         });
     }
-
-
     public int getItemCount() {
         return cards.size();
     }

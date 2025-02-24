@@ -82,8 +82,8 @@ public class HomeFragment extends Fragment {
     }
     private void getData(){
         Database database = new Database(requireContext());
-        //radioStationsList = database.getAllRadioStations();
-        radioStationsList = database.getRadioStatonWithFilter(null,null,null,1);
+        radioStationsList = database.getAllRadioStations();
+        //radioStationsList = database.getRadioStatonWithFilter(null,null,null,1);
     }
     private void findAllId(View view){
         timerButton = view.findViewById(R.id.timerButtonView);

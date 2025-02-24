@@ -127,7 +127,7 @@ public class Database extends SQLiteOpenHelper {
         values.put(COLUMN_STATION_ID, stationId);
         return db.insert(TABLE_FAVORITES, null, values);
     }
-    public long addUser(String name, String email) {
+    public long addUser(String name, String email) { // TODO: delete email
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_USER, name);
