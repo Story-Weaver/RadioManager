@@ -1,12 +1,7 @@
 package by.roman.worldradio2;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -17,10 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import by.roman.worldradio2.dataclasses.RadioStations;
+import by.roman.worldradio2.dataclasses.Database;
 import by.roman.worldradio2.fragments.FindCountryFragment;
 import by.roman.worldradio2.fragments.HomeFragment;
 import by.roman.worldradio2.fragments.SaveFragment;
@@ -30,6 +22,7 @@ import by.roman.worldradio2.fragments.TopFragment;
 public class MainActivity extends AppCompatActivity {
 
     private int frame = 2;
+    // TODO: binding
     private ImageView button_country;
     private ImageView button_settings;
     private ImageView button_save;
@@ -48,12 +41,15 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         initObjects();
+        // TODO: убрать после подключения апи
+        //Database database = new Database(getApplicationContext());
+        //database.addRadioStation("-","mexico","","https://sonic01.instainternet.com/8374/stream",null,0,0,"x3",25,false);
+        //database.addRadioStation("Radio Country Live New York","usa","https://cdn-radiotime-logos.tunein.com/s127108d.png","https://streaming.radiostreamlive.com/radiocountrylive_devices",null,0,0,"x3",10,false);
         button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
         button_save.setOnClickListener(v -> FragmentChange(new SaveFragment(), 1));
         button_home.setOnClickListener(v -> FragmentChange(new HomeFragment(), 2));
         button_top.setOnClickListener(v -> FragmentChange(new TopFragment(), 3));
         button_settings.setOnClickListener(v -> FragmentChange(new SettingsFragment(), 4));
-
     }
 
     private void resetIcons(){
