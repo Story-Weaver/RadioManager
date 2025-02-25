@@ -1,7 +1,5 @@
 package by.roman.worldradio2.fragments;
 
-import static androidx.core.content.ContextCompat.registerReceiver;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +33,7 @@ public class HomeFragment extends Fragment {
     RadioManager radioManager;
     private  int position;
     private ImageView timerButton;
-    private BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("by.roman.worldradio2.TIMER_FINISHED".equals(intent.getAction())) {

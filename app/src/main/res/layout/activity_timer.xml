@@ -143,8 +143,9 @@
             android:id="@+id/backButtonView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="65dp"
+            android:layout_marginStart="20dp"
+            android:padding="10dp"
+            android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/back_timer" />

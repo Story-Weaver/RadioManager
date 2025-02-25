@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,7 +23,6 @@ import by.roman.worldradio2.fragments.TopFragment;
 public class MainActivity extends AppCompatActivity {
 
     private int frame = 2;
-    // TODO: binding
     private ImageView button_country;
     private ImageView button_settings;
     private ImageView button_save;
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         initObjects();
-        // TODO: убрать после подключения апи
         //Database database = new Database(getApplicationContext());
+        //database.addFilter(1,null,null,null,0);
         //database.addRadioStation("-","mexico","","https://sonic01.instainternet.com/8374/stream",null,0,0,"x3",25,false);
         //database.addRadioStation("Radio Country Live New York","usa","https://cdn-radiotime-logos.tunein.com/s127108d.png","https://streaming.radiostreamlive.com/radiocountrylive_devices",null,0,0,"x3",10,false);
         button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetIcons(){
-        button_country.setImageDrawable(getDrawable(R.drawable.findcountry_navigationbar));
-        button_save.setImageDrawable(getDrawable(R.drawable.save_navigationbar));
-        button_home.setImageDrawable(getDrawable(R.drawable.home_navigationbar));
-        button_top.setImageDrawable(getDrawable(R.drawable.top_navigationbar));
-        button_settings.setImageDrawable(getDrawable(R.drawable.settings_navigationbar));
+        button_country.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.findcountry_navigationbar));
+        button_save.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.save_navigationbar));
+        button_home.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.home_navigationbar));
+        button_top.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.top_navigationbar));
+        button_settings.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.settings_navigationbar));
     }
 
     private void initObjects(){
@@ -77,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setSelectedButtonIcon(int fragmentId) {
         switch (fragmentId) {
-            case 0: button_country.setImageDrawable(getDrawable(R.drawable.selectedfindcountry_navigationbar)); break;
-            case 1: button_save.setImageDrawable(getDrawable(R.drawable.selectedsave_navigationbar)); break;
-            case 2: button_home.setImageDrawable(getDrawable(R.drawable.selectedhome_navigationbar)); break;
-            case 3: button_top.setImageDrawable(getDrawable(R.drawable.selectedtop_navigationbar)); break;
-            case 4: button_settings.setImageDrawable(getDrawable(R.drawable.selectedsettings_navigationbar)); break;
+            case 0: button_country.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.selectedfindcountry_navigationbar)); break;
+            case 1: button_save.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.selectedsave_navigationbar)); break;
+            case 2: button_home.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.selectedhome_navigationbar)); break;
+            case 3: button_top.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.selectedtop_navigationbar)); break;
+            case 4: button_settings.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.selectedsettings_navigationbar)); break;
         }
     }
     public void change(Fragment f){
