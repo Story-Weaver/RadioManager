@@ -202,6 +202,132 @@ public class Database extends SQLiteOpenHelper {
         }
         return radioStationsList;
     }
+    public List<String> getCountry(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> countryList = new ArrayList<>();
+        Cursor cursor = db.query(TABLE_RADIO_STATION,
+                new String[]{COLUMN_COUNTRY},
+                null,
+                null,
+                null,
+                null,
+                null);
+        if(cursor != null){
+            while (cursor.moveToNext()) {
+                int countryIndex = cursor.getColumnIndex(COLUMN_COUNTRY);
+                if (countryIndex != -1) {
+                    countryList.add(cursor.getString(countryIndex));
+                }
+            }
+        }
+        cursor.close();
+        return countryList;
+    }
+    public List<String> getLang(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> langList = new ArrayList<>();
+        Cursor cursor = db.query(TABLE_RADIO_STATION,
+                new String[]{COLUMN_LANG},
+                null,
+                null,
+                null,
+                null,
+                null);
+        if(cursor != null){
+            while (cursor.moveToNext()) {
+                int countryIndex = cursor.getColumnIndex(COLUMN_LANG);
+                if (countryIndex != -1) {
+                    langList.add(cursor.getString(countryIndex));
+                }
+            }
+        }
+        cursor.close();
+        return langList;
+    }
+    public List<String> getStyle(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> styleList = new ArrayList<>();
+        Cursor cursor = db.query(TABLE_RADIO_STATION,
+                new String[]{COLUMN_STYLE},
+                null,
+                null,
+                null,
+                null,
+                null);
+        if(cursor != null){
+            while (cursor.moveToNext()) {
+                int countryIndex = cursor.getColumnIndex(COLUMN_STYLE);
+                if (countryIndex != -1) {
+                    styleList.add(cursor.getString(countryIndex));
+                }
+            }
+        }
+        cursor.close();
+        return styleList;
+    }
+    public String getCountryFilter(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String countryFilter = null;
+        Cursor cursor = db.query(
+                TABLE_FILTER,
+                new String[]{COLUMN_COUNTRY_F},
+                COLUMN_USER_ID_F + " = ?",
+                new String[]{String.valueOf(userId)},
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            int countryIndex = cursor.getColumnIndex(COLUMN_COUNTRY_F);
+            if (countryIndex != -1) {
+                countryFilter = cursor.getString(countryIndex);
+            }
+        }
+        cursor.close();
+        return countryFilter;
+    }
+    public String getStyleFilter(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String styleFilter = null;
+        Cursor cursor = db.query(
+                TABLE_FILTER,
+                new String[]{COLUMN_STYLE_F},
+                COLUMN_USER_ID_F + " = ?",
+                new String[]{String.valueOf(userId)},
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            int countryIndex = cursor.getColumnIndex(COLUMN_STYLE_F);
+            if (countryIndex != -1) {
+                styleFilter = cursor.getString(countryIndex);
+            }
+        }
+        cursor.close();
+        return styleFilter;
+    }
+    public String getLangFilter(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String langFilter = null;
+        Cursor cursor = db.query(
+                TABLE_FILTER,
+                new String[]{COLUMN_LANG_F},
+                COLUMN_USER_ID_F + " = ?",
+                new String[]{String.valueOf(userId)},
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            int countryIndex = cursor.getColumnIndex(COLUMN_LANG_F);
+            if (countryIndex != -1) {
+                langFilter = cursor.getString(countryIndex);
+            }
+        }
+        cursor.close();
+        return langFilter;
+    }
     public void setIsplaying(int id,boolean isPlaying){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -295,6 +421,7 @@ public class Database extends SQLiteOpenHelper {
                 orderBy = null;
                 break;
         }
+        cursor1.close();
         List<RadioStations> radioStationsList = new ArrayList<>();
         Cursor cursor2 = db.query(TABLE_RADIO_STATION,
                 new String[]{COLUMN_UUID_STATION, COLUMN_NAME_STATION, COLUMN_COUNTRY, COLUMN_LOGO_URL, COLUMN_STREAM_URL,
@@ -336,6 +463,64 @@ public class Database extends SQLiteOpenHelper {
                 }
             }
         }
+        cursor2.close();
         return radioStationsList;
+    }
+    public int getRadioStationCountWithFilter() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        StringBuilder selection = new StringBuilder();
+        List<String> selectionArgsList = new ArrayList<>();
+        String countryF = null;
+        String langF = null;
+        String styleF = null;
+
+        Cursor cursor1 = db.query(TABLE_FILTER,
+                new String[]{COLUMN_USER_ID_F, COLUMN_COUNTRY_F, COLUMN_LANG_F, COLUMN_STYLE_F, COLUMN_SORT_F},
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor1 != null && cursor1.moveToFirst()) {
+            int countryIndex = cursor1.getColumnIndex(COLUMN_COUNTRY_F);
+            int langIndex = cursor1.getColumnIndex(COLUMN_LANG_F);
+            int styleIndex = cursor1.getColumnIndex(COLUMN_STYLE_F);
+
+            if (countryIndex != -1) countryF = cursor1.getString(countryIndex);
+            if (langIndex != -1) langF = cursor1.getString(langIndex);
+            if (styleIndex != -1) styleF = cursor1.getString(styleIndex);
+        }
+        cursor1.close();
+
+        if (countryF != null) {
+            selection.append(COLUMN_COUNTRY).append(" = ?");
+            selectionArgsList.add(countryF);
+        }
+        if (langF != null) {
+            if (selection.length() > 0) selection.append(" AND ");
+            selection.append(COLUMN_LANG).append(" = ?");
+            selectionArgsList.add(langF);
+        }
+        if (styleF != null) {
+            if (selection.length() > 0) selection.append(" AND ");
+            selection.append(COLUMN_STYLE).append(" = ?");
+            selectionArgsList.add(styleF);
+        }
+
+        Cursor cursor2 = db.query(TABLE_RADIO_STATION,
+                new String[]{"COUNT(*)"},
+                selection.length() > 0 ? selection.toString() : null,
+                selectionArgsList.isEmpty() ? null : selectionArgsList.toArray(new String[0]),
+                null,
+                null,
+                null);
+
+        int count = 0;
+        if (cursor2 != null && cursor2.moveToFirst()) {
+            count = cursor2.getInt(0);
+        }
+        cursor2.close();
+        return count;
     }
 }

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="background">#100E1B</color>
-    <color name="navigateBar">#080613</color>
-    <color name="backgroundcard">#231D30</color>
+    <!-- Основные цвета -->
+    <color name="background">#100E1B</color>  <!-- Тёмный фон страницы -->
+    <color name="navigateBar">#080613</color>  <!-- Цвет для навигационной панели -->
+    <color name="backgroundcard">#231D30</color> <!-- Цвет для карточек -->
+    <!-- Цвета для кнопок -->
+    <color name="buttonTextColor">#FFFFFF</color> <!-- Белый текст для кнопок -->
+    <color name="buttonBackgroundColor">#664EFF</color> <!-- Яркий фиолетовый для кнопок -->
+    <!-- Цвета текста -->
+    <color name="white">#FFFFFF</color> <!-- Белый текст -->
+    <color name="gray">#B0BEC5</color> <!-- Серый для подсказок и неактивного текста -->
+    <color name="lightGray">#D1D1D1</color> <!-- Светлый серый для текста в фокусе -->
+
 </resources>

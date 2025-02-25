@@ -99,7 +99,7 @@ public class TimerActivity extends AppCompatActivity {
         pauseButton = findViewById(R.id.pauseButtonView);
         playButton = findViewById(R.id.playButtonView);
         startButton = findViewById(R.id.startButtonView);
-        backButton = findViewById(R.id.backButtonView);
+        backButton = findViewById(R.id.backButtonTimerView);
         stopButton = findViewById(R.id.stopButtonView);
         recyclerHour = findViewById(R.id.recyclerHour);
         recyclerMinute = findViewById(R.id.recyclerMinute);

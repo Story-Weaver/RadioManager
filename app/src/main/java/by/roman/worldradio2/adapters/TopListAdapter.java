@@ -73,8 +73,15 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
             }
         });
     }
+    @Override
     public int getItemCount() {
         return cards.size();
+    }
+
+    // Метод для обновления данных
+    public void updateData(List<RadioStations> newList) {
+        cards = newList;
+        notifyDataSetChanged(); // Уведомляем адаптер, что данные изменились
     }
     public void offIsPlaying() {
         for (RadioStations station : cards) {

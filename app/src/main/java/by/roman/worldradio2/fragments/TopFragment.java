@@ -24,20 +24,23 @@ import by.roman.worldradio2.dataclasses.model.RadioStations;
 
 public class TopFragment extends Fragment {
     private RecyclerView recyclerView;
+    private TopListAdapter adapter;
     private List<RadioStations> radioStationsList;
     private  int position;
     private ImageView filterButton;
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateDataInAdapter(); // Обновляем данные, когда фрагмент возвращается на экран
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_top, container, false);
-
         findAllId(view);
         getData();
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        TopListAdapter adapter = new TopListAdapter(getContext(), radioStationsList, position -> {
+        adapter = new TopListAdapter(getContext(), radioStationsList, position -> {
             Toast.makeText(getContext(), "Нажат элемент " + position, Toast.LENGTH_SHORT).show();
             this.position = position;
         });
@@ -55,5 +58,14 @@ public class TopFragment extends Fragment {
     private void getData(){
         Database database = new Database(requireContext());
         radioStationsList = database.getRadioStationWithFilter();
+        if (adapter != null) {
+            adapter.updateData(radioStationsList); // обновляем данные в адаптере
+        }
+    }
+    public void updateDataInAdapter() {
+        getData(); // Перезагружаем данные с учётом фильтров
+        if (adapter != null) {
+            adapter.notifyDataSetChanged(); // Обновляем адаптер
+        }
     }
 }

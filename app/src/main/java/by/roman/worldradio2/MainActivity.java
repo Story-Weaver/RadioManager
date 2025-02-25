@@ -41,8 +41,11 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         initObjects();
-        //Database database = new Database(getApplicationContext());
-        //database.addFilter(1,null,null,null,0);
+        Database database = new Database(getApplicationContext());
+        database.setSort(1,0);
+        database.setFilter(1,"country",null);
+        database.setFilter(1,"style",null);
+        database.setFilter(1,"lang",null);
         //database.addRadioStation("-","mexico","","https://sonic01.instainternet.com/8374/stream",null,0,0,"x3",25,false);
         //database.addRadioStation("Radio Country Live New York","usa","https://cdn-radiotime-logos.tunein.com/s127108d.png","https://streaming.radiostreamlive.com/radiocountrylive_devices",null,0,0,"x3",10,false);
         button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
