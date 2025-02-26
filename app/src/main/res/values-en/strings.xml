@@ -5,4 +5,5 @@
     <string name="lang_filter">Language</string>
     <string name="style_filter">Style</string>
     <string name="sort_filter">Sort</string>
+    <string name="confirm_filter">Confirm</string>
 </resources>

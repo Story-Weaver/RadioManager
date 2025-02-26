@@ -1,4 +1,4 @@
-package by.roman.worldradio2.fragments;
+package by.roman.worldradio2.ui.fragments;
 
 import android.os.Bundle;
 

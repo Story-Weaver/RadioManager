@@ -1,4 +1,4 @@
-package by.roman.worldradio2;
+package by.roman.worldradio2.ui.activities;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -24,8 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import by.roman.worldradio2.adapters.TimerWheelAdapter;
-import by.roman.worldradio2.view.CircularTimerView;
+import by.roman.worldradio2.R;
+import by.roman.worldradio2.ui.adapters.TimerWheelAdapter;
+import by.roman.worldradio2.ui.elements.view.CircularTimerView;
 
 
 

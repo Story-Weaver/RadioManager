@@ -5,4 +5,5 @@
     <string name="lang_filter">Язык</string>
     <string name="style_filter">Стиль</string>
     <string name="sort_filter">Сортировка</string>
+    <string name="confirm_filter">Применить</string>
 </resources>

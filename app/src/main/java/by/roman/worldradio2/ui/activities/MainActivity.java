@@ -1,4 +1,4 @@
-package by.roman.worldradio2;
+package by.roman.worldradio2.ui.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -13,12 +13,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import by.roman.worldradio2.R;
 import by.roman.worldradio2.dataclasses.Database;
-import by.roman.worldradio2.fragments.FindCountryFragment;
-import by.roman.worldradio2.fragments.HomeFragment;
-import by.roman.worldradio2.fragments.SaveFragment;
-import by.roman.worldradio2.fragments.SettingsFragment;
-import by.roman.worldradio2.fragments.TopFragment;
+import by.roman.worldradio2.ui.fragments.FindCountryFragment;
+import by.roman.worldradio2.ui.fragments.HomeFragment;
+import by.roman.worldradio2.ui.fragments.SaveFragment;
+import by.roman.worldradio2.ui.fragments.SettingsFragment;
+import by.roman.worldradio2.ui.fragments.TopFragment;
 
 public class MainActivity extends AppCompatActivity {
 

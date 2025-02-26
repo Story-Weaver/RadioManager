@@ -1,4 +1,4 @@
-package by.roman.worldradio2.adapters;
+package by.roman.worldradio2.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import by.roman.worldradio2.R;
-import by.roman.worldradio2.RadioManager;
+import by.roman.worldradio2.data.RadioManager;
 import by.roman.worldradio2.dataclasses.Database;
 import by.roman.worldradio2.dataclasses.model.RadioStations;
 

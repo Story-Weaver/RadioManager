@@ -35,6 +35,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.annotations)
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -48,4 +52,5 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.localbroadcastmanager)
+    implementation(libs.lombok)
 }

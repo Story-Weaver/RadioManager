@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".FilterActivity">
+    tools:context=".ui.activities.FilterActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,6 +17,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/savedButtonFilter"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toStartOf="@+id/topButtonFilter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sortType"
+            app:srcCompat="@drawable/delete_save" />
+
+        <ImageView
+            android:id="@+id/topButtonFilter"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sortType"
+            app:srcCompat="@drawable/delete_save" />
+
+        <ImageView
+            android:id="@+id/recomendedButtonFilter"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/topButtonFilter"
+            app:layout_constraintTop_toBottomOf="@+id/sortType"
+            app:srcCompat="@drawable/delete_save" />
 
         <ImageView
             android:id="@+id/backButtonFilterView"
@@ -101,7 +131,7 @@
             android:id="@+id/countStation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="90dp"
+            android:layout_marginBottom="120dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -142,6 +172,37 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/delete_save" />
+
+        <ImageView
+            android:id="@+id/confirmButtonView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/confirmbutton_filter" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_filter"
+            app:layout_constraintBottom_toBottomOf="@+id/confirmButtonView"
+            app:layout_constraintEnd_toEndOf="@+id/confirmButtonView"
+            app:layout_constraintStart_toStartOf="@+id/confirmButtonView"
+            app:layout_constraintTop_toTopOf="@+id/confirmButtonView" />
+
+        <Spinner
+            android:id="@+id/sortType"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilLang" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,4 +1,4 @@
-package by.roman.worldradio2.adapters;
+package by.roman.worldradio2.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

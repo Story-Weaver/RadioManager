@@ -1,4 +1,4 @@
-package by.roman.worldradio2.fragments;
+package by.roman.worldradio2.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import by.roman.worldradio2.FilterActivity;
+import by.roman.worldradio2.ui.activities.FilterActivity;
 import by.roman.worldradio2.R;
-import by.roman.worldradio2.adapters.TopListAdapter;
+import by.roman.worldradio2.ui.adapters.TopListAdapter;
 import by.roman.worldradio2.dataclasses.Database;
 import by.roman.worldradio2.dataclasses.model.RadioStations;
 

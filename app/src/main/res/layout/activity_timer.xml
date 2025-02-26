@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context=".TimerActivity">
+    tools:context=".ui.activities.TimerActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="427dp"
@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/playbutton_timer" />
 
-        <by.roman.worldradio2.view.CircularTimerView
+        <by.roman.worldradio2.ui.elements.view.CircularTimerView
             android:id="@+id/circularTimerView"
             android:layout_width="350dp"
             android:layout_height="350dp"

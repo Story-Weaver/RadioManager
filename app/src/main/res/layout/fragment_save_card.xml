@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".fragments.FragmentSaveCard">
+    tools:context=".ui.fragments.FragmentSaveCard">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

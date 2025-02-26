@@ -328,6 +328,27 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         return langFilter;
     }
+    public int getSortFilter(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int sortFilter = 0;
+        Cursor cursor = db.query(
+                TABLE_FILTER,
+                new String[]{COLUMN_SORT_F},
+                COLUMN_USER_ID_F + " = ?",
+                new String[]{String.valueOf(userId)},
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            int sortIndex = cursor.getColumnIndex(COLUMN_SORT_F);
+            if (sortIndex != -1) {
+                sortFilter = cursor.getInt(sortIndex);
+            }
+        }
+        cursor.close();
+        return sortFilter;
+    }
     public void setIsplaying(int id,boolean isPlaying){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

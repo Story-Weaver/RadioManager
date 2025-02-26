@@ -1,4 +1,4 @@
-package by.roman.worldradio2.fragments;
+package by.roman.worldradio2.ui.fragments;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import by.roman.worldradio2.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ItemWheel#newInstance} factory method to
+ * Use the {@link SaveFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ItemWheel extends Fragment {
+public class SaveFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class ItemWheel extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ItemWheel() {
+    public SaveFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class ItemWheel extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ItemWheel.
+     * @return A new instance of fragment SaveFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ItemWheel newInstance(String param1, String param2) {
-        ItemWheel fragment = new ItemWheel();
+    public static SaveFragment newInstance(String param1, String param2) {
+        SaveFragment fragment = new SaveFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class ItemWheel extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_item_wheel, container, false);
+        return inflater.inflate(R.layout.fragment_save, container, false);
     }
 }

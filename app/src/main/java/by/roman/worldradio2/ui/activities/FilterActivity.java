@@ -1,19 +1,22 @@
-package by.roman.worldradio2;
+package by.roman.worldradio2.ui.activities;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -24,18 +27,25 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.roman.worldradio2.R;
 import by.roman.worldradio2.dataclasses.Database;
 
 public class    FilterActivity extends AppCompatActivity {
     private MaterialAutoCompleteTextView actvCountry;
     private MaterialAutoCompleteTextView actvStyle;
     private MaterialAutoCompleteTextView actvLang;
+    private Spinner spinnerSortBy;
     private ImageView backButton;
     private ImageView deleteCountry;
     private ImageView deleteStyle;
     private ImageView deleteLang;
+    private ImageView confirmButton;
+    private ImageView savedButton;
+    private ImageView topButton;
+    private ImageView recomendedButton;
     private TextView count;
     private Database database;
+    private int savedSort;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +61,24 @@ public class    FilterActivity extends AppCompatActivity {
         database = new Database(getApplicationContext());
         loadSavedFilters();
         updateCount();
+        setupSortOptions();
         setupAutoComplete();
         setAutoCompleteTextViewFocusListener(actvLang);
         backButton.setOnClickListener(v ->{
             finish();
+        });
+        confirmButton.setOnTouchListener((v,event) ->{
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, "alpha", 0.5f);
+                fadeOut.setDuration(100);
+                fadeOut.start();
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                ObjectAnimator fadeIn = ObjectAnimator.ofFloat(v, "alpha", 1.0f);
+                fadeIn.setDuration(100);
+                fadeIn.start();
+            }
+            finish();
+            return false;
         });
         deleteCountry.setOnClickListener(v->{
             database.setFilter(1,"country",null);
@@ -74,6 +98,35 @@ public class    FilterActivity extends AppCompatActivity {
             actvLang.setText("");
             deleteLang.setVisibility(INVISIBLE);
         });
+        savedButton.setOnClickListener(v -> {
+
+        });
+        topButton.setOnClickListener(v -> {
+
+        });
+        recomendedButton.setOnClickListener(v -> {
+
+        });
+    }
+    private void setupSortOptions() {
+        List<String> sortOptions = new ArrayList<>();
+        sortOptions.add("Никак");
+        sortOptions.add("По имени");
+        sortOptions.add("По популярности");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSortBy.setAdapter(adapter);
+        spinnerSortBy.setSelection(savedSort);
+        spinnerSortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                database.setSort(1,position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
     }
     private void updateCount(){
         count.setText("Подходит " + database.getRadioStationCountWithFilter() + " радиостанций");
@@ -94,6 +147,7 @@ public class    FilterActivity extends AppCompatActivity {
             actvLang.setText(savedLang);
             deleteLang.setVisibility(VISIBLE);
         } else deleteLang.setVisibility(INVISIBLE);
+        savedSort = database.getSortFilter(1);
     }
     private void setupAutoComplete(){
         ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(this,
@@ -152,6 +206,11 @@ public class    FilterActivity extends AppCompatActivity {
         deleteCountry = findViewById(R.id.deleteCountryFilter);
         deleteStyle = findViewById(R.id.deleteStyleFilter);
         deleteLang = findViewById(R.id.deleteLangFilter);
+        confirmButton = findViewById(R.id.confirmButtonView);
+        savedButton = findViewById(R.id.savedButtonFilter);
+        topButton = findViewById(R.id.topButtonFilter);
+        recomendedButton = findViewById(R.id.recomendedButtonFilter);
+        spinnerSortBy = findViewById(R.id.sortType);
     }
     private void hideKeyboard(View view){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -159,7 +218,7 @@ public class    FilterActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0); // Скрыть клавиатуру
         }
     }
-    private void setAutoCompleteTextViewFocusListener(final MaterialAutoCompleteTextView actv) {
+    private void setAutoCompleteTextViewFocusListener(@NonNull final MaterialAutoCompleteTextView actv) {
         actv.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus && !actv.getText().toString().isEmpty()) {
                 actv.setText("");

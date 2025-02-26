@@ -1,4 +1,4 @@
-package by.roman.worldradio2.fragments;
+package by.roman.worldradio2.ui.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import by.roman.worldradio2.RadioManager;
-import by.roman.worldradio2.TimerActivity;
-import by.roman.worldradio2.adapters.HomeListAdapter;
+import by.roman.worldradio2.data.RadioManager;
+import by.roman.worldradio2.ui.activities.TimerActivity;
+import by.roman.worldradio2.ui.adapters.HomeListAdapter;
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.dataclasses.Database;
 import by.roman.worldradio2.dataclasses.model.RadioStations;

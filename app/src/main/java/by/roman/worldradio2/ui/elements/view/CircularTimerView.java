@@ -1,4 +1,4 @@
-package by.roman.worldradio2.view;
+package by.roman.worldradio2.ui.elements.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
