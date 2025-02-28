@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,18 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import by.roman.worldradio2.data.RadioManager;
+import by.roman.worldradio2.data.model.RadioStation;
+import by.roman.worldradio2.data.repository.DatabaseHelper;
+import by.roman.worldradio2.data.repository.RadioStationRepository;
 import by.roman.worldradio2.ui.activities.TimerActivity;
 import by.roman.worldradio2.ui.adapters.HomeListAdapter;
 import by.roman.worldradio2.R;
-import by.roman.worldradio2.dataclasses.Database;
-import by.roman.worldradio2.dataclasses.model.RadioStations;
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private HomeListAdapter adapter;
-    private List<RadioStations> radioStationsList;
-    RadioManager radioManager;
+    private List<RadioStation> radioStationList;
+    private RadioStationRepository radioStationRepository;
     private  int position;
     private ImageView timerButton;
     private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
@@ -38,13 +39,10 @@ public class HomeFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if ("by.roman.worldradio2.TIMER_FINISHED".equals(intent.getAction())) {
                 Toast.makeText(getContext(), "Таймер завершен через сервис!", Toast.LENGTH_SHORT).show();
-                if (radioManager != null) {
                     adapter.offIsPlaying();
-                    radioManager.stop();
 
-                }
-                if (radioStationsList != null && position >= 0 && position < radioStationsList.size()) {
-                    radioStationsList.get(position).setPlaying(false);
+                if (radioStationList != null && position >= 0 && position < radioStationList.size()) {
+                    radioStationList.get(position).setPlaying(false);
                     adapter.notifyItemChanged(position);
                 }
             }
@@ -65,12 +63,11 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         findAllId(view);
         getData();
-        radioManager = new RadioManager(requireContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new HomeListAdapter(getContext(), radioStationsList, position -> {
+        adapter = new HomeListAdapter(getContext(), radioStationList, position -> {
             Toast.makeText(getContext(), "Нажат элемент " + position, Toast.LENGTH_SHORT).show();
             this.position = position;
-        },radioManager);
+        }, radioStationRepository);
         recyclerView.setAdapter(adapter);
         timerButton.setOnClickListener(v->{
             Intent intent = new Intent(getContext(), TimerActivity.class);
@@ -79,18 +76,13 @@ public class HomeFragment extends Fragment {
         return view;
     }
     private void getData(){
-        Database database = new Database(requireContext());
-        radioStationsList = database.getAllRadioStations();
-        //radioStationsList = database.getRadioStatonWithFilter(null,null,null,1);
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        radioStationRepository = new RadioStationRepository(db);
+        radioStationList = radioStationRepository.getAllRadioStations();
     }
     private void findAllId(View view){
         timerButton = view.findViewById(R.id.timerButtonView);
         recyclerView = view.findViewById(R.id.cardView);
-    }
-    public List<RadioStations> getRadioStations() {
-        return radioStationsList;
-    }
-    public RadioManager getRadioManager(){
-        return radioManager;
     }
 }

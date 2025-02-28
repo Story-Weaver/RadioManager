@@ -15,20 +15,22 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import by.roman.worldradio2.R;
-import by.roman.worldradio2.dataclasses.Database;
-import by.roman.worldradio2.dataclasses.model.RadioStations;
+import by.roman.worldradio2.data.dto.RadioStationDTO;
+import by.roman.worldradio2.data.model.RadioStation;
+import by.roman.worldradio2.data.repository.RadioStationRepository;
 
 public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHolder>{
-    private Database database;
     private Context context;
-    private List<RadioStations> cards;
+    private List<RadioStation> cards;
+    private RadioStationDTO dto;
+    private RadioStationRepository radioStationRepository;
     private OnItemClickListener listener;
 
-    public TopListAdapter(Context context, List<RadioStations> cards, OnItemClickListener listener) {
+    public TopListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener,RadioStationRepository radioStationRepository) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
-
+        this.radioStationRepository = radioStationRepository;
     }
     @Override
     @NonNull
@@ -41,13 +43,12 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
     }
     @Override
     public void onBindViewHolder(@NonNull TopListAdapter.ViewHolder holder, int position) {
-        database = new Database(context);
-        RadioStations card = cards.get(position);
-        holder.nameStation.setText(card.getNameStation());
+        RadioStation card = cards.get(position);
+        holder.nameStation.setText(cards.get(position).getName());
         Glide.with(context)
                 .load(card.getLogoUrl())
                 .into(holder.logoStation);
-        if (card.getIsPlaying()) {
+        if (card.isPlaying()) {
             Glide.with(context)
                     .asGif()
                     .load(R.drawable.sound)
@@ -60,13 +61,13 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
-            for (RadioStations item : cards) {
+            for (RadioStation item : cards) {
                 item.setPlaying(false);
-                database.setIsplaying(item.getId(),false);
+                radioStationRepository.setIsPlaying(item.getId(),false);
             }
-            RadioStations selectedStation = cards.get(adapterPosition);
+            RadioStation selectedStation = cards.get(adapterPosition);
             selectedStation.setPlaying(true);
-            database.setIsplaying(selectedStation.getId(),true);
+            radioStationRepository.setIsPlaying(selectedStation.getId(),true);
             notifyDataSetChanged();
             if(listener != null){
                 listener.onItemClick(position);
@@ -79,14 +80,14 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
     }
 
     // Метод для обновления данных
-    public void updateData(List<RadioStations> newList) {
+    public void updateData(List<RadioStation> newList) {
         cards = newList;
         notifyDataSetChanged(); // Уведомляем адаптер, что данные изменились
     }
     public void offIsPlaying() {
-        for (RadioStations station : cards) {
-            if (station.getIsPlaying()) {
-                database.setIsplaying(station.getId(),false);
+        for (RadioStation station : cards) {
+            if (station.isPlaying()) {
+                radioStationRepository.setIsPlaying(station.getId(),false);
             }
         }
     }
@@ -96,9 +97,9 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameStation = itemView.findViewById(R.id.nameStationView);
-            logoStation = itemView.findViewById(R.id.logoStationView);
-            sound = itemView.findViewById(R.id.soundView);
+            nameStation = itemView.findViewById(R.id.nameStationView_Home);
+            logoStation = itemView.findViewById(R.id.logoStationView_Home);
+            sound = itemView.findViewById(R.id.soundView_Home);
         }
     }
 }

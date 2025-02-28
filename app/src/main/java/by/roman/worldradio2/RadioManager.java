@@ -1,4 +1,4 @@
-package by.roman.worldradio2.data;
+package by.roman.worldradio2;
 
 import android.content.Context;
 import android.net.Uri;

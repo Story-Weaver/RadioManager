@@ -21,7 +21,7 @@
             android:background="@color/backgroundcard">
 
             <ImageView
-                android:id="@+id/logoStationView"
+                android:id="@+id/logoStationView_Save"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="13dp"
@@ -33,7 +33,7 @@
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/nameStationView"
+                android:id="@+id/nameStationView_Save"
                 android:layout_width="215dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="88dp"

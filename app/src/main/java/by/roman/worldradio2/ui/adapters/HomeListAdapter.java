@@ -16,21 +16,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import by.roman.worldradio2.R;
-import by.roman.worldradio2.data.RadioManager;
-import by.roman.worldradio2.dataclasses.Database;
-import by.roman.worldradio2.dataclasses.model.RadioStations;
+import by.roman.worldradio2.data.dto.RadioStationDTO;
+import by.roman.worldradio2.data.model.RadioStation;
+import by.roman.worldradio2.data.repository.RadioStationRepository;
 
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
     private Context context;
-    RadioManager radioManager;
-    Database database;
-    private List<RadioStations> cards;
+    private List<RadioStation> cards;
+    private RadioStationDTO dto;
+    private RadioStationRepository radioStationRepository;
     private OnItemClickListener listener;
-    public HomeListAdapter(Context context, List<RadioStations> cards, OnItemClickListener listener, RadioManager radioManager) {
+
+    public HomeListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener, RadioStationRepository radioStationRepository) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
-        this.radioManager = radioManager;
+        this.radioStationRepository = radioStationRepository;
     }
     @Override
     @NonNull
@@ -43,13 +44,12 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        database = new Database(context);
-        RadioStations card = cards.get(position);
-        holder.nameStation.setText(card.getNameStation());
+        RadioStation card = cards.get(position);
+        holder.nameStation.setText(card.getName());
         Glide.with(context)
                 .load(card.getLogoUrl())
                 .into(holder.logoStation);
-        if (card.getIsPlaying()) {
+        if (card.isPlaying()) {
             Glide.with(context)
                     .asGif()
                     .load(R.drawable.sound)
@@ -61,17 +61,14 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         holder.itemView.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition == RecyclerView.NO_POSITION) return;
-            radioManager.stop();
-            radioManager.release();
-            radioManager.play(cards.get(adapterPosition).getStreamUrl());
 
-            for (RadioStations item : cards) {
+            for (RadioStation item : cards) {
                 item.setPlaying(false);
-                database.setIsplaying(item.getId(),false);
+                radioStationRepository.setIsPlaying(item.getId(),false);
             }
-            RadioStations selectedStation = cards.get(adapterPosition);
+            RadioStation selectedStation = cards.get(adapterPosition);
             selectedStation.setPlaying(true);
-            database.setIsplaying(selectedStation.getId(),true);
+            radioStationRepository.setIsPlaying(selectedStation.getId(),true);
             notifyDataSetChanged();
             if(listener != null){
                 listener.onItemClick(position);
@@ -84,9 +81,9 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         return cards.size();
     }
     public void offIsPlaying() {
-        for (RadioStations station : cards) {
-            if (station.getIsPlaying()) {
-                database.setIsplaying(station.getId(),false);
+        for (RadioStation station : cards) {
+            if (station.isPlaying()) {
+                radioStationRepository.setIsPlaying(station.getId(),false);
             }
         }
     }
@@ -96,9 +93,9 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameStation = itemView.findViewById(R.id.nameStationView);
-            logoStation = itemView.findViewById(R.id.logoStationView);
-            sound = itemView.findViewById(R.id.soundView);
+            nameStation = itemView.findViewById(R.id.nameStationView_Home);
+            logoStation = itemView.findViewById(R.id.logoStationView_Home);
+            sound = itemView.findViewById(R.id.soundView_Home);
         }
     }
 }

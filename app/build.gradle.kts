@@ -39,6 +39,9 @@ dependencies {
     implementation(libs.jackson.databind)
     implementation(libs.jackson.annotations)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter)
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -53,4 +56,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.localbroadcastmanager)
     implementation(libs.lombok)
+    annotationProcessor(libs.lombok)
 }

@@ -21,7 +21,7 @@
             android:background="@color/backgroundcard">
 
             <ImageView
-                android:id="@+id/logoStationView"
+                android:id="@+id/logoStationView_Home"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="13dp"
@@ -33,7 +33,7 @@
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/nameStationView"
+                android:id="@+id/nameStationView_Home"
                 android:layout_width="215dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="88dp"
@@ -45,7 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/soundView"
+                android:id="@+id/soundView_Home"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"

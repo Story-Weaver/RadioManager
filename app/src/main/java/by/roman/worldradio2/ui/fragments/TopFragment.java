@@ -1,6 +1,7 @@
 package by.roman.worldradio2.ui.fragments;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,17 +16,19 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import by.roman.worldradio2.data.model.RadioStation;
+import by.roman.worldradio2.data.repository.DatabaseHelper;
+import by.roman.worldradio2.data.repository.RadioStationRepository;
 import by.roman.worldradio2.ui.activities.FilterActivity;
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.ui.adapters.TopListAdapter;
-import by.roman.worldradio2.dataclasses.Database;
-import by.roman.worldradio2.dataclasses.model.RadioStations;
 
 
 public class TopFragment extends Fragment {
     private RecyclerView recyclerView;
     private TopListAdapter adapter;
-    private List<RadioStations> radioStationsList;
+    private List<RadioStation> radioStationList;
+    private RadioStationRepository radioStationRepository;
     private  int position;
     private ImageView filterButton;
     @Override
@@ -40,10 +43,10 @@ public class TopFragment extends Fragment {
         findAllId(view);
         getData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TopListAdapter(getContext(), radioStationsList, position -> {
+        adapter = new TopListAdapter(getContext(), radioStationList, position -> {
             Toast.makeText(getContext(), "Нажат элемент " + position, Toast.LENGTH_SHORT).show();
             this.position = position;
-        });
+        },radioStationRepository);
         recyclerView.setAdapter(adapter);
         filterButton.setOnClickListener(v->{
             Intent intent = new Intent(getContext(), FilterActivity.class);
@@ -56,10 +59,12 @@ public class TopFragment extends Fragment {
         recyclerView = view.findViewById(R.id.cardTopView);
     }
     private void getData(){
-        Database database = new Database(requireContext());
-        radioStationsList = database.getRadioStationWithFilter();
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        radioStationRepository = new RadioStationRepository(db);
+        radioStationList = radioStationRepository.getRadioStationWithFilter();
         if (adapter != null) {
-            adapter.updateData(radioStationsList); // обновляем данные в адаптере
+            adapter.updateData(radioStationList); // обновляем данные в адаптере
         }
     }
     public void updateDataInAdapter() {

@@ -14,7 +14,7 @@
 //
 //     RadioStationModel data = Converter.fromJsonString(jsonString);
 
-package by.roman.worldradio2.data.model;
+package by.roman.worldradio2.data;
 
 import java.io.IOException;
 import java.util.*;
@@ -63,11 +63,11 @@ class Converter {
     }
     // Serialize/deserialize helpers
 
-    public static RadioStationModel fromJsonString(String json) throws IOException {
+    public static RadioStationJSONtoJSON fromJsonString(String json) throws IOException {
         return getObjectReader().readValue(json);
     }
 
-    public static String toJsonString(RadioStationModel obj) throws JsonProcessingException {
+    public static String toJsonString(RadioStationJSONtoJSON obj) throws JsonProcessingException {
         return getObjectWriter().writeValueAsString(obj);
     }
 
@@ -88,8 +88,8 @@ class Converter {
             }
         });
         mapper.registerModule(module);
-        reader = mapper.readerFor(RadioStationModel.class);
-        writer = mapper.writerFor(RadioStationModel.class);
+        reader = mapper.readerFor(RadioStationJSONtoJSON.class);
+        writer = mapper.writerFor(RadioStationJSONtoJSON.class);
     }
 
     private static ObjectReader getObjectReader() {
@@ -106,7 +106,7 @@ class Converter {
 // RadioStationModel.java
 
 @lombok.Data
-public class RadioStationModel {
+public class RadioStationJSONtoJSON {
     @lombok.Getter(onMethod_ = {@JsonProperty("id")})
     @lombok.Setter(onMethod_ = {@JsonProperty("id")})
     private UUID id;
