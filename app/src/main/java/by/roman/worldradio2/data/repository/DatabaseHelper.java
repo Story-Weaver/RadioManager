@@ -38,11 +38,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String COLUMN_UUID_USER = "id";
     protected static final String COLUMN_LOGIN_USER = "login";
     protected static final String COLUMN_PASSWORD_USER = "password";
+    protected static final String COLUMN_IN_SYSTEM_USER = "in_system";
 
     protected static final String CREATE_TABLE_USER = "CREATE TABLE "+ TABLE_USER + " ("+
             COLUMN_UUID_USER +     " INTEGER PRIMARY KEY AUTOINCREMENT, "+
             COLUMN_LOGIN_USER +    " TEXT, "+
-            COLUMN_PASSWORD_USER + " TEXT);";
+            COLUMN_PASSWORD_USER + " TEXT, "+
+            COLUMN_IN_SYSTEM_USER + " TEXT);";
     protected static final String TABLE_FILTER = "filter";
     protected static final String COLUMN_USER_ID_FILTER = "user_id_f";
     public static final String COLUMN_STYLE_FILTER = "style_f";
