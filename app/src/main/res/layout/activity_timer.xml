@@ -52,11 +52,12 @@
             android:id="@+id/stopButtonView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
             android:layout_marginBottom="70dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/stopbutton_timer"
-            tools:layout_editor_absoluteX="247dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/stopbutton_timer" />
 
         <ImageView
             android:id="@+id/startButtonView"

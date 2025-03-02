@@ -1,6 +1,7 @@
 package by.roman.worldradio2.ui.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         initObjects();
+        Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
+        startActivity(intent);
         button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
         button_save.setOnClickListener(v -> FragmentChange(new SaveFragment(), 1));
         button_home.setOnClickListener(v -> FragmentChange(new HomeFragment(), 2));

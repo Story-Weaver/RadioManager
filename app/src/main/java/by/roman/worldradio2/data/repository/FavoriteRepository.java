@@ -65,12 +65,12 @@ public class FavoriteRepository {
             int nameIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME_STATION);
             int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_STATION);
             int logoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LOGO_URL_STATION);
-            int streamIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STREAM_URL_STATION);
+            int streamIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_URL_STATION);
             int styleIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STYLE_STATION);
-            int latIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LATITUDE_STATION);
-            int longIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LONGITUDE_STATION);
-            int langIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANG_STATION);
-            int likesIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LIKES_STATION);
+            int latIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_LATITUDE_STATION);
+            int longIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION);
+            int langIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_STATION);
+            int likesIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_VOTES_STATION);
             int isPlayingIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_ISPLAYING_STATION);
             if (idIndex != -1 && nameIndex != -1 && countryIndex != -1 &&
                     logoIndex != -1 && streamIndex != -1 && styleIndex != -1 &&

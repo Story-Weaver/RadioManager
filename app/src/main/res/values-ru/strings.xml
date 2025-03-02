@@ -6,4 +6,11 @@
     <string name="style_filter">Стиль</string>
     <string name="sort_filter">Сортировка</string>
     <string name="confirm_filter">Применить</string>
+    <string name="entrance">Вход</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_pass">Забыли пароль?</string>
+    <string name="enter">Войти</string>
+    <string name="create_account">Создать аккаунт</string>
+    <string name="error_entrance">Неправильный логин или пароль</string>
 </resources>

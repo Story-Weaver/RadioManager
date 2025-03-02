@@ -10,28 +10,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String DATABASE_NAME = "Radio.db";
     protected static final int DATABASE_VERSION = 1;
     protected static final String TABLE_RADIO_STATION = "radiostation";
-    protected static final String COLUMN_UUID_STATION= "id";
+    protected static final String COLUMN_CHANGEUUID_STATION = "changeUUID";
+    protected static final String COLUMN_UUID_STATION= "stationUUID";
     protected static final String COLUMN_NAME_STATION = "name";
-    protected static final String COLUMN_LOGO_URL_STATION = "logoUrl";
-    protected static final String COLUMN_STREAM_URL_STATION = "streamUrl";
+    protected static final String COLUMN_URL_STATION = "url";
+    protected static final String COLUMN_URL_RESOLVED_STATION = "url_resolved";
+    protected static final String COLUMN_HOMEPAGE_STATION = "homepage";
+    protected static final String COLUMN_FAVICON_STATION = "favicon";
+    protected static final String COLUMN_TAGS_STATION = "tags";
     protected static final String COLUMN_COUNTRY_STATION = "country";
-    protected static final String COLUMN_STYLE_STATION = "style";
-    protected static final String COLUMN_LONGITUDE_STATION = "longitude";
-    protected static final String COLUMN_LATITUDE_STATION = "latitude";
-    protected static final String COLUMN_LIKES_STATION = "likes";
-    protected static final String COLUMN_LANG_STATION = "lang";
+    protected static final String COLUMN_COUNTRY_CODE_STATION = "countryCode";
+    protected static final String COLUMN_STATE_STATION = "state";
+    protected static final String COLUMN_iso_3166_2_STATION = "iso_3166_2";
+    protected static final String COLUMN_LANGUAGE_STATION = "language";
+    protected static final String COLUMN_LANGUAGE_CODES_STATION = "languageCodes";
+    protected static final String COLUMN_VOTES_STATION = "votes";
+    protected static final String COLUMN_LAST_CHANGE_TIME_STATION = "lastChangeTime";
+    protected static final String COLUMN_LAST_CHANGE_TIME_iso8601_STATION = "lastChangeTime_iso8601";
+    protected static final String COLUMN_CODEC_STATION = "codec";
+    protected static final String COLUMN_BITRATE_STATION = "bitrate";
+    protected static final String COLUMN_HLS_STATION = "hls";
+    protected static final String COLUMN_LAST_CHECK_OK_STATION = "lastCheckOk";
+    protected static final String COLUMN_LAST_CHECK_TIME_STATION = "lastCheckTime";
+    protected static final String COLUMN_LAST_CHECK_TIME_iso8601_STATION = "lastCheckTime_iso8601";
+    protected static final String COLUMN_LAST_CHECK_OK_TIME_STATION = "lastCheckOkTime";
+    protected static final String COLUMN_LAST_CHECK_OK_TIME_iso8601_STATION = "lastCheckOkTime_iso8601";
+    protected static final String COLUMN_LAST_LOCAL_CHECK_TIME_STATION = "lastLocalCheckTime";
+    protected static final String COLUMN_LAST_LOCAL_CHECK_TIME_iso8601_STATION = "lastLocalCheckTime_iso8601";
+    protected static final String COLUMN_CLICK_TIME_STAMP_STATION = "clickTimeStamp";
+    protected static final String COLUMN_CLICK_TIME_STAMP_iso8601_STATION = "clickTimeStamp_iso8601";
+    protected static final String COLUMN_CLICK_COUNT_STATION = "clickCount";
+    protected static final String COLUMN_CLICK_TREND_STATION = "clickTrend";
+    protected static final String COLUMN_SSL_ERROR_STATION = "ssl_error";
+    protected static final String COLUMN_GEO_LATITUDE_STATION = "geo_lat";
+    protected static final String COLUMN_GEO_LONGITUDE_STATION = "geo_long";
+    protected static final String COLUMN_GEO_DISTANCE_STATION = "geo_distance";
+    protected static final String COLUMN_HAS_EXTENDED_INFO_STATION = "has_extended_info";
+    protected static final String COLUMN_STYLE_STATION = "style";// TODO remove to tags
+
+
+
+
     protected static final String COLUMN_ISPLAYING_STATION = "isPlaying";
     protected static final String CREATE_TABLE_RADIO_STATION = "CREATE TABLE "+ TABLE_RADIO_STATION + " ("+
             COLUMN_UUID_STATION +         " INTEGER PRIMARY KEY AUTOINCREMENT,"+
             COLUMN_NAME_STATION +         " TEXT, "+
             COLUMN_COUNTRY_STATION +      " TEXT, "+
-            COLUMN_LOGO_URL_STATION +     " TEXT, "+
-            COLUMN_STREAM_URL_STATION +   " TEXT, "+
+            COLUMN_FAVICON_STATION +     " TEXT, "+
+            COLUMN_URL_STATION +   " TEXT, "+
             COLUMN_STYLE_STATION +        " TEXT, "+
-            COLUMN_LATITUDE_STATION +     " REAL, "+
-            COLUMN_LONGITUDE_STATION +    " REAL, "+
-            COLUMN_LANG_STATION +         " TEXT, "+
-            COLUMN_LIKES_STATION +        " INTEGER, "+
+            COLUMN_GEO_LATITUDE_STATION +     " REAL, "+
+            COLUMN_GEO_LONGITUDE_STATION +    " REAL, "+
+            COLUMN_LANGUAGE_STATION +         " TEXT, "+
+            COLUMN_VOTES_STATION +        " INTEGER, "+
             COLUMN_ISPLAYING_STATION +    " INTEGER);";
 
     protected static final String TABLE_USER = "user";

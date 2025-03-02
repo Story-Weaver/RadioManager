@@ -12,15 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="189dp"
-            android:layout_marginTop="426dp"
-            android:layout_marginEnd="181dp"
-            android:layout_marginBottom="432dp"
-            android:text="В разработке"
+        <WebView
+            android:id="@+id/globe_Find"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
