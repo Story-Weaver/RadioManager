@@ -20,54 +20,164 @@ public class RadioStationRepository {
     }
     public long addRadioStation(@NonNull RadioStationDTO dto) {
         ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_CHANGE_UUID_STATION, dto.getChangeUuid());
+        values.put(DatabaseHelper.COLUMN_UUID_STATION, dto.getStationUuid());
         values.put(DatabaseHelper.COLUMN_NAME_STATION, dto.getName());
+        values.put(DatabaseHelper.COLUMN_URL_STATION, dto.getUrl());
+        values.put(DatabaseHelper.COLUMN_URL_RESOLVED_STATION, dto.getUrlResolved());
+        values.put(DatabaseHelper.COLUMN_HOMEPAGE_STATION, dto.getHomepage());
+        values.put(DatabaseHelper.COLUMN_FAVICON_STATION, dto.getFavicon());
+        values.put(DatabaseHelper.COLUMN_TAGS_STATION, dto.getTags());
         values.put(DatabaseHelper.COLUMN_COUNTRY_STATION, dto.getCountry());
-        values.put(DatabaseHelper.COLUMN_LOGO_URL_STATION, dto.getLogoUrl());
-        values.put(DatabaseHelper.COLUMN_URL_STATION, dto.getStreamUrl());
-        values.put(DatabaseHelper.COLUMN_STYLE_STATION, dto.getStyle());
-        values.put(DatabaseHelper.COLUMN_GEO_LATITUDE_STATION, dto.getLatitude());
-        values.put(DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION, dto.getLongitude());
-        values.put(DatabaseHelper.COLUMN_LANGUAGE_STATION, dto.getLang());
-        values.put(DatabaseHelper.COLUMN_VOTES_STATION, dto.getLikes());
-        values.put(DatabaseHelper.COLUMN_ISPLAYING_STATION, dto.isPlaying() ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_COUNTRY_CODE_STATION, dto.getCountryCode());
+        values.put(DatabaseHelper.COLUMN_STATE_STATION, dto.getState());
+        values.put(DatabaseHelper.COLUMN_iso_3166_2_STATION, dto.getIso31662());
+        values.put(DatabaseHelper.COLUMN_LANGUAGE_STATION, dto.getLanguage());
+        values.put(DatabaseHelper.COLUMN_LANGUAGE_CODE_STATION, dto.getLanguageCode());
+        values.put(DatabaseHelper.COLUMN_VOTES_STATION, dto.getVotes());
+        values.put(DatabaseHelper.COLUMN_LAST_CHANGE_TIME_STATION, dto.getLastChangeTime());
+        values.put(DatabaseHelper.COLUMN_LAST_CHANGE_TIME_iso8601_STATION, dto.getLastChangeTimeIso8601());
+        values.put(DatabaseHelper.COLUMN_CODEC_STATION, dto.getCodec());
+        values.put(DatabaseHelper.COLUMN_BITRATE_STATION, dto.getBitrate());
+        values.put(DatabaseHelper.COLUMN_HLS_STATION, dto.getHls());
+        values.put(DatabaseHelper.COLUMN_LAST_CHECK_OK_STATION, dto.getLastCheckOk());
+        values.put(DatabaseHelper.COLUMN_LAST_CHECK_TIME_STATION, dto.getLastCheckTime());
+        values.put(DatabaseHelper.COLUMN_LAST_CHECK_TIME_iso8601_STATION, dto.getLastCheckTimeIso8601());
+        values.put(DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_STATION, dto.getLastCheckOkTime());
+        values.put(DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_iso8601_STATION, dto.getLastCheckOkTimeIso8601());
+        values.put(DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_STATION, dto.getLastLocalCheckTime());
+        values.put(DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_iso8601_STATION, dto.getLastLocalCheckTimeIso8601());
+        values.put(DatabaseHelper.COLUMN_CLICK_TIME_STAMP_STATION, dto.getClickTimestamp());
+        values.put(DatabaseHelper.COLUMN_CLICK_TIME_STAMP_iso8601_STATION, dto.getClickTimestampIso8601());
+        values.put(DatabaseHelper.COLUMN_CLICK_COUNT_STATION, dto.getClickCount());
+        values.put(DatabaseHelper.COLUMN_CLICK_TREND_STATION, dto.getClickTrend());
+        values.put(DatabaseHelper.COLUMN_SSL_ERROR_STATION, dto.getSslError());
+        values.put(DatabaseHelper.COLUMN_GEO_LATITUDE_STATION, dto.getGeoLat());
+        values.put(DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION, dto.getGeoLong());
+        values.put(DatabaseHelper.COLUMN_GEO_DISTANCE_STATION, dto.getGeoDistance());
+        values.put(DatabaseHelper.COLUMN_HAS_EXTENDED_INFO_STATION, dto.getIsHasExtendedInfo());
+        values.put(DatabaseHelper.COLUMN_ISPLAYING_STATION, dto.getIsPlaying());
         return db.insert(DatabaseHelper.TABLE_RADIO_STATION, null, values);
     }
     public List<RadioStation> getAllRadioStations() {
         List<RadioStation> radioStationsList = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.TABLE_RADIO_STATION,
-                new String[]{DatabaseHelper.COLUMN_UUID_STATION, DatabaseHelper.COLUMN_NAME_STATION, DatabaseHelper.COLUMN_COUNTRY_STATION,
-                             DatabaseHelper.COLUMN_LOGO_URL_STATION, DatabaseHelper.COLUMN_URL_STATION,
-                             DatabaseHelper.COLUMN_STYLE_STATION, DatabaseHelper.COLUMN_GEO_LATITUDE_STATION, DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION,
-                             DatabaseHelper.COLUMN_LANGUAGE_STATION, DatabaseHelper.COLUMN_VOTES_STATION, DatabaseHelper.COLUMN_ISPLAYING_STATION},
+                new String[]{
+                        DatabaseHelper.COLUMN_CHANGE_UUID_STATION, DatabaseHelper.COLUMN_UUID_STATION, DatabaseHelper.COLUMN_NAME_STATION,
+                        DatabaseHelper.COLUMN_URL_STATION, DatabaseHelper.COLUMN_URL_RESOLVED_STATION, DatabaseHelper.COLUMN_HOMEPAGE_STATION,
+                        DatabaseHelper.COLUMN_FAVICON_STATION, DatabaseHelper.COLUMN_TAGS_STATION, DatabaseHelper.COLUMN_COUNTRY_STATION,
+                        DatabaseHelper.COLUMN_COUNTRY_CODE_STATION, DatabaseHelper.COLUMN_STATE_STATION, DatabaseHelper.COLUMN_iso_3166_2_STATION,
+                        DatabaseHelper.COLUMN_LANGUAGE_STATION, DatabaseHelper.COLUMN_LANGUAGE_CODE_STATION, DatabaseHelper.COLUMN_VOTES_STATION,
+                        DatabaseHelper.COLUMN_LAST_CHANGE_TIME_STATION, DatabaseHelper.COLUMN_LAST_CHANGE_TIME_iso8601_STATION, DatabaseHelper.COLUMN_CODEC_STATION,
+                        DatabaseHelper.COLUMN_BITRATE_STATION, DatabaseHelper.COLUMN_HLS_STATION, DatabaseHelper.COLUMN_LAST_CHECK_OK_STATION,
+                        DatabaseHelper.COLUMN_LAST_CHECK_TIME_STATION, DatabaseHelper.COLUMN_LAST_CHECK_TIME_iso8601_STATION, DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_STATION,
+                        DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_iso8601_STATION, DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_STATION, DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_iso8601_STATION,
+                        DatabaseHelper.COLUMN_CLICK_TIME_STAMP_STATION, DatabaseHelper.COLUMN_CLICK_TIME_STAMP_iso8601_STATION, DatabaseHelper.COLUMN_CLICK_COUNT_STATION,
+                        DatabaseHelper.COLUMN_CLICK_TREND_STATION, DatabaseHelper.COLUMN_SSL_ERROR_STATION, DatabaseHelper.COLUMN_GEO_LATITUDE_STATION,
+                        DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION, DatabaseHelper.COLUMN_GEO_DISTANCE_STATION, DatabaseHelper.COLUMN_HAS_EXTENDED_INFO_STATION,
+                        DatabaseHelper.COLUMN_ISPLAYING_STATION
+                },
                 null, null, null, null, null);
+
         if (cursor != null) {
             while (cursor.moveToNext()) {
+                int changeUuidIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CHANGE_UUID_STATION);
                 int idIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_UUID_STATION);
                 int nameIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME_STATION);
-                int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_STATION);
-                int logoUrlIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LOGO_URL_STATION);
                 int streamUrlIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_URL_STATION);
-                int styleIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STYLE_STATION);
+                int urlResolvedIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_URL_RESOLVED_STATION);
+                int homepageIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_HOMEPAGE_STATION);
+                int logoUrlIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_FAVICON_STATION);
+                int tagsIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_STATION);
+                int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_STATION);
+                int countryCodeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_CODE_STATION);
+                int stateIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STATE_STATION);
+                int iso31662Index = cursor.getColumnIndex(DatabaseHelper.COLUMN_iso_3166_2_STATION);
+                int langIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_STATION);
+                int langCodeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_CODE_STATION);
+                int likesIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_VOTES_STATION);
+                int lastChangeTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHANGE_TIME_STATION);
+                int lastChangeTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHANGE_TIME_iso8601_STATION);
+                int codecIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CODEC_STATION);
+                int bitrateIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_BITRATE_STATION);
+                int hlsIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_HLS_STATION);
+                int lastCheckOkIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_OK_STATION);
+                int lastCheckTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_TIME_STATION);
+                int lastCheckTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_TIME_iso8601_STATION);
+                int lastCheckOkTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_STATION);
+                int lastCheckOkTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_iso8601_STATION);
+                int lastLocalCheckTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_STATION);
+                int lastLocalCheckTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_iso8601_STATION);
+                int clickTimestampIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_TIME_STAMP_STATION);
+                int clickTimestampIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_TIME_STAMP_iso8601_STATION);
+                int clickCountIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_COUNT_STATION);
+                int clickTrendIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_TREND_STATION);
+                int sslErrorIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_SSL_ERROR_STATION);
                 int latIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_LATITUDE_STATION);
                 int longIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION);
-                int langIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_STATION);
-                int likesIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_VOTES_STATION);
+                int geoDistanceIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_DISTANCE_STATION);
+                int hasExtendedInfoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_HAS_EXTENDED_INFO_STATION);
                 int playingIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_ISPLAYING_STATION);
                 if (idIndex != -1 && nameIndex != -1 && countryIndex != -1 && logoUrlIndex != -1 &&
-                        streamUrlIndex != -1 && styleIndex != -1 && latIndex != -1 && longIndex != -1 && langIndex != -1 &&
-                        likesIndex != -1 && playingIndex != -1) {
-                    int id = cursor.getInt(idIndex);
+                        streamUrlIndex != -1 && urlResolvedIndex != -1 && homepageIndex != -1 && tagsIndex != -1 &&
+                        countryCodeIndex != -1 && stateIndex != -1 && iso31662Index != -1 && langIndex != -1 &&
+                        langCodeIndex != -1 && likesIndex != -1 && lastChangeTimeIndex != -1 && lastChangeTimeIsoIndex != -1 &&
+                        codecIndex != -1 && bitrateIndex != -1 && hlsIndex != -1 && lastCheckOkIndex != -1 &&
+                        lastCheckTimeIndex != -1 && lastCheckTimeIsoIndex != -1 && lastCheckOkTimeIndex != -1 &&
+                        lastCheckOkTimeIsoIndex != -1 && lastLocalCheckTimeIndex != -1 && lastLocalCheckTimeIsoIndex != -1 &&
+                        clickTimestampIndex != -1 && clickTimestampIsoIndex != -1 && clickCountIndex != -1 &&
+                        clickTrendIndex != -1 && sslErrorIndex != -1 && latIndex != -1 && longIndex != -1 &&
+                        geoDistanceIndex != -1 && hasExtendedInfoIndex != -1 && playingIndex != -1) {
+
+                    String changeUuid = cursor.getString(changeUuidIndex);
+                    String id = cursor.getString(idIndex);
                     String name = cursor.getString(nameIndex);
-                    String country = cursor.getString(countryIndex);
-                    String logoUrl = cursor.getString(logoUrlIndex);
                     String streamUrl = cursor.getString(streamUrlIndex);
-                    String style = cursor.getString(styleIndex);
+                    String urlResolved = cursor.getString(urlResolvedIndex);
+                    String homepage = cursor.getString(homepageIndex);
+                    String logoUrl = cursor.getString(logoUrlIndex);
+                    String tags = cursor.getString(tagsIndex);
+                    String country = cursor.getString(countryIndex);
+                    String countryCode = cursor.getString(countryCodeIndex);
+                    String state = cursor.getString(stateIndex);
+                    String iso31662 = cursor.getString(iso31662Index);
+                    String lang = cursor.getString(langIndex);
+                    String langCode = cursor.getString(langCodeIndex);
+                    int likes = cursor.getInt(likesIndex);
+                    String lastChangeTime = cursor.getString(lastChangeTimeIndex);
+                    String lastChangeTimeIso = cursor.getString(lastChangeTimeIsoIndex);
+                    String codec = cursor.getString(codecIndex);
+                    int bitrate = cursor.getInt(bitrateIndex);
+                    int hls = cursor.getInt(hlsIndex);
+                    int lastCheckOk = cursor.getInt(lastCheckOkIndex);
+                    String lastCheckTime = cursor.getString(lastCheckTimeIndex);
+                    String lastCheckTimeIso = cursor.getString(lastCheckTimeIsoIndex);
+                    String lastCheckOkTime = cursor.getString(lastCheckOkTimeIndex);
+                    String lastCheckOkTimeIso = cursor.getString(lastCheckOkTimeIsoIndex);
+                    String lastLocalCheckTime = cursor.getString(lastLocalCheckTimeIndex);
+                    String lastLocalCheckTimeIso = cursor.getString(lastLocalCheckTimeIsoIndex);
+                    String clickTimestamp = cursor.getString(clickTimestampIndex);
+                    String clickTimestampIso = cursor.getString(clickTimestampIsoIndex);
+                    int clickCount = cursor.getInt(clickCountIndex);
+                    int clickTrend = cursor.getInt(clickTrendIndex);
+                    int sslError = cursor.getInt(sslErrorIndex);
                     double latitude = cursor.getDouble(latIndex);
                     double longitude = cursor.getDouble(longIndex);
-                    String lang = cursor.getString(langIndex);
-                    int likes = cursor.getInt(likesIndex);
-                    boolean isPlaying = cursor.getInt(playingIndex) == 1;
-                    RadioStation station = new RadioStation(id,logoUrl, name, streamUrl, country, style, latitude, longitude, lang,likes, isPlaying);
+                    double geoDistance = cursor.getDouble(geoDistanceIndex);
+                    boolean hasExtendedInfo = cursor.getInt(hasExtendedInfoIndex) == 1;
+                    int isPlaying = cursor.getInt(playingIndex);
+
+                    RadioStation station = new RadioStation(
+                            changeUuid, id, name, streamUrl, urlResolved, homepage, logoUrl, tags,
+                            country, countryCode, iso31662, state, lang, langCode, likes,
+                            lastChangeTime, lastChangeTimeIso, codec, bitrate,
+                            hls, lastCheckOk, lastCheckTime,
+                            lastCheckTimeIso, lastCheckOkTime, lastCheckOkTimeIso,
+                            lastLocalCheckTime, lastLocalCheckTimeIso,
+                            clickTimestamp, clickTimestampIso, clickCount,
+                            clickTrend, sslError, latitude, longitude, geoDistance,
+                            hasExtendedInfo, isPlaying
+                    );
                     radioStationsList.add(station);
                 }
             }
@@ -106,9 +216,9 @@ public class RadioStationRepository {
                 null);
         if(cursor != null){
             while (cursor.moveToNext()) {
-                int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_STATION);
-                if (countryIndex != -1) {
-                    langList.add(cursor.getString(countryIndex));
+                int langIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_STATION);
+                if (langIndex != -1) {
+                    langList.add(cursor.getString(langIndex));
                 }
             }
             cursor.close();
@@ -126,23 +236,23 @@ public class RadioStationRepository {
                 null);
         if(cursor != null){
             while (cursor.moveToNext()) {
-                int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STYLE_STATION);
-                if (countryIndex != -1) {
-                    styleList.add(cursor.getString(countryIndex));
+                int styleIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STYLE_STATION);
+                if (styleIndex != -1) {
+                    styleList.add(cursor.getString(styleIndex));
                 }
             }
             cursor.close();
         }
         return styleList;
-    }
-    public void setIsPlaying(int id,boolean isPlaying){
+    } // TODO: починить для тегов
+    public void setIsPlaying(String uuid, boolean isPlaying){
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ISPLAYING_STATION, isPlaying ? 1 : 0);
         String selection = DatabaseHelper.COLUMN_UUID_STATION + " = ?";
-        String[] selectionArgs = {String.valueOf(id)};
+        String[] selectionArgs = {uuid};
         db.update(DatabaseHelper.TABLE_RADIO_STATION, values, selection, selectionArgs);
     }
-    public List<RadioStation> getRadioStationWithFilter(){ // TODO: debug
+    public List<RadioStation> getRadioStationWithFilter(){
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgsList = new ArrayList<>();
         String countryF = null;
@@ -200,53 +310,134 @@ public class RadioStationRepository {
         }
         cursor1.close();
         List<RadioStation> radioStationList = new ArrayList<>();
-        Cursor cursor2 = db.query(DatabaseHelper.TABLE_RADIO_STATION,
-                new String[]{DatabaseHelper.COLUMN_UUID_STATION, DatabaseHelper.COLUMN_NAME_STATION,
-                             DatabaseHelper.COLUMN_COUNTRY_STATION, DatabaseHelper.COLUMN_LOGO_URL_STATION,
-                             DatabaseHelper.COLUMN_URL_STATION, DatabaseHelper.COLUMN_STYLE_STATION,
-                             DatabaseHelper.COLUMN_GEO_LATITUDE_STATION, DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION,
-                             DatabaseHelper.COLUMN_LANGUAGE_STATION, DatabaseHelper.COLUMN_VOTES_STATION,
-                             DatabaseHelper.COLUMN_ISPLAYING_STATION},
+        Cursor cursor = db.query(DatabaseHelper.TABLE_RADIO_STATION,
+                new String[]{DatabaseHelper.COLUMN_CHANGE_UUID_STATION,DatabaseHelper.COLUMN_UUID_STATION,
+                        DatabaseHelper.COLUMN_NAME_STATION,DatabaseHelper.COLUMN_URL_STATION,
+                        DatabaseHelper.COLUMN_URL_RESOLVED_STATION,DatabaseHelper.COLUMN_HOMEPAGE_STATION,
+                        DatabaseHelper.COLUMN_FAVICON_STATION,DatabaseHelper.COLUMN_TAGS_STATION,
+                        DatabaseHelper.COLUMN_COUNTRY_STATION,DatabaseHelper.COLUMN_COUNTRY_CODE_STATION,
+                        DatabaseHelper.COLUMN_STATE_STATION,DatabaseHelper.COLUMN_iso_3166_2_STATION,
+                        DatabaseHelper.COLUMN_LANGUAGE_STATION,DatabaseHelper.COLUMN_LANGUAGE_CODE_STATION,
+                        DatabaseHelper.COLUMN_VOTES_STATION,DatabaseHelper.COLUMN_LAST_CHANGE_TIME_STATION,
+                        DatabaseHelper.COLUMN_LAST_CHANGE_TIME_iso8601_STATION,DatabaseHelper.COLUMN_CODEC_STATION,
+                        DatabaseHelper.COLUMN_BITRATE_STATION,DatabaseHelper.COLUMN_HLS_STATION,
+                        DatabaseHelper.COLUMN_LAST_CHECK_OK_STATION,DatabaseHelper.COLUMN_LAST_CHECK_TIME_STATION,
+                        DatabaseHelper.COLUMN_LAST_CHECK_TIME_iso8601_STATION,DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_STATION,
+                        DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_iso8601_STATION,DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_STATION,
+                        DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_iso8601_STATION,DatabaseHelper.COLUMN_CLICK_TIME_STAMP_STATION,
+                        DatabaseHelper.COLUMN_CLICK_TIME_STAMP_iso8601_STATION,DatabaseHelper.COLUMN_CLICK_COUNT_STATION,
+                        DatabaseHelper.COLUMN_CLICK_TREND_STATION,DatabaseHelper.COLUMN_SSL_ERROR_STATION,DatabaseHelper.COLUMN_GEO_LATITUDE_STATION,
+                        DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION,DatabaseHelper.COLUMN_GEO_DISTANCE_STATION,
+                        DatabaseHelper.COLUMN_HAS_EXTENDED_INFO_STATION,DatabaseHelper.COLUMN_ISPLAYING_STATION},
                 selection.length() > 0 ? selection.toString() : null,
                 selectionArgsList.isEmpty() ? null : selectionArgsList.toArray(new String[0]),
                 null,
                 null,
                 orderBy);
-        if(cursor2 != null){
-            while (cursor2.moveToNext()) {
-                int idIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_UUID_STATION);
-                int nameIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_NAME_STATION);
-                int countryIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_STATION);
-                int logoUrlIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_LOGO_URL_STATION);
-                int streamUrlIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_URL_STATION);
-                int styleIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_STYLE_STATION);
-                int latIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_GEO_LATITUDE_STATION);
-                int longIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION);
-                int langIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_STATION);
-                int likesIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_VOTES_STATION);
-                int playingIndex = cursor2.getColumnIndex(DatabaseHelper.COLUMN_ISPLAYING_STATION);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int changeUuidIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CHANGE_UUID_STATION);
+                int idIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_UUID_STATION);
+                int nameIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_NAME_STATION);
+                int urlIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_URL_STATION);
+                int urlResolvedIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_URL_RESOLVED_STATION);
+                int homepageIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_HOMEPAGE_STATION);
+                int logoUrlIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_FAVICON_STATION);
+                int tagsIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_STATION);
+                int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_STATION);
+                int countryCodeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_CODE_STATION);
+                int stateIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STATE_STATION);
+                int iso31662Index = cursor.getColumnIndex(DatabaseHelper.COLUMN_iso_3166_2_STATION);
+                int langIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_STATION);
+                int langCodeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LANGUAGE_CODE_STATION);
+                int likesIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_VOTES_STATION);
+                int lastChangeTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHANGE_TIME_STATION);
+                int lastChangeTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHANGE_TIME_iso8601_STATION);
+                int codecIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CODEC_STATION);
+                int bitrateIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_BITRATE_STATION);
+                int hlsIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_HLS_STATION);
+                int lastCheckOkIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_OK_STATION);
+                int lastCheckTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_TIME_STATION);
+                int lastCheckTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_TIME_iso8601_STATION);
+                int lastCheckOkTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_STATION);
+                int lastCheckOkTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_CHECK_OK_TIME_iso8601_STATION);
+                int lastLocalCheckTimeIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_STATION);
+                int lastLocalCheckTimeIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LAST_LOCAL_CHECK_TIME_iso8601_STATION);
+                int clickTimestampIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_TIME_STAMP_STATION);
+                int clickTimestampIsoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_TIME_STAMP_iso8601_STATION);
+                int clickCountIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_COUNT_STATION);
+                int clickTrendIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CLICK_TREND_STATION);
+                int sslErrorIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_SSL_ERROR_STATION);
+                int latIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_LATITUDE_STATION);
+                int longIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION);
+                int geoDistanceIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_GEO_DISTANCE_STATION);
+                int hasExtendedInfoIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_HAS_EXTENDED_INFO_STATION);
+                int playingIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_ISPLAYING_STATION);
                 if (idIndex != -1 && nameIndex != -1 && countryIndex != -1 && logoUrlIndex != -1 &&
-                        streamUrlIndex != -1 && styleIndex != -1 && latIndex != -1 && longIndex != -1 && langIndex != -1 &&
-                        likesIndex != -1 && playingIndex != -1) {
-                    int id = cursor2.getInt(idIndex);
-                    String name = cursor2.getString(nameIndex);
-                    String country = cursor2.getString(countryIndex);
-                    String logoUrl = cursor2.getString(logoUrlIndex);
-                    String streamUrl = cursor2.getString(streamUrlIndex);
-                    String style = cursor2.getString(styleIndex);
-                    double latitude = cursor2.getDouble(latIndex);
-                    double longitude = cursor2.getDouble(longIndex);
-                    String lang = cursor2.getString(langIndex);
-                    int likes = cursor2.getInt(likesIndex);
-                    boolean isPlaying = cursor2.getInt(playingIndex) == 1;
-                    RadioStation station = new RadioStation(id, logoUrl, name, streamUrl, country, style, latitude, longitude, lang, likes, isPlaying);
+                        urlIndex != -1 && urlResolvedIndex != -1 && homepageIndex != -1 && tagsIndex != -1 &&
+                        countryCodeIndex != -1 && stateIndex != -1 && iso31662Index != -1 && langIndex != -1 &&
+                        langCodeIndex != -1 && likesIndex != -1 && lastChangeTimeIndex != -1 && lastChangeTimeIsoIndex != -1 &&
+                        codecIndex != -1 && bitrateIndex != -1 && hlsIndex != -1 && lastCheckOkIndex != -1 &&
+                        lastCheckTimeIndex != -1 && lastCheckTimeIsoIndex != -1 && lastCheckOkTimeIndex != -1 &&
+                        lastCheckOkTimeIsoIndex != -1 && lastLocalCheckTimeIndex != -1 && lastLocalCheckTimeIsoIndex != -1 &&
+                        clickTimestampIndex != -1 && clickTimestampIsoIndex != -1 && clickCountIndex != -1 &&
+                        clickTrendIndex != -1 && sslErrorIndex != -1 && latIndex != -1 && longIndex != -1 &&
+                        geoDistanceIndex != -1 && hasExtendedInfoIndex != -1 && playingIndex != -1) {
+                    String changeUuid = cursor.getString(changeUuidIndex);
+                    String id = cursor.getString(idIndex);
+                    String name = cursor.getString(nameIndex);
+                    String url = cursor.getString(urlIndex);
+                    String urlResolved = cursor.getString(urlResolvedIndex);
+                    String homepage = cursor.getString(homepageIndex);
+                    String logoUrl = cursor.getString(logoUrlIndex);
+                    String tags = cursor.getString(tagsIndex);
+                    String country = cursor.getString(countryIndex);
+                    String countryCode = cursor.getString(countryCodeIndex);
+                    String state = cursor.getString(stateIndex);
+                    String iso31662 = cursor.getString(iso31662Index);
+                    String lang = cursor.getString(langIndex);
+                    String langCode = cursor.getString(langCodeIndex);
+                    int likes = cursor.getInt(likesIndex);
+                    String lastChangeTime = cursor.getString(lastChangeTimeIndex);
+                    String lastChangeTimeIso = cursor.getString(lastChangeTimeIsoIndex);
+                    String codec = cursor.getString(codecIndex);
+                    int bitrate = cursor.getInt(bitrateIndex);
+                    int hls = cursor.getInt(hlsIndex);
+                    int lastCheckOk = cursor.getInt(lastCheckOkIndex);
+                    String lastCheckTime = cursor.getString(lastCheckTimeIndex);
+                    String lastCheckTimeIso = cursor.getString(lastCheckTimeIsoIndex);
+                    String lastCheckOkTime = cursor.getString(lastCheckOkTimeIndex);
+                    String lastCheckOkTimeIso = cursor.getString(lastCheckOkTimeIsoIndex);
+                    String lastLocalCheckTime = cursor.getString(lastLocalCheckTimeIndex);
+                    String lastLocalCheckTimeIso = cursor.getString(lastLocalCheckTimeIsoIndex);
+                    String clickTimestamp = cursor.getString(clickTimestampIndex);
+                    String clickTimestampIso = cursor.getString(clickTimestampIsoIndex);
+                    int clickCount = cursor.getInt(clickCountIndex);
+                    int clickTrend = cursor.getInt(clickTrendIndex);
+                    int sslError = cursor.getInt(sslErrorIndex);
+                    double latitude = cursor.getDouble(latIndex);
+                    double longitude = cursor.getDouble(longIndex);
+                    double geoDistance = cursor.getDouble(geoDistanceIndex);
+                    boolean hasExtendedInfo = cursor.getInt(hasExtendedInfoIndex) == 1;
+                    int isPlaying = cursor.getInt(playingIndex);
+                    RadioStation station = new RadioStation(
+                            changeUuid, id, name, url, urlResolved, homepage, logoUrl, tags,
+                            country, countryCode, iso31662, state, lang, langCode, likes,
+                            lastChangeTime, lastChangeTimeIso, codec, bitrate,
+                            hls, lastCheckOk, lastCheckTime,
+                            lastCheckTimeIso, lastCheckOkTime, lastCheckOkTimeIso,
+                            lastLocalCheckTime, lastLocalCheckTimeIso,
+                            clickTimestamp, clickTimestampIso, clickCount,
+                            clickTrend, sslError, latitude, longitude, geoDistance,
+                            hasExtendedInfo, isPlaying
+                    );
                     radioStationList.add(station);
                 }
             }
+            cursor.close();
         }
-        cursor2.close();
         return radioStationList;
-    }
+    }// TODO: стили
     public int getRadioStationCountWithFilter() {
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgsList = new ArrayList<>();
@@ -285,7 +476,7 @@ public class RadioStationRepository {
         }
         if (styleF != null) {
             if (selection.length() > 0) selection.append(" AND ");
-            selection.append(DatabaseHelper.COLUMN_STYLE_STATION).append(" = ?");
+            selection.append(DatabaseHelper.COLUMN_STYLE_STATION).append(" = ?");// TODO: опять эти стили...
             selectionArgsList.add(styleF);
         }
 
@@ -303,6 +494,6 @@ public class RadioStationRepository {
         }
         cursor2.close();
         return count;
-    }
+    } // TODO: стили
 }
 

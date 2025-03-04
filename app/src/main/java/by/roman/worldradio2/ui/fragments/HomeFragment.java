@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
                     adapter.offIsPlaying();
 
                 if (radioStationList != null && position >= 0 && position < radioStationList.size()) {
-                    radioStationList.get(position).setPlaying(false);
+                    radioStationList.get(position).setIsPlaying(0);
                     adapter.notifyItemChanged(position);
                 }
             }

@@ -10,7 +10,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String DATABASE_NAME = "Radio.db";
     protected static final int DATABASE_VERSION = 1;
     protected static final String TABLE_RADIO_STATION = "radiostation";
-    protected static final String COLUMN_CHANGEUUID_STATION = "changeUUID";
+    protected static final String COLUMN_CHANGE_UUID_STATION = "changeUUID";
     protected static final String COLUMN_UUID_STATION= "stationUUID";
     protected static final String COLUMN_NAME_STATION = "name";
     protected static final String COLUMN_URL_STATION = "url";
@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String COLUMN_STATE_STATION = "state";
     protected static final String COLUMN_iso_3166_2_STATION = "iso_3166_2";
     protected static final String COLUMN_LANGUAGE_STATION = "language";
-    protected static final String COLUMN_LANGUAGE_CODES_STATION = "languageCodes";
+    protected static final String COLUMN_LANGUAGE_CODE_STATION = "languageCode";
     protected static final String COLUMN_VOTES_STATION = "votes";
     protected static final String COLUMN_LAST_CHANGE_TIME_STATION = "lastChangeTime";
     protected static final String COLUMN_LAST_CHANGE_TIME_iso8601_STATION = "lastChangeTime_iso8601";
@@ -53,17 +53,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     protected static final String COLUMN_ISPLAYING_STATION = "isPlaying";
     protected static final String CREATE_TABLE_RADIO_STATION = "CREATE TABLE "+ TABLE_RADIO_STATION + " ("+
-            COLUMN_UUID_STATION +         " INTEGER PRIMARY KEY AUTOINCREMENT,"+
-            COLUMN_NAME_STATION +         " TEXT, "+
-            COLUMN_COUNTRY_STATION +      " TEXT, "+
-            COLUMN_FAVICON_STATION +     " TEXT, "+
-            COLUMN_URL_STATION +   " TEXT, "+
-            COLUMN_STYLE_STATION +        " TEXT, "+
-            COLUMN_GEO_LATITUDE_STATION +     " REAL, "+
-            COLUMN_GEO_LONGITUDE_STATION +    " REAL, "+
-            COLUMN_LANGUAGE_STATION +         " TEXT, "+
-            COLUMN_VOTES_STATION +        " INTEGER, "+
-            COLUMN_ISPLAYING_STATION +    " INTEGER);";
+            COLUMN_CHANGE_UUID_STATION +                   " TEXT, "+
+            COLUMN_UUID_STATION +                          " TEXT,"+
+            COLUMN_NAME_STATION +                          " TEXT, "+
+            COLUMN_URL_STATION +                           " TEXT, "+
+            COLUMN_URL_RESOLVED_STATION +                  " TEXT, "+
+            COLUMN_HOMEPAGE_STATION +                      " TEXT, "+
+            COLUMN_FAVICON_STATION +                       " TEXT, "+
+            COLUMN_TAGS_STATION +                          " TEXT, "+
+            COLUMN_COUNTRY_STATION +                       " TEXT, "+
+            COLUMN_COUNTRY_CODE_STATION +                  " TEXT, "+
+            COLUMN_STATE_STATION +                         " TEXT, "+
+            COLUMN_iso_3166_2_STATION +                    " TEXT, "+
+            COLUMN_LANGUAGE_STATION +                      " TEXT, "+
+            COLUMN_LANGUAGE_CODE_STATION +                " TEXT, "+
+            COLUMN_VOTES_STATION +                         " INTEGER, "+
+            COLUMN_LAST_CHANGE_TIME_STATION +              " TEXT, "+
+            COLUMN_LAST_CHANGE_TIME_iso8601_STATION +      " TEXT, "+
+            COLUMN_CODEC_STATION +                         " TEXT, "+
+            COLUMN_BITRATE_STATION +                       " INTEGER, "+
+            COLUMN_HLS_STATION +                           " INTEGER, "+
+            COLUMN_LAST_CHECK_OK_STATION +                 " INTEGER, "+
+            COLUMN_LAST_CHECK_TIME_STATION +               " TEXT, "+
+            COLUMN_LAST_CHECK_TIME_iso8601_STATION +       " TEXT, "+
+            COLUMN_LAST_CHECK_OK_TIME_STATION +            " TEXT, "+
+            COLUMN_LAST_CHECK_OK_TIME_iso8601_STATION +    " TEXT, "+
+            COLUMN_LAST_LOCAL_CHECK_TIME_STATION +         " TEXT, "+
+            COLUMN_LAST_LOCAL_CHECK_TIME_iso8601_STATION + " TEXT, "+
+            COLUMN_CLICK_TIME_STAMP_STATION +              " TEXT, "+
+            COLUMN_CLICK_TIME_STAMP_iso8601_STATION +      " TEXT, "+
+            COLUMN_CLICK_COUNT_STATION +                   " INTEGER, "+
+            COLUMN_CLICK_TREND_STATION +                   " INTEGER, "+
+            COLUMN_SSL_ERROR_STATION +                     " INTEGER, "+
+            COLUMN_GEO_LATITUDE_STATION +                  " REAL, "+
+            COLUMN_GEO_LONGITUDE_STATION +                 " REAL, "+
+            COLUMN_GEO_DISTANCE_STATION +                  " REAL, "+
+            COLUMN_HAS_EXTENDED_INFO_STATION +             " INTEGER, "+
+            COLUMN_ISPLAYING_STATION +                     " INTEGER);";
 
     protected static final String TABLE_USER = "user";
     protected static final String COLUMN_UUID_USER = "id";
@@ -72,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String COLUMN_IN_SYSTEM_USER = "in_system";
 
     protected static final String CREATE_TABLE_USER = "CREATE TABLE "+ TABLE_USER + " ("+
-            COLUMN_UUID_USER +     " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+            COLUMN_UUID_USER +     " INTEGER, "+
             COLUMN_LOGIN_USER +    " TEXT, "+
             COLUMN_PASSWORD_USER + " TEXT, "+
             COLUMN_IN_SYSTEM_USER + " TEXT);";
@@ -111,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String COLUMN_STATION_ID_FAVORITE = "station_id";
     protected static final String CREATE_TABLE_FAVORITE = "CREATE TABLE " + TABLE_FAVORITE + " (" +
             COLUMN_USER_ID_FAVORITE +    " INTEGER, " +
-            COLUMN_STATION_ID_FAVORITE + " INTEGER, " +
+            COLUMN_STATION_ID_FAVORITE + " TEXT, " +
             "PRIMARY KEY (" + COLUMN_USER_ID_FAVORITE + ", " + COLUMN_STATION_ID_FAVORITE + "), " +
             "FOREIGN KEY (" + COLUMN_USER_ID_FAVORITE + ") REFERENCES " + TABLE_USER + "(" + COLUMN_UUID_USER + ") ON DELETE CASCADE, " +
             "FOREIGN KEY (" + COLUMN_STATION_ID_FAVORITE + ") REFERENCES " + TABLE_RADIO_STATION + "(" + COLUMN_UUID_STATION + ") ON DELETE CASCADE);";

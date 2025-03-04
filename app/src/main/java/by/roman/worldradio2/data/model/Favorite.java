@@ -2,17 +2,14 @@ package by.roman.worldradio2.data.model;
 
 public class Favorite {
     private int userId;
-    private int stationId;
+    private String stationUUID;
 
-    public Favorite(int userId, int stationId) {
+    public Favorite(int userId, String stationUUID) {
         this.userId = userId;
-        this.stationId = stationId;
+        this.stationUUID = stationUUID;
     }
 
     // Геттеры
     public int getUserId() { return userId; }
-    public int getStationId() { return stationId; }
-
-    // Сеттеры
-    public void setStationId(int stationId) { this.stationId = stationId; }
+    public String getStationUUID() { return stationUUID; }
 }

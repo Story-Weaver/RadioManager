@@ -20,7 +20,7 @@ public class UserRepository {
         values.put(DatabaseHelper.COLUMN_IN_SYSTEM_USER, dto.getInSystem());
         return db.insert(DatabaseHelper.TABLE_USER, null, values);
     }
-    public void setInSystem(int id,boolean inSystem){
+    public void setUserInSystem(int id, boolean inSystem){
         String checkQuery = "SELECT " + DatabaseHelper.COLUMN_UUID_USER + " FROM " + DatabaseHelper.TABLE_USER +
                 " WHERE " + DatabaseHelper.COLUMN_IN_SYSTEM_USER + " = 1";
         Cursor cursor = db.rawQuery(checkQuery, null);
@@ -36,6 +36,10 @@ public class UserRepository {
         String[] selectionArgs = {String.valueOf(id)};
         db.update(DatabaseHelper.TABLE_USER, values, selection, selectionArgs);
     }
+    public int getUserInSystem(){
+        int id = 0;
+        return id;
+    }
     public boolean entranceUser(String login, String password) {
         String query = "SELECT " + DatabaseHelper.COLUMN_UUID_USER + " FROM " + DatabaseHelper.TABLE_USER + " WHERE " +
                 DatabaseHelper.COLUMN_LOGIN_USER + " = ? AND " + DatabaseHelper.COLUMN_PASSWORD_USER + " = ?";
@@ -45,7 +49,7 @@ public class UserRepository {
             userId = cursor.getInt(0);
         }
         if(userId != -1){
-            setInSystem(userId,true);
+            setUserInSystem(userId,true);
         }
         cursor.close();
         db.close();

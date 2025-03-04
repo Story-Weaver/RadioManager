@@ -47,9 +47,9 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         RadioStation card = cards.get(position);
         holder.nameStation.setText(card.getName());
         Glide.with(context)
-                .load(card.getLogoUrl())
+                .load(card.getFavicon())
                 .into(holder.logoStation);
-        if (card.isPlaying()) {
+        if (card.getIsPlaying() == 1) {
             Glide.with(context)
                     .asGif()
                     .load(R.drawable.sound)
@@ -63,12 +63,12 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
             for (RadioStation item : cards) {
-                item.setPlaying(false);
-                radioStationRepository.setIsPlaying(item.getId(),false);
+                item.setIsPlaying(0);
+                radioStationRepository.setIsPlaying(item.getStationUuid(),false);
             }
             RadioStation selectedStation = cards.get(adapterPosition);
-            selectedStation.setPlaying(true);
-            radioStationRepository.setIsPlaying(selectedStation.getId(),true);
+            selectedStation.setIsPlaying(1);
+            radioStationRepository.setIsPlaying(selectedStation.getStationUuid(),true);
             notifyDataSetChanged();
             if(listener != null){
                 listener.onItemClick(position);
@@ -82,8 +82,8 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     }
     public void offIsPlaying() {
         for (RadioStation station : cards) {
-            if (station.isPlaying()) {
-                radioStationRepository.setIsPlaying(station.getId(),false);
+            if (station.getIsPlaying() == 1) {
+                radioStationRepository.setIsPlaying(station.getStationUuid(),false);
             }
         }
     }

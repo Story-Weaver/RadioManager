@@ -59,7 +59,7 @@ public class FilterRepository {
         }
         cursor.close();
         return styleFilter;
-    }
+    } //TODO: стили
     public String getLangFilter(int userId) {
         String langFilter = null;
         Cursor cursor = db.query(DatabaseHelper.TABLE_FILTER,

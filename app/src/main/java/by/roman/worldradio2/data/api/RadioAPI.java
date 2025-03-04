@@ -1,6 +1,8 @@
 package by.roman.worldradio2.data.api;
 
 import android.util.Log;
+
+import by.roman.worldradio2.data.model.RadioStation;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -11,6 +13,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -33,6 +36,10 @@ public class RadioAPI {
                         String jsonResponse = response.body().string();
                         Log.d("RadioAPI", "Response: " + jsonResponse);
 
+                        if(response.code() != 200){
+                            Log.e("RadioAPI","Response code isn't 200");
+                            return;
+                        }
                         if (jsonResponse.isEmpty()) {
                             Log.e("RadioAPI", "Empty response body.");
                             callback.onError(new Exception("Empty response body"));
@@ -44,14 +51,12 @@ public class RadioAPI {
                                 .registerTypeAdapter(new TypeToken<List<String>>(){}.getType(), new TagsAdapter())
                                 .create();
 
-                        List<Model> stationList = new ArrayList<>();
+                        List<RadioStation> stationList = new ArrayList<>();
 
                         try {
                             if (jsonResponse.startsWith("[")) {
-                                Model[] stations = gson.fromJson(jsonResponse, Model[].class);
-                                for (Model station : stations) {
-                                    stationList.add(station);
-                                }
+                                RadioStation[] stations = gson.fromJson(jsonResponse, RadioStation[].class);
+                                stationList.addAll(Arrays.asList(stations));
                                 callback.onStationsFetched(stationList);
                             } else {
                                 Log.e("RadioAPI", "Unexpected response: " + jsonResponse);

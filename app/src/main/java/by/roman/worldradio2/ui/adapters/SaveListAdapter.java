@@ -52,19 +52,19 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
         RadioStation card = cards.get(position);
         holder.nameStation.setText(cards.get(position).getName());
         Glide.with(context)
-                .load(card.getLogoUrl())
+                .load(card.getFavicon())
                 .into(holder.logoStation);
         holder.itemView.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
             for (RadioStation item : cards) {
-                item.setPlaying(false);
-                radioStationRepository.setIsPlaying(item.getId(),false);
+                item.setIsPlaying(0);
+                radioStationRepository.setIsPlaying(item.getStationUuid(),false);
             }
             RadioStation selectedStation = cards.get(adapterPosition);
-            selectedStation.setPlaying(true);
-            radioStationRepository.setIsPlaying(selectedStation.getId(),true);
+            selectedStation.setIsPlaying(1);
+            radioStationRepository.setIsPlaying(selectedStation.getStationUuid(),true);
             notifyDataSetChanged();
             if(listener != null){
                 listener.onItemClick(position);
@@ -72,8 +72,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
         });
         holder.deleteButton.setOnClickListener(v -> {
             favoriteDTO = null;
-            favoriteDTO = new FavoriteDTO(1,cards.get(position).getId());
-            favoriteRepository.removeFavorite(favoriteDTO);
+
             notifyDataSetChanged();
         });
     }
@@ -93,8 +92,8 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
     }
     public void offIsPlaying() {
         for (RadioStation station : cards) {
-            if (station.isPlaying()) {
-                radioStationRepository.setIsPlaying(station.getId(),false);
+            if (station.getIsPlaying() == 1) {
+                radioStationRepository.setIsPlaying(station.getStationUuid(),false);
             }
         }
     }
