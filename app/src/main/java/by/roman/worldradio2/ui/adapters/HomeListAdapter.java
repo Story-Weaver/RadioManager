@@ -63,8 +63,10 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
             for (RadioStation item : cards) {
-                item.setIsPlaying(0);
-                radioStationRepository.setIsPlaying(item.getStationUuid(),false);
+                if(item.getIsPlaying() == 1){
+                    item.setIsPlaying(0);
+                    radioStationRepository.setIsPlaying(item.getStationUuid(),false);
+                }
             }
             RadioStation selectedStation = cards.get(adapterPosition);
             selectedStation.setIsPlaying(1);

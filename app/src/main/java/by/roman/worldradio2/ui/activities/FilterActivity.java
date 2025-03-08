@@ -35,14 +35,14 @@ import by.roman.worldradio2.data.repository.RadioStationRepository;
 
 public class    FilterActivity extends AppCompatActivity {
     private MaterialAutoCompleteTextView actvCountry;
-    private MaterialAutoCompleteTextView actvStyle;
+    private MaterialAutoCompleteTextView actvTags;
     private MaterialAutoCompleteTextView actvLang;
     private RadioStationRepository radioStationRepository;
     private FilterRepository filterRepository;
     private Spinner spinnerSortBy;
     private ImageView backButton;
     private ImageView deleteCountry;
-    private ImageView deleteStyle;
+    private ImageView deleteTags;
     private ImageView deleteLang;
     private ImageView confirmButton;
     private ImageView savedButton;
@@ -93,11 +93,11 @@ public class    FilterActivity extends AppCompatActivity {
             actvCountry.setText("");
             deleteCountry.setVisibility(INVISIBLE);
         });
-        deleteStyle.setOnClickListener(v->{
-            filterRepository.setFilter(1,DatabaseHelper.COLUMN_STYLE_FILTER,null);
+        deleteTags.setOnClickListener(v->{
+            filterRepository.setFilter(1,DatabaseHelper.COLUMN_TAGS_FILTER,null);
             updateCount();
-            actvStyle.setText("");
-            deleteStyle.setVisibility(INVISIBLE);
+            actvTags.setText("");
+            deleteTags.setVisibility(INVISIBLE);
         });
         deleteLang.setOnClickListener(v->{
             filterRepository.setFilter(1,DatabaseHelper.COLUMN_LANG_FILTER,null);
@@ -144,11 +144,11 @@ public class    FilterActivity extends AppCompatActivity {
             actvCountry.setText(savedCountry);
             deleteCountry.setVisibility(VISIBLE);
         } else deleteCountry.setVisibility(INVISIBLE);
-        String savedStyle = filterRepository.getStyleFilter(1);
+        String savedStyle = filterRepository.getTagsFilter(1);
         if (savedStyle != null && !savedStyle.isEmpty()) {
-            actvStyle.setText(savedStyle);
-            deleteStyle.setVisibility(VISIBLE);
-        } else deleteStyle.setVisibility(INVISIBLE);
+            actvTags.setText(savedStyle);
+            deleteTags.setVisibility(VISIBLE);
+        } else deleteTags.setVisibility(INVISIBLE);
         String savedLang = filterRepository.getLangFilter(1);
         if (savedLang != null && !savedLang.isEmpty()) {
             actvLang.setText(savedLang);
@@ -174,19 +174,19 @@ public class    FilterActivity extends AppCompatActivity {
         setAutoCompleteTextViewFocusListener(actvCountry);
 
         ArrayAdapter<String> styleAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, radioStationRepository.getStyle());
-        actvStyle.setAdapter(styleAdapter);
-        actvStyle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                android.R.layout.simple_dropdown_item_1line, radioStationRepository.getTags());
+        actvTags.setAdapter(styleAdapter);
+        actvTags.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedStyle = (String) parent.getItemAtPosition(position);
-                filterRepository.setFilter(1,DatabaseHelper.COLUMN_STYLE_FILTER,selectedStyle);
-                hideKeyboard(actvStyle);
-                deleteStyle.setVisibility(VISIBLE);
-                actvStyle.clearFocus();
+                filterRepository.setFilter(1,DatabaseHelper.COLUMN_TAGS_FILTER,selectedStyle);
+                hideKeyboard(actvTags);
+                deleteTags.setVisibility(VISIBLE);
+                actvTags.clearFocus();
             }
         });
-        setAutoCompleteTextViewFocusListener(actvStyle);
+        setAutoCompleteTextViewFocusListener(actvTags);
 
         ArrayAdapter<String> langAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, radioStationRepository.getLang());
@@ -206,12 +206,12 @@ public class    FilterActivity extends AppCompatActivity {
     }
     private void findAllId(){
         actvCountry = findViewById(R.id.actvCountry);
-        actvStyle = findViewById(R.id.actvStyle);
+        actvTags = findViewById(R.id.actvStyle);
         actvLang = findViewById(R.id.actvLang);
         backButton = findViewById(R.id.backButtonFilterView);
         count = findViewById(R.id.countStation);
         deleteCountry = findViewById(R.id.deleteCountryFilter);
-        deleteStyle = findViewById(R.id.deleteStyleFilter);
+        deleteTags = findViewById(R.id.deleteStyleFilter);
         deleteLang = findViewById(R.id.deleteLangFilter);
         confirmButton = findViewById(R.id.confirmButtonView);
         savedButton = findViewById(R.id.savedButtonFilter);

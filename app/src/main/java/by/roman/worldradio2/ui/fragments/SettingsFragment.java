@@ -41,39 +41,36 @@ public class SettingsFragment extends Fragment {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         radioStationRepository = new RadioStationRepository(db);
 
-        radioAPI.fetchStations(new StationsCallback() {
-            @Override
-            public void onStationsFetched(List<RadioStation> stations) {
-                // Обновляем UI в основном потоке
-                getActivity().runOnUiThread(() -> {
-                    StringBuilder sb = new StringBuilder();
-                    for (RadioStation station : stations) {
-                        sb.append(station.getName()).append(" - ").append(station.getCountry()).append("\n");
-                        radioStationDTO = null;
-                        radioStationDTO = new RadioStationDTO(station.getChangeUuid(),station.getStationUuid(),station.getName(),
-                                station.getUrl(),station.getUrlResolved(),station.getHomepage(),station.getFavicon(),station.getTags(),
-                                station.getCountry(),station.getCountryCode(),station.getIso31662(),station.getState(),
-                                station.getLanguage(),station.getLanguageCodes(),station.getVotes(),station.getLastChangeTime(),
-                                station.getLastChangeTimeIso8601(),station.getCodec(),station.getBitrate(),station.getHls(),
-                                station.getLastCheckOk(),station.getLastCheckTime(),station.getLastCheckTimeIso8601(),
-                                station.getLastCheckOkTime(),station.getLastCheckOkTimeIso8601(),station.getLastLocalCheckTime(),
-                                station.getLastLocalCheckTimeIso8601(),station.getClickTimestamp(),station.getClickTimestampIso8601(),
-                                station.getClickCount(),station.getClickTrend(),station.getSslError(),station.getGeoLat(),
-                                station.getGeoLong(),station.getGeoDistance(),station.isHasExtendedInfo(),station.getIsPlaying());
-                        radioStationRepository.addRadioStation(radioStationDTO);
-                    }
-
-                    text.setText(sb.toString());
-                });
-            }
-
-            @Override
-            public void onError(Exception e) {
-                // Обработка ошибки
-                Log.e("RadioStationError", "Error fetching stations", e);
-            }
-        });
-
+//        radioAPI.fetchStations(new StationsCallback() {
+//            @Override
+//            public void onStationsFetched(List<RadioStation> stations) {
+//                // Обновляем UI в основном потоке
+//                getActivity().runOnUiThread(() -> {
+//                    StringBuilder sb = new StringBuilder();
+//                    for (RadioStation station : stations) {
+//                        sb.append(station.getName()).append(" - ").append(station.getCountry()).append("\n");
+//                        radioStationDTO = null;
+//                        radioStationDTO = new RadioStationDTO(station.getChangeUuid(),station.getStationUuid(),station.getName(),
+//                                station.getUrl(),station.getUrlResolved(),station.getHomepage(),station.getFavicon(),station.getTags(),
+//                                station.getCountry(),station.getCountryCode(),station.getIso31662(),station.getState(),
+//                                station.getLanguage(),station.getLanguageCodes(),station.getVotes(),station.getLastChangeTime(),
+//                                station.getLastChangeTimeIso8601(),station.getCodec(),station.getBitrate(),station.getHls(),
+//                                station.getLastCheckOk(),station.getLastCheckTime(),station.getLastCheckTimeIso8601(),
+//                                station.getLastCheckOkTime(),station.getLastCheckOkTimeIso8601(),station.getLastLocalCheckTime(),
+//                                station.getLastLocalCheckTimeIso8601(),station.getClickTimestamp(),station.getClickTimestampIso8601(),
+//                                station.getClickCount(),station.getClickTrend(),station.getSslError(),station.getGeoLat(),
+//                                station.getGeoLong(),station.getGeoDistance(),station.isHasExtendedInfo(),station.getIsPlaying());
+//                        radioStationRepository.addRadioStation(radioStationDTO);
+//                    }
+//                    text.setText(sb.toString());
+//                });
+//            }
+//            @Override
+//            public void onError(Exception e) {
+//                // Обработка ошибки
+//                Log.e("RadioStationError", "Error fetching stations", e);
+//            }
+//        });
 
         return view;
     }

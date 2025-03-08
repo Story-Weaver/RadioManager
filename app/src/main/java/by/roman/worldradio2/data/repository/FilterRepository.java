@@ -18,7 +18,7 @@ public class FilterRepository {
         values.put(DatabaseHelper.COLUMN_USER_ID_FILTER, dto.getUserId());
         values.put(DatabaseHelper.COLUMN_COUNTRY_FILTER, dto.getCountryFilter());
         values.put(DatabaseHelper.COLUMN_LANG_FILTER, dto.getLangFilter());
-        values.put(DatabaseHelper.COLUMN_STYLE_FILTER, dto.getStyleFilter());
+        values.put(DatabaseHelper.COLUMN_TAGS_FILTER, dto.getStyleFilter());
         values.put(DatabaseHelper.COLUMN_SORT_FILTER, dto.getSortFilter());
         return db.insert(DatabaseHelper.TABLE_FILTER, null, values);
     }
@@ -41,10 +41,10 @@ public class FilterRepository {
         cursor.close();
         return countryFilter;
     }
-    public String getStyleFilter(int userId) {
+    public String getTagsFilter(int userId) {
         String styleFilter = null;
         Cursor cursor = db.query(DatabaseHelper.TABLE_FILTER,
-                new String[]{DatabaseHelper.COLUMN_STYLE_FILTER},
+                new String[]{DatabaseHelper.COLUMN_TAGS_FILTER},
                 DatabaseHelper.COLUMN_USER_ID_FILTER + " = ?",
                 new String[]{String.valueOf(userId)},
                 null,
@@ -52,7 +52,7 @@ public class FilterRepository {
                 null
         );
         if (cursor.moveToFirst()) {
-            int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STYLE_FILTER);
+            int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_STATION);
             if (countryIndex != -1) {
                 styleFilter = cursor.getString(countryIndex);
             }

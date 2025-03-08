@@ -46,11 +46,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     protected static final String COLUMN_GEO_LONGITUDE_STATION = "geo_long";
     protected static final String COLUMN_GEO_DISTANCE_STATION = "geo_distance";
     protected static final String COLUMN_HAS_EXTENDED_INFO_STATION = "has_extended_info";
-    protected static final String COLUMN_STYLE_STATION = "style";// TODO remove to tags
-
-
-
-
     protected static final String COLUMN_ISPLAYING_STATION = "isPlaying";
     protected static final String CREATE_TABLE_RADIO_STATION = "CREATE TABLE "+ TABLE_RADIO_STATION + " ("+
             COLUMN_CHANGE_UUID_STATION +                   " TEXT, "+
@@ -104,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_IN_SYSTEM_USER + " TEXT);";
     protected static final String TABLE_FILTER = "filter";
     protected static final String COLUMN_USER_ID_FILTER = "user_id_f";
-    public static final String COLUMN_STYLE_FILTER = "style_f";
+    public static final String COLUMN_TAGS_FILTER = "style_f";
     public static final String COLUMN_COUNTRY_FILTER = "country_f";
     public static final String COLUMN_LANG_FILTER = "lang_f";
     protected static final String COLUMN_SORT_FILTER = "sort_f";
@@ -112,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_USER_ID_FILTER + " INTEGER, "+
             COLUMN_COUNTRY_FILTER + " TEXT, "+
             COLUMN_LANG_FILTER +    " TEXT, "+
-            COLUMN_STYLE_FILTER +   " TEXT, "+
+            COLUMN_TAGS_FILTER +   " TEXT, "+
             COLUMN_SORT_FILTER +    " INTEGER);";
     protected static final String TABLE_SETTINGS = "settings";
     protected static final String COLUMN_USER_ID_SETTINGS = "id";

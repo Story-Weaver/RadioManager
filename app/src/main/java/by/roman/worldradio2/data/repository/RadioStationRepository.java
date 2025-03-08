@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import by.roman.worldradio2.data.dto.RadioStationDTO;
 import by.roman.worldradio2.data.model.RadioStation;
@@ -203,7 +205,19 @@ public class RadioStationRepository {
             }
             cursor.close();
         }
-        return countryList;
+        Set<String> uniqueTags = new HashSet<>();
+        for (String tags : countryList) {
+            if (tags != null && !tags.isEmpty()) {
+                String[] splitTags = tags.split(",");
+                for (String tag : splitTags) {
+                    String trimmedTag = tag.trim();
+                    if (!trimmedTag.isEmpty()) {
+                        uniqueTags.add(trimmedTag);
+                    }
+                }
+            }
+        }
+        return new ArrayList<>(uniqueTags);
     }
     public List<String> getLang(){
         List<String> langList = new ArrayList<>();
@@ -223,12 +237,24 @@ public class RadioStationRepository {
             }
             cursor.close();
         }
-        return langList;
+        Set<String> uniqueTags = new HashSet<>();
+        for (String tags : langList) {
+            if (tags != null && !tags.isEmpty()) {
+                String[] splitTags = tags.split(",");
+                for (String tag : splitTags) {
+                    String trimmedTag = tag.trim();
+                    if (!trimmedTag.isEmpty()) {
+                        uniqueTags.add(trimmedTag);
+                    }
+                }
+            }
+        }
+        return new ArrayList<>(uniqueTags);
     }
-    public List<String> getStyle(){
-        List<String> styleList = new ArrayList<>();
+    public List<String> getTags(){
+        List<String> tagsList = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.TABLE_RADIO_STATION,
-                new String[]{DatabaseHelper.COLUMN_STYLE_STATION},
+                new String[]{DatabaseHelper.COLUMN_TAGS_STATION},
                 null,
                 null,
                 null,
@@ -236,15 +262,27 @@ public class RadioStationRepository {
                 null);
         if(cursor != null){
             while (cursor.moveToNext()) {
-                int styleIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_STYLE_STATION);
+                int styleIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_STATION);
                 if (styleIndex != -1) {
-                    styleList.add(cursor.getString(styleIndex));
+                    tagsList.add(cursor.getString(styleIndex));
                 }
             }
             cursor.close();
         }
-        return styleList;
-    } // TODO: починить для тегов
+        Set<String> uniqueTags = new HashSet<>();
+        for (String tags : tagsList) {
+            if (tags != null && !tags.isEmpty()) {
+                String[] splitTags = tags.split(",");
+                for (String tag : splitTags) {
+                    String trimmedTag = tag.trim();
+                    if (!trimmedTag.isEmpty()) {
+                        uniqueTags.add(trimmedTag);
+                    }
+                }
+            }
+        }
+        return new ArrayList<>(uniqueTags);
+    }
     public void setIsPlaying(String uuid, boolean isPlaying){
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_ISPLAYING_STATION, isPlaying ? 1 : 0);
@@ -262,7 +300,7 @@ public class RadioStationRepository {
         String orderBy;
         Cursor cursor1 = db.query(DatabaseHelper.TABLE_FILTER,
                 new String[]{DatabaseHelper.COLUMN_USER_ID_FILTER, DatabaseHelper.COLUMN_COUNTRY_FILTER,
-                             DatabaseHelper.COLUMN_LANG_FILTER, DatabaseHelper.COLUMN_STYLE_FILTER, DatabaseHelper.COLUMN_SORT_FILTER},
+                             DatabaseHelper.COLUMN_LANG_FILTER, DatabaseHelper.COLUMN_TAGS_FILTER, DatabaseHelper.COLUMN_SORT_FILTER},
                 null,
                 null,
                 null,
@@ -271,7 +309,7 @@ public class RadioStationRepository {
         if (cursor1 != null && cursor1.moveToFirst()) {
             int countryIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_FILTER);
             int langIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_LANG_FILTER);
-            int styleIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_STYLE_FILTER);
+            int styleIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_TAGS_FILTER);
             int sortIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_SORT_FILTER);
 
             if (countryIndex != -1) countryF = cursor1.getString(countryIndex);
@@ -290,7 +328,7 @@ public class RadioStationRepository {
         }
         if (styleF != null) {
             if (selection.length() > 0) selection.append(" AND ");
-            selection.append(DatabaseHelper.COLUMN_STYLE_STATION).append(" = ?");
+            selection.append(DatabaseHelper.COLUMN_TAGS_STATION).append(" = ?");
             selectionArgsList.add(styleF);
         }
 
@@ -334,6 +372,7 @@ public class RadioStationRepository {
                 null,
                 null,
                 orderBy);
+
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 int changeUuidIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_CHANGE_UUID_STATION);
@@ -431,23 +470,28 @@ public class RadioStationRepository {
                             clickTrend, sslError, latitude, longitude, geoDistance,
                             hasExtendedInfo, isPlaying
                     );
-                    radioStationList.add(station);
+                    if(radioStationList.size() <= 100){
+                        radioStationList.add(station);
+                    } else {
+                        cursor.close();
+                        return radioStationList;
+                    }
                 }
             }
-            cursor.close();
+
         }
         return radioStationList;
-    }// TODO: стили
+    }// TODO: фильтры
     public int getRadioStationCountWithFilter() {
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgsList = new ArrayList<>();
         String countryF = null;
         String langF = null;
-        String styleF = null;
+        String tagsF = null;
 
         Cursor cursor1 = db.query(DatabaseHelper.TABLE_FILTER,
                 new String[]{DatabaseHelper.COLUMN_USER_ID_FILTER, DatabaseHelper.COLUMN_COUNTRY_FILTER,
-                             DatabaseHelper.COLUMN_LANG_FILTER, DatabaseHelper.COLUMN_STYLE_FILTER, DatabaseHelper.COLUMN_SORT_FILTER},
+                             DatabaseHelper.COLUMN_LANG_FILTER, DatabaseHelper.COLUMN_TAGS_FILTER, DatabaseHelper.COLUMN_SORT_FILTER},
                 null,
                 null,
                 null,
@@ -457,11 +501,11 @@ public class RadioStationRepository {
         if (cursor1 != null && cursor1.moveToFirst()) {
             int countryIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_FILTER);
             int langIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_LANG_FILTER);
-            int styleIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_STYLE_FILTER);
+            int tagsIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_TAGS_FILTER);
 
             if (countryIndex != -1) countryF = cursor1.getString(countryIndex);
             if (langIndex != -1) langF = cursor1.getString(langIndex);
-            if (styleIndex != -1) styleF = cursor1.getString(styleIndex);
+            if (tagsIndex != -1) tagsF = cursor1.getString(tagsIndex);
         }
         cursor1.close();
 
@@ -474,10 +518,10 @@ public class RadioStationRepository {
             selection.append(DatabaseHelper.COLUMN_LANGUAGE_STATION).append(" = ?");
             selectionArgsList.add(langF);
         }
-        if (styleF != null) {
+        if (tagsF != null) {
             if (selection.length() > 0) selection.append(" AND ");
-            selection.append(DatabaseHelper.COLUMN_STYLE_STATION).append(" = ?");// TODO: опять эти стили...
-            selectionArgsList.add(styleF);
+            selection.append(DatabaseHelper.COLUMN_TAGS_STATION).append(" = ?");
+            selectionArgsList.add(tagsF);
         }
 
         Cursor cursor2 = db.query(DatabaseHelper.TABLE_RADIO_STATION,
