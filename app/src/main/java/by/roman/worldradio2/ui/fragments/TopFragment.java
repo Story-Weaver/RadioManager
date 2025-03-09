@@ -1,10 +1,14 @@
 package by.roman.worldradio2.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
@@ -31,6 +36,34 @@ public class TopFragment extends Fragment {
     private RadioStationRepository radioStationRepository;
     private  int position;
     private ImageView filterButton;
+    private RadioService radioService;
+
+    private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("by.roman.worldradio2.TIMER_FINISHED".equals(intent.getAction())) {
+                Toast.makeText(getContext(), "Таймер завершен через сервис!", Toast.LENGTH_SHORT).show();
+                adapter.offIsPlaying();
+                radioService.checkNow();
+
+                if (radioStationList != null && position >= 0 && position < radioStationList.size()) {
+                    radioStationList.get(position).setIsPlaying(0);
+                    adapter.notifyItemChanged(position);
+                }
+            }
+        }
+    };
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(timerFinishedReceiver, new IntentFilter("by.roman.worldradio2.TIMER_FINISHED"));
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(timerFinishedReceiver);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -40,6 +73,7 @@ public class TopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_top, container, false);
+        radioService = RadioService.getInstance(getContext());
         findAllId(view);
         getData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

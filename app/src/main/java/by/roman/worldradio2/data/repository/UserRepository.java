@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import by.roman.worldradio2.data.dto.FavoriteDTO;
 import by.roman.worldradio2.data.dto.UserDTO;
+import lombok.NonNull;
 
 public class UserRepository {
     private SQLiteDatabase db;
@@ -80,5 +82,9 @@ public class UserRepository {
 
         return exists;
     }
-
+    public int removeUser(int id) {
+        String selection = DatabaseHelper.COLUMN_UUID_USER + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+        return db.delete(DatabaseHelper.TABLE_USER, selection, selectionArgs);
+    }
 }

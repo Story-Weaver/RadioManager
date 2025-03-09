@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.dto.FavoriteDTO;
 import by.roman.worldradio2.data.dto.RadioStationDTO;
 import by.roman.worldradio2.data.model.Favorite;
@@ -30,6 +31,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
     private FavoriteDTO favoriteDTO;
     private FavoriteRepository favoriteRepository;
     private OnItemClickListener listener;
+    private RadioService radioService;
 
     public SaveListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener, RadioStationRepository radioStationRepository, FavoriteRepository favoriteRepository) {
         this.context = context;
@@ -37,6 +39,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
         this.listener = listener;
         this.radioStationRepository = radioStationRepository;
         this.favoriteRepository = favoriteRepository;
+        this.radioService = RadioService.getInstance(context);
     }
     @Override
     @NonNull
@@ -59,12 +62,16 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
             for (RadioStation item : cards) {
-                item.setIsPlaying(0);
-                radioStationRepository.setIsPlaying(item.getStationUuid(),false);
+                if(item.getIsPlaying() == 1){
+                    item.setIsPlaying(0);
+                }
+                radioStationRepository.removeIsPlaying();
             }
+
             RadioStation selectedStation = cards.get(adapterPosition);
             selectedStation.setIsPlaying(1);
             radioStationRepository.setIsPlaying(selectedStation.getStationUuid(),true);
+            radioService.checkNow();
             notifyDataSetChanged();
             if(listener != null){
                 listener.onItemClick(position);
@@ -93,9 +100,10 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
     public void offIsPlaying() {
         for (RadioStation station : cards) {
             if (station.getIsPlaying() == 1) {
-                radioStationRepository.setIsPlaying(station.getStationUuid(),false);
+                station.setIsPlaying(0);
             }
         }
+        radioStationRepository.removeIsPlaying();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameStation;

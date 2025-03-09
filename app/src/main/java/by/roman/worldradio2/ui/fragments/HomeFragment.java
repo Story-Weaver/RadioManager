@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
@@ -34,12 +35,14 @@ public class HomeFragment extends Fragment {
     private RadioStationRepository radioStationRepository;
     private  int position;
     private ImageView timerButton;
+    private RadioService radioService;
     private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("by.roman.worldradio2.TIMER_FINISHED".equals(intent.getAction())) {
                 Toast.makeText(getContext(), "Таймер завершен через сервис!", Toast.LENGTH_SHORT).show();
                     adapter.offIsPlaying();
+                    radioService.checkNow();
 
                 if (radioStationList != null && position >= 0 && position < radioStationList.size()) {
                     radioStationList.get(position).setIsPlaying(0);
@@ -61,6 +64,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        radioService = RadioService.getInstance(getContext());
         findAllId(view);
         getData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -180,7 +180,9 @@ public class RadioStationRepository {
                             clickTrend, sslError, latitude, longitude, geoDistance,
                             hasExtendedInfo, isPlaying
                     );
-                    radioStationsList.add(station);
+                    if(radioStationsList.size() <=100){ // TODO: убрать
+                        radioStationsList.add(station);
+                    }
                 }
             }
             cursor.close();
@@ -288,6 +290,13 @@ public class RadioStationRepository {
         values.put(DatabaseHelper.COLUMN_ISPLAYING_STATION, isPlaying ? 1 : 0);
         String selection = DatabaseHelper.COLUMN_UUID_STATION + " = ?";
         String[] selectionArgs = {uuid};
+        db.update(DatabaseHelper.TABLE_RADIO_STATION, values, selection, selectionArgs);
+    }
+    public void removeIsPlaying(){
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_ISPLAYING_STATION, 0);
+        String selection = DatabaseHelper.COLUMN_ISPLAYING_STATION + " = ?";
+        String[] selectionArgs = {"1"};
         db.update(DatabaseHelper.TABLE_RADIO_STATION, values, selection, selectionArgs);
     }
     public List<RadioStation> getRadioStationWithFilter(){
@@ -539,5 +548,17 @@ public class RadioStationRepository {
         cursor2.close();
         return count;
     } // TODO: стили
+    public String getActiveStationUrl() {
+        String streamUrl = null;
+        String query = "SELECT " + DatabaseHelper.COLUMN_URL_STATION + " FROM " + DatabaseHelper.TABLE_RADIO_STATION
+                + " WHERE " + DatabaseHelper.COLUMN_ISPLAYING_STATION + " = 1 LIMIT 1";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            streamUrl = cursor.getString(0);
+        }
+        cursor.close();
+        return streamUrl;
+    }
 }
 

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.dto.RadioStationDTO;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
@@ -26,12 +27,14 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     private RadioStationDTO dto;
     private RadioStationRepository radioStationRepository;
     private OnItemClickListener listener;
+    private RadioService radioService;
 
     public HomeListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener, RadioStationRepository radioStationRepository) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
         this.radioStationRepository = radioStationRepository;
+        this.radioService = RadioService.getInstance(context);
     }
     @Override
     @NonNull
@@ -65,12 +68,13 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
             for (RadioStation item : cards) {
                 if(item.getIsPlaying() == 1){
                     item.setIsPlaying(0);
-                    radioStationRepository.setIsPlaying(item.getStationUuid(),false);
                 }
+                radioStationRepository.removeIsPlaying();
             }
             RadioStation selectedStation = cards.get(adapterPosition);
             selectedStation.setIsPlaying(1);
             radioStationRepository.setIsPlaying(selectedStation.getStationUuid(),true);
+            radioService.checkNow();
             notifyDataSetChanged();
             if(listener != null){
                 listener.onItemClick(position);
@@ -85,9 +89,10 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     public void offIsPlaying() {
         for (RadioStation station : cards) {
             if (station.getIsPlaying() == 1) {
-                radioStationRepository.setIsPlaying(station.getStationUuid(),false);
+                station.setIsPlaying(0);
             }
         }
+        radioStationRepository.removeIsPlaying();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameStation;

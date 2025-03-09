@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.dto.RadioStationDTO;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
@@ -25,12 +26,14 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
     private RadioStationDTO dto;
     private RadioStationRepository radioStationRepository;
     private OnItemClickListener listener;
+    private RadioService radioService;
 
     public TopListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener,RadioStationRepository radioStationRepository) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
         this.radioStationRepository = radioStationRepository;
+        this.radioService = RadioService.getInstance(context);
     }
     @Override
     @NonNull
@@ -62,12 +65,15 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
             for (RadioStation item : cards) {
-                item.setIsPlaying(0);
-                radioStationRepository.setIsPlaying(item.getStationUuid(),false);
+                if(item.getIsPlaying() == 1){
+                    item.setIsPlaying(0);
+                }
             }
+            radioStationRepository.removeIsPlaying();
             RadioStation selectedStation = cards.get(adapterPosition);
             selectedStation.setIsPlaying(1);
             radioStationRepository.setIsPlaying(selectedStation.getStationUuid(),true);
+            radioService.checkNow();
             notifyDataSetChanged();
             if(listener != null){
                 listener.onItemClick(position);
@@ -87,9 +93,10 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
     public void offIsPlaying() {
         for (RadioStation station : cards) {
             if (station.getIsPlaying() == 1) {
-                radioStationRepository.setIsPlaying(station.getStationUuid(),false);
+                station.setIsPlaying(0);
             }
         }
+        radioStationRepository.removeIsPlaying();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameStation;

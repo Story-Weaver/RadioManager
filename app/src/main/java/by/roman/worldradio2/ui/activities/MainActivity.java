@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.dto.FilterDTO;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FilterRepository;
@@ -48,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         initObjects();
-        Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
-        startActivity(intent);
-
         DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         //FilterDTO dto = new FilterDTO(1,null,null,null,0);
@@ -58,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
         //filterRepository.addFilter(dto);
         UserRepository userRepository = new UserRepository(db);
         userRepository.removeUserFromSystem();
+        userRepository.removeUser(2);
+        RadioStationRepository radioStationRepository = new RadioStationRepository(db);
+        radioStationRepository.removeIsPlaying();
+
+        Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
+        startActivity(intent);
+
+        RadioService radioService = RadioService.getInstance(getApplicationContext());
+        radioService.startMonitoring();
 
         button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
         button_save.setOnClickListener(v -> FragmentChange(new SaveFragment(), 1));
