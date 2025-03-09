@@ -2,6 +2,7 @@ package by.roman.worldradio2.ui.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -15,6 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.data.dto.FilterDTO;
+import by.roman.worldradio2.data.repository.DatabaseHelper;
+import by.roman.worldradio2.data.repository.FilterRepository;
+import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.data.repository.UserRepository;
 import by.roman.worldradio2.ui.fragments.FindCountryFragment;
 import by.roman.worldradio2.ui.fragments.HomeFragment;
 import by.roman.worldradio2.ui.fragments.SaveFragment;
@@ -44,6 +50,15 @@ public class MainActivity extends AppCompatActivity {
         initObjects();
         Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
         startActivity(intent);
+
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        //FilterDTO dto = new FilterDTO(1,null,null,null,0);
+        //FilterRepository filterRepository = new FilterRepository(db);
+        //filterRepository.addFilter(dto);
+        UserRepository userRepository = new UserRepository(db);
+        userRepository.removeUserFromSystem();
+
         button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
         button_save.setOnClickListener(v -> FragmentChange(new SaveFragment(), 1));
         button_home.setOnClickListener(v -> FragmentChange(new HomeFragment(), 2));

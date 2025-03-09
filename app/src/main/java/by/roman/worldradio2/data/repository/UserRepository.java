@@ -36,6 +36,17 @@ public class UserRepository {
         String[] selectionArgs = {String.valueOf(id)};
         db.update(DatabaseHelper.TABLE_USER, values, selection, selectionArgs);
     }
+    public void removeUserFromSystem(){
+        String checkQuery = "SELECT * FROM " + DatabaseHelper.TABLE_USER +
+                " WHERE " + DatabaseHelper.COLUMN_IN_SYSTEM_USER + " = 1";
+        Cursor cursor = db.rawQuery(checkQuery, null);
+        if (cursor.moveToFirst()) {
+            ContentValues resetValues = new ContentValues();
+            resetValues.put(DatabaseHelper.COLUMN_IN_SYSTEM_USER, 0);
+            db.update(DatabaseHelper.TABLE_USER, resetValues, null, null);
+        }
+        cursor.close();
+    }
     public int getUserInSystem(){
         int id = 0;
         return id;
@@ -45,16 +56,29 @@ public class UserRepository {
                 DatabaseHelper.COLUMN_LOGIN_USER + " = ? AND " + DatabaseHelper.COLUMN_PASSWORD_USER + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{login, password});
         int userId = -1;
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             userId = cursor.getInt(0);
         }
         if(userId != -1){
             setUserInSystem(userId,true);
         }
         cursor.close();
-        db.close();
         return userId != -1;
     }
+    public boolean checkUserData(String login) {
+        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_USER +
+                " WHERE " + DatabaseHelper.COLUMN_LOGIN_USER + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{login});
 
+        boolean exists = false;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                exists = cursor.getInt(0) > 0;
+            }
+            cursor.close();
+        }
+
+        return exists;
+    }
 
 }

@@ -2,9 +2,11 @@ package by.roman.worldradio2.ui.fragments;
 
 import static android.view.View.VISIBLE;
 
+import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -32,6 +34,7 @@ public class FragmentEntrance extends Fragment {
     private TextView error;
     private String login;
     private String password;
+    private TextView forgot;
     private UserRepository userRepository;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,18 +48,27 @@ public class FragmentEntrance extends Fragment {
             login = loginText.getText().toString();
             password = passwordText.getText().toString();
             if(userRepository.entranceUser(login,password)){
-                //requireActivity().finish();
+                requireActivity().finish();
             } else {
+                int redColor = ContextCompat.getColor(requireContext(), R.color.red);
+                ColorStateList errorColorStateList = new ColorStateList(
+                        new int[][] {new int[] { android.R.attr.state_enabled }, new int[] { -android.R.attr.state_enabled }},
+                        new int[] {redColor, redColor}
+                );
                 error.setVisibility(VISIBLE);
+                forgot.setVisibility(VISIBLE);
                 loginText.setText("");
                 passwordText.setText("");
-                loginHolder.setBoxStrokeColor(getResources().getColor(R.color.red));
-                passwordHolder.setBoxStrokeColor(getResources().getColor(R.color.red));
-                error.setTextColor(getResources().getColor(R.color.red));
+                loginHolder.setBoxStrokeColorStateList(errorColorStateList);
+                passwordHolder.setBoxStrokeColorStateList(errorColorStateList);
+                error.setTextColor(redColor);
             }
         });
         create.setOnClickListener(v -> {
             change(new FragmentRegistration());
+        });
+        forgot.setOnClickListener(v -> {
+
         });
         return view;
     }
@@ -68,6 +80,7 @@ public class FragmentEntrance extends Fragment {
         error = view.findViewById(R.id.errorText_Entrance);
         loginHolder = view.findViewById(R.id.loginHolderView_Entrance);
         passwordHolder = view.findViewById(R.id.passwordHolderView_Entrance);
+        forgot = view.findViewById(R.id.forgotPass_Entrance);
     }
     private void change(Fragment f){
         FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
