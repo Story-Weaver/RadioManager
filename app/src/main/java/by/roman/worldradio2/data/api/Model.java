@@ -26,7 +26,7 @@ public class Model {
     private String favicon;
 
     @SerializedName("tags")
-    private String tags; // Строка с тегами, разделенными запятыми
+    private String tags;
 
     @SerializedName("country")
     private String country;

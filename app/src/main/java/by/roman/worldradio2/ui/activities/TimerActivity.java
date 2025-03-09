@@ -148,7 +148,7 @@ public class TimerActivity extends AppCompatActivity {
                 if (timeRemaining > 0) {
                     sendTimeToService();
                 } else {
-                    // TODO: fix stop playing, when user wait a timer
+                    // TODO: доделать
                 }
                 finish();
             }

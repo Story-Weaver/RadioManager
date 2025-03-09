@@ -32,6 +32,7 @@ import by.roman.worldradio2.R;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FilterRepository;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.data.repository.UserRepository;
 
 public class    FilterActivity extends AppCompatActivity {
     private MaterialAutoCompleteTextView actvCountry;
@@ -39,6 +40,7 @@ public class    FilterActivity extends AppCompatActivity {
     private MaterialAutoCompleteTextView actvLang;
     private RadioStationRepository radioStationRepository;
     private FilterRepository filterRepository;
+    private UserRepository userRepository;
     private Spinner spinnerSortBy;
     private ImageView backButton;
     private ImageView deleteCountry;
@@ -66,6 +68,7 @@ public class    FilterActivity extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         radioStationRepository = new RadioStationRepository(db);
         filterRepository = new FilterRepository(db);
+        userRepository = new UserRepository(db);
         loadSavedFilters();
         updateCount();
         setupSortOptions();
@@ -88,19 +91,19 @@ public class    FilterActivity extends AppCompatActivity {
             return false;
         });
         deleteCountry.setOnClickListener(v->{
-            filterRepository.setFilter(1,DatabaseHelper.COLUMN_COUNTRY_FILTER,null);
+            filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_COUNTRY_FILTER,null);
             updateCount();
             actvCountry.setText("");
             deleteCountry.setVisibility(INVISIBLE);
         });
         deleteTags.setOnClickListener(v->{
-            filterRepository.setFilter(1,DatabaseHelper.COLUMN_TAGS_FILTER,null);
+            filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_TAGS_FILTER,null);
             updateCount();
             actvTags.setText("");
             deleteTags.setVisibility(INVISIBLE);
         });
         deleteLang.setOnClickListener(v->{
-            filterRepository.setFilter(1,DatabaseHelper.COLUMN_LANG_FILTER,null);
+            filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_LANG_FILTER,null);
             updateCount();
             actvLang.setText("");
             deleteLang.setVisibility(INVISIBLE);
@@ -128,7 +131,7 @@ public class    FilterActivity extends AppCompatActivity {
         spinnerSortBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                filterRepository.setSort(1,position);
+                filterRepository.setSort(userRepository.getUserIdInSystem(),position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
@@ -139,22 +142,22 @@ public class    FilterActivity extends AppCompatActivity {
         count.setText("Подходит " + radioStationRepository.getRadioStationCountWithFilter() + " радиостанций");
     }
     private void loadSavedFilters(){
-        String savedCountry = filterRepository.getCountryFilter(1);
+        String savedCountry = filterRepository.getCountryFilter(userRepository.getUserIdInSystem());
         if (savedCountry != null && !savedCountry.isEmpty()) {
             actvCountry.setText(savedCountry);
             deleteCountry.setVisibility(VISIBLE);
         } else deleteCountry.setVisibility(INVISIBLE);
-        String savedStyle = filterRepository.getTagsFilter(1);
+        String savedStyle = filterRepository.getTagsFilter(userRepository.getUserIdInSystem());
         if (savedStyle != null && !savedStyle.isEmpty()) {
             actvTags.setText(savedStyle);
             deleteTags.setVisibility(VISIBLE);
         } else deleteTags.setVisibility(INVISIBLE);
-        String savedLang = filterRepository.getLangFilter(1);
+        String savedLang = filterRepository.getLangFilter(userRepository.getUserIdInSystem());
         if (savedLang != null && !savedLang.isEmpty()) {
             actvLang.setText(savedLang);
             deleteLang.setVisibility(VISIBLE);
         } else deleteLang.setVisibility(INVISIBLE);
-        savedSort = filterRepository.getSortFilter(1);
+        savedSort = filterRepository.getSortFilter(userRepository.getUserIdInSystem());
     }
     private void setupAutoComplete(){
         ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(this,
@@ -164,7 +167,7 @@ public class    FilterActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCountry = (String) parent.getItemAtPosition(position);
-                filterRepository.setFilter(1,DatabaseHelper.COLUMN_COUNTRY_FILTER,selectedCountry);
+                filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_COUNTRY_FILTER,selectedCountry);
                 hideKeyboard(actvCountry);
                 deleteCountry.setVisibility(VISIBLE);
                 updateCount();
@@ -180,7 +183,7 @@ public class    FilterActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedStyle = (String) parent.getItemAtPosition(position);
-                filterRepository.setFilter(1,DatabaseHelper.COLUMN_TAGS_FILTER,selectedStyle);
+                filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_TAGS_FILTER,selectedStyle);
                 hideKeyboard(actvTags);
                 deleteTags.setVisibility(VISIBLE);
                 actvTags.clearFocus();
@@ -195,7 +198,7 @@ public class    FilterActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLang = (String) parent.getItemAtPosition(position);
-                filterRepository.setFilter(1,DatabaseHelper.COLUMN_LANG_FILTER,selectedLang);
+                filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_LANG_FILTER,selectedLang);
                 deleteLang.setVisibility(VISIBLE);
                 hideKeyboard(actvLang);
                 updateCount();
@@ -222,7 +225,7 @@ public class    FilterActivity extends AppCompatActivity {
     private void hideKeyboard(View view){
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0); // Скрыть клавиатуру
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
     private void setAutoCompleteTextViewFocusListener(@NonNull final MaterialAutoCompleteTextView actv) {

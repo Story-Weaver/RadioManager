@@ -10,11 +10,6 @@ import android.view.ViewGroup;
 
 import by.roman.worldradio2.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentHomeCard#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentHomeCard extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match

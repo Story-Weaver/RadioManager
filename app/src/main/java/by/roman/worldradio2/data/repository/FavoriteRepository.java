@@ -15,12 +15,12 @@ import by.roman.worldradio2.data.model.RadioStation;
 import lombok.NonNull;
 
 public class FavoriteRepository {
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
    public FavoriteRepository(SQLiteDatabase db) {this.db = db;}
-   public long addFavorite(FavoriteDTO dto) {
+   public long addFavorite(int userId, String stationUUID) {
        ContentValues values = new ContentValues();
-       values.put(DatabaseHelper.COLUMN_USER_ID_FAVORITE, dto.getUserId());
-       values.put(DatabaseHelper.COLUMN_STATION_ID_FAVORITE, dto.getStationUUID());
+       values.put(DatabaseHelper.COLUMN_USER_ID_FAVORITE, userId);
+       values.put(DatabaseHelper.COLUMN_STATION_ID_FAVORITE, stationUUID);
        return db.insert(DatabaseHelper.TABLE_FAVORITE, null, values);
    }
    public int removeFavorite(@NonNull FavoriteDTO dto) {
@@ -166,7 +166,7 @@ public class FavoriteRepository {
         }
         return null;
     }
-    public void removeAllFavorites(int userId) {
+    public void removeAllFavorites(int userId) { // TODO: переделать
         db.delete(DatabaseHelper.TABLE_FAVORITE,
                 DatabaseHelper.COLUMN_USER_ID_FAVORITE + " = ?",
                 new String[]{String.valueOf(userId)});

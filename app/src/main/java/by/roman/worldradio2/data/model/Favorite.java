@@ -9,7 +9,7 @@ public class Favorite {
         this.stationUUID = stationUUID;
     }
 
-    // Геттеры
+    // Getters
     public int getUserId() { return userId; }
     public String getStationUUID() { return stationUUID; }
 }

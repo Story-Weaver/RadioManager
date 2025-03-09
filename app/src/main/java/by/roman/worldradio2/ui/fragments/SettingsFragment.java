@@ -32,7 +32,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_settings, container, false);
         text = view.findViewById(R.id.textJSON);
         radioAPI = new RadioAPI();
@@ -44,7 +43,6 @@ public class SettingsFragment extends Fragment {
 //        radioAPI.fetchStations(new StationsCallback() {
 //            @Override
 //            public void onStationsFetched(List<RadioStation> stations) {
-//                // Обновляем UI в основном потоке
 //                getActivity().runOnUiThread(() -> {
 //                    StringBuilder sb = new StringBuilder();
 //                    for (RadioStation station : stations) {
@@ -67,7 +65,6 @@ public class SettingsFragment extends Fragment {
 //            }
 //            @Override
 //            public void onError(Exception e) {
-//                // Обработка ошибки
 //                Log.e("RadioStationError", "Error fetching stations", e);
 //            }
 //        });

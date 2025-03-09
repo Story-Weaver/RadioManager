@@ -15,9 +15,9 @@ public class RadioService {
     private final RadioManager radioManager;
     private final DatabaseHelper dbHelper;
     private final Handler handler;
-    private String currentStreamUrl = null; // Запоминаем текущий поток
-    private SQLiteDatabase db;
-    private RadioStationRepository radioStationRepository;
+    private String currentStreamUrl = null;
+    private final SQLiteDatabase db;
+    private final RadioStationRepository radioStationRepository;
     private static RadioService instance;
     private boolean isMonitoring = false;
 

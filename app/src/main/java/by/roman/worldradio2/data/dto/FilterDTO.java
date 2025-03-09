@@ -7,7 +7,6 @@ public class FilterDTO {
     private String styleFilter;
     private int sortFilter;
 
-    // Конструктор
     public FilterDTO(int userId, String countryFilter, String langFilter, String styleFilter, int sortFilter) {
         this.userId = userId;
         this.countryFilter = countryFilter;
@@ -16,7 +15,7 @@ public class FilterDTO {
         this.sortFilter = sortFilter;
     }
 
-    // Геттеры и сеттеры
+    // Getters and Setters
     public int getUserId() {
         return userId;
     }

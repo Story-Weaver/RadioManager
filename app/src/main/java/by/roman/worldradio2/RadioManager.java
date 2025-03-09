@@ -16,7 +16,7 @@ public class RadioManager {
     private ExoPlayer player;
 
     public RadioManager(Context context) {
-        this.context = context.getApplicationContext(); // Используем Application Context
+        this.context = context.getApplicationContext();
         initializePlayer();
     }
 
@@ -35,7 +35,6 @@ public class RadioManager {
             initializePlayer();
         }
 
-        // Добавляем поддержку заголовков
         DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory()
                 .setUserAgent("Mozilla/5.0 (Android)");
 

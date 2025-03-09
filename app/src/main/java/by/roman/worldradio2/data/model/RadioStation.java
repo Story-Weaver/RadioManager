@@ -169,6 +169,7 @@ public class RadioStation {
         return isPlaying;
     }
 
+    // Setter
     public void setIsPlaying(int isPlaying){
         this.isPlaying = isPlaying;
     }

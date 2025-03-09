@@ -46,7 +46,6 @@ public class RadioAPI {
                             return;
                         }
 
-                        // Создаем Gson с зарегистрированным адаптером для List<String>
                         Gson gson = new GsonBuilder()
                                 .registerTypeAdapter(new TypeToken<List<String>>(){}.getType(), new TagsAdapter())
                                 .create();

@@ -16,9 +16,6 @@ import java.util.List;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
-import by.roman.worldradio2.data.dto.FavoriteDTO;
-import by.roman.worldradio2.data.dto.RadioStationDTO;
-import by.roman.worldradio2.data.model.Favorite;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.FavoriteRepository;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
@@ -26,9 +23,7 @@ import by.roman.worldradio2.data.repository.RadioStationRepository;
 public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHolder>{
     private Context context;
     private List<RadioStation> cards;
-    private RadioStationDTO dto;
     private RadioStationRepository radioStationRepository;
-    private FavoriteDTO favoriteDTO;
     private FavoriteRepository favoriteRepository;
     private OnItemClickListener listener;
     private RadioService radioService;
@@ -78,8 +73,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
             }
         });
         holder.deleteButton.setOnClickListener(v -> {
-            favoriteDTO = null;
-
+            //TODO: удаление всего
             notifyDataSetChanged();
         });
     }
@@ -92,10 +86,9 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
         this.cards.addAll(newList);
         notifyDataSetChanged();
     }
-    // Метод для обновления данных
     public void updateData(List<RadioStation> newList) {
         cards = newList;
-        notifyDataSetChanged(); // Уведомляем адаптер, что данные изменились
+        notifyDataSetChanged();
     }
     public void offIsPlaying() {
         for (RadioStation station : cards) {

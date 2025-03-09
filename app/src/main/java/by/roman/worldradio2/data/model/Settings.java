@@ -17,18 +17,11 @@ public class Settings {
         this.filterEnabled = filterEnabled;
     }
 
-    // Геттеры
+    // Getters
     public int getUserId() { return userId; }
     public int getTheme() { return theme; }
     public int getMapEnabled() { return mapEnabled; }
     public int getTimerSeconds() { return timerSeconds; }
     public int getTimerDots() { return timerDots; }
     public int getFilterEnabled() { return filterEnabled; }
-
-    // Сеттеры
-    public void setTheme(int theme) { this.theme = theme; }
-    public void setMapEnabled(int mapEnabled) { this.mapEnabled = mapEnabled; }
-    public void setTimerSeconds(int timerSeconds) { this.timerSeconds = timerSeconds; }
-    public void setTimerDots(int timerDots) { this.timerDots = timerDots; }
-    public void setFilterEnabled(int filterEnabled) { this.filterEnabled = filterEnabled; }
 }

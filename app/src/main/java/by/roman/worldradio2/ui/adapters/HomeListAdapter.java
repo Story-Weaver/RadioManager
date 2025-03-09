@@ -17,14 +17,12 @@ import java.util.List;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
-import by.roman.worldradio2.data.dto.RadioStationDTO;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
 
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
     private Context context;
     private List<RadioStation> cards;
-    private RadioStationDTO dto;
     private RadioStationRepository radioStationRepository;
     private OnItemClickListener listener;
     private RadioService radioService;

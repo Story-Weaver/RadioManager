@@ -42,7 +42,7 @@ public class FilterRepository {
         return countryFilter;
     }
     public String getTagsFilter(int userId) {
-        String styleFilter = null;
+        String tagsFilter = null;
         Cursor cursor = db.query(DatabaseHelper.TABLE_FILTER,
                 new String[]{DatabaseHelper.COLUMN_TAGS_FILTER},
                 DatabaseHelper.COLUMN_USER_ID_FILTER + " = ?",
@@ -52,14 +52,14 @@ public class FilterRepository {
                 null
         );
         if (cursor.moveToFirst()) {
-            int countryIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_STATION);
-            if (countryIndex != -1) {
-                styleFilter = cursor.getString(countryIndex);
+            int tagsIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_STATION);
+            if (tagsIndex != -1) {
+                tagsFilter = cursor.getString(tagsIndex);
             }
         }
         cursor.close();
-        return styleFilter;
-    } //TODO: стили
+        return tagsFilter;
+    }
     public String getLangFilter(int userId) {
         String langFilter = null;
         Cursor cursor = db.query(DatabaseHelper.TABLE_FILTER,

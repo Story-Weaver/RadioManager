@@ -20,8 +20,10 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.data.dto.FilterDTO;
 import by.roman.worldradio2.data.dto.UserDTO;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
+import by.roman.worldradio2.data.repository.FilterRepository;
 import by.roman.worldradio2.data.repository.UserRepository;
 
 
@@ -53,8 +55,11 @@ public class FragmentRegistration extends Fragment {
             password = passwordText.getText().toString();
             if(!login.isEmpty() && !password.isEmpty()){
                 if(!userRepository.checkUserData(login)){
-                    UserDTO dto = new UserDTO(2,login,password,1);
+                    UserDTO dto = new UserDTO(login,password,1);
                     userRepository.addUser(dto);
+                    FilterDTO dto2 = new FilterDTO(userRepository.getUserIdInSystem(),null,null,null,0);
+                    FilterRepository filterRepository = new FilterRepository(db);
+                    filterRepository.addFilter(dto2);
                     requireActivity().finish();
                 } else {
                     error.setText("same");

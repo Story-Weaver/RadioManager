@@ -67,7 +67,7 @@ public class TopFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateDataInAdapter(); // Обновляем данные, когда фрагмент возвращается на экран
+        updateDataInAdapter();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,13 +98,13 @@ public class TopFragment extends Fragment {
         radioStationRepository = new RadioStationRepository(db);
         radioStationList = radioStationRepository.getRadioStationWithFilter();
         if (adapter != null) {
-            adapter.updateData(radioStationList); // обновляем данные в адаптере
+            adapter.updateData(radioStationList);
         }
     }
     public void updateDataInAdapter() {
-        getData(); // Перезагружаем данные с учётом фильтров
+        getData();
         if (adapter != null) {
-            adapter.notifyDataSetChanged(); // Обновляем адаптер
+            adapter.notifyDataSetChanged();
         }
     }
 }

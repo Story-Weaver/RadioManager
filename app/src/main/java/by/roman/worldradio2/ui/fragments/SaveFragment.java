@@ -79,7 +79,7 @@ public class SaveFragment extends Fragment {
        recyclerView.setAdapter(adapter);
        deleteButton.setOnClickListener(v -> {
            favoriteRepository.removeAllFavorites(1);
-           updateFavoritesList(); // Обновляем UI после удаления
+           updateFavoritesList();
        });
         return view;
     } // TODO: debug

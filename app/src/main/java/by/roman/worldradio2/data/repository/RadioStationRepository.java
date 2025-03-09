@@ -15,7 +15,7 @@ import by.roman.worldradio2.data.dto.RadioStationDTO;
 import by.roman.worldradio2.data.model.RadioStation;
 
 public class RadioStationRepository {
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
 
     public RadioStationRepository(SQLiteDatabase db) {
         this.db = db;
@@ -490,7 +490,7 @@ public class RadioStationRepository {
 
         }
         return radioStationList;
-    }// TODO: фильтры
+    } // TODO: теги
     public int getRadioStationCountWithFilter() {
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgsList = new ArrayList<>();
@@ -547,7 +547,7 @@ public class RadioStationRepository {
         }
         cursor2.close();
         return count;
-    } // TODO: стили
+    } // TODO: теги
     public String getActiveStationUrl() {
         String streamUrl = null;
         String query = "SELECT " + DatabaseHelper.COLUMN_URL_STATION + " FROM " + DatabaseHelper.TABLE_RADIO_STATION

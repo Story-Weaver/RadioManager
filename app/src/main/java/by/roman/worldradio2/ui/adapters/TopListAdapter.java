@@ -16,14 +16,12 @@ import java.util.List;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
-import by.roman.worldradio2.data.dto.RadioStationDTO;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
 
 public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHolder>{
     private Context context;
     private List<RadioStation> cards;
-    private RadioStationDTO dto;
     private RadioStationRepository radioStationRepository;
     private OnItemClickListener listener;
     private RadioService radioService;
@@ -84,11 +82,9 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
     public int getItemCount() {
         return cards.size();
     }
-
-    // Метод для обновления данных
     public void updateData(List<RadioStation> newList) {
         cards = newList;
-        notifyDataSetChanged(); // Уведомляем адаптер, что данные изменились
+        notifyDataSetChanged();
     }
     public void offIsPlaying() {
         for (RadioStation station : cards) {

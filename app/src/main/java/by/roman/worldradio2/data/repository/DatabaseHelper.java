@@ -87,13 +87,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ISPLAYING_STATION +                     " INTEGER);";
 
     protected static final String TABLE_USER = "user";
-    protected static final String COLUMN_UUID_USER = "id";
+    protected static final String COLUMN_ID_USER = "id";
     protected static final String COLUMN_LOGIN_USER = "login";
     protected static final String COLUMN_PASSWORD_USER = "password";
     protected static final String COLUMN_IN_SYSTEM_USER = "in_system";
 
     protected static final String CREATE_TABLE_USER = "CREATE TABLE "+ TABLE_USER + " ("+
-            COLUMN_UUID_USER +     " INTEGER, "+
+            COLUMN_ID_USER +     " INTEGER PRIMARY KEY AUTOINCREMENT, "+
             COLUMN_LOGIN_USER +    " TEXT, "+
             COLUMN_PASSWORD_USER + " TEXT, "+
             COLUMN_IN_SYSTEM_USER + " TEXT);";
@@ -108,7 +108,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_COUNTRY_FILTER + " TEXT, "+
             COLUMN_LANG_FILTER +    " TEXT, "+
             COLUMN_TAGS_FILTER +   " TEXT, "+
-            COLUMN_SORT_FILTER +    " INTEGER);";
+            COLUMN_SORT_FILTER +    " INTEGER, "+
+            "FOREIGN KEY (" + COLUMN_USER_ID_FILTER + ") REFERENCES " + TABLE_USER + "(" + COLUMN_ID_USER + ") ON DELETE CASCADE"
+            + ");";
     protected static final String TABLE_SETTINGS = "settings";
     protected static final String COLUMN_USER_ID_SETTINGS = "id";
     protected static final String COLUMN_THEME_SETTINGS = "theme";
@@ -124,7 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_TIMER_SECONDS_SETTINGS + " INTEGER, " +
             COLUMN_TIMER_DOTS_SETTINGS +    " INTEGER, " +
             COLUMN_FILTER_SETTINGS +        " INTEGER, " + // TODO: какая-то фигатень с формой записи
-            "FOREIGN KEY (" + COLUMN_USER_ID_SETTINGS + ") REFERENCES " + TABLE_USER + "(" + COLUMN_UUID_USER + ") ON DELETE CASCADE"
+            "FOREIGN KEY (" + COLUMN_USER_ID_SETTINGS + ") REFERENCES " + TABLE_USER + "(" + COLUMN_ID_USER + ") ON DELETE CASCADE"
             + ");";
 
     protected static final String TABLE_FAVORITE = "favorites";
@@ -134,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_USER_ID_FAVORITE +    " INTEGER, " +
             COLUMN_STATION_ID_FAVORITE + " TEXT, " +
             "PRIMARY KEY (" + COLUMN_USER_ID_FAVORITE + ", " + COLUMN_STATION_ID_FAVORITE + "), " +
-            "FOREIGN KEY (" + COLUMN_USER_ID_FAVORITE + ") REFERENCES " + TABLE_USER + "(" + COLUMN_UUID_USER + ") ON DELETE CASCADE, " +
+            "FOREIGN KEY (" + COLUMN_USER_ID_FAVORITE + ") REFERENCES " + TABLE_USER + "(" + COLUMN_ID_USER + ") ON DELETE CASCADE, " +
             "FOREIGN KEY (" + COLUMN_STATION_ID_FAVORITE + ") REFERENCES " + TABLE_RADIO_STATION + "(" + COLUMN_UUID_STATION + ") ON DELETE CASCADE);";
 
     public DatabaseHelper(Context context) {

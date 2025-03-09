@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import by.roman.worldradio2.data.dto.FavoriteDTO;
+import androidx.annotation.NonNull;
+
 import by.roman.worldradio2.data.dto.UserDTO;
-import lombok.NonNull;
 
 public class UserRepository {
     private SQLiteDatabase db;
@@ -14,16 +14,15 @@ public class UserRepository {
     public UserRepository(SQLiteDatabase db) {
         this.db = db;
     }
-    public long addUser(UserDTO dto) {
+    public long addUser(@NonNull UserDTO dto) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_UUID_USER, dto.getId());
         values.put(DatabaseHelper.COLUMN_LOGIN_USER, dto.getLogin());
         values.put(DatabaseHelper.COLUMN_PASSWORD_USER,dto.getPassword());
         values.put(DatabaseHelper.COLUMN_IN_SYSTEM_USER, dto.getInSystem());
         return db.insert(DatabaseHelper.TABLE_USER, null, values);
     }
-    public void setUserInSystem(int id, boolean inSystem){
-        String checkQuery = "SELECT " + DatabaseHelper.COLUMN_UUID_USER + " FROM " + DatabaseHelper.TABLE_USER +
+    private void setUserInSystem(int id, boolean inSystem){
+        String checkQuery = "SELECT " + DatabaseHelper.COLUMN_ID_USER + " FROM " + DatabaseHelper.TABLE_USER +
                 " WHERE " + DatabaseHelper.COLUMN_IN_SYSTEM_USER + " = 1";
         Cursor cursor = db.rawQuery(checkQuery, null);
         if (cursor.moveToFirst()) {
@@ -34,7 +33,7 @@ public class UserRepository {
         cursor.close();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_IN_SYSTEM_USER, inSystem ? 1 : 0);
-        String selection = DatabaseHelper.COLUMN_UUID_USER + " = ?";
+        String selection = DatabaseHelper.COLUMN_ID_USER + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
         db.update(DatabaseHelper.TABLE_USER, values, selection, selectionArgs);
     }
@@ -49,12 +48,8 @@ public class UserRepository {
         }
         cursor.close();
     }
-    public int getUserInSystem(){
-        int id = 0;
-        return id;
-    }
     public boolean entranceUser(String login, String password) {
-        String query = "SELECT " + DatabaseHelper.COLUMN_UUID_USER + " FROM " + DatabaseHelper.TABLE_USER + " WHERE " +
+        String query = "SELECT " + DatabaseHelper.COLUMN_ID_USER + " FROM " + DatabaseHelper.TABLE_USER + " WHERE " +
                 DatabaseHelper.COLUMN_LOGIN_USER + " = ? AND " + DatabaseHelper.COLUMN_PASSWORD_USER + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{login, password});
         int userId = -1;
@@ -66,6 +61,16 @@ public class UserRepository {
         }
         cursor.close();
         return userId != -1;
+    }
+    public int getUserIdInSystem(){
+        int userId = -1;
+        String query = "SELECT " + DatabaseHelper.COLUMN_ID_USER + " FROM " + DatabaseHelper.TABLE_USER + " WHERE " +
+                DatabaseHelper.COLUMN_IN_SYSTEM_USER + " = 1";
+        Cursor cursor = db.rawQuery(query,null);
+        if(cursor != null && cursor.moveToNext()){
+            userId = cursor.getInt(0);
+        }
+        return userId;
     }
     public boolean checkUserData(String login) {
         String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_USER +
@@ -82,8 +87,8 @@ public class UserRepository {
 
         return exists;
     }
-    public int removeUser(int id) {
-        String selection = DatabaseHelper.COLUMN_UUID_USER + " = ?";
+    public int deleteUser(int id) {
+        String selection = DatabaseHelper.COLUMN_ID_USER + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
         return db.delete(DatabaseHelper.TABLE_USER, selection, selectionArgs);
     }
