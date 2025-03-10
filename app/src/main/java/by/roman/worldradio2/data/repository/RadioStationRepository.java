@@ -61,7 +61,7 @@ public class RadioStationRepository {
         values.put(DatabaseHelper.COLUMN_ISPLAYING_STATION, dto.getIsPlaying());
         return db.insert(DatabaseHelper.TABLE_RADIO_STATION, null, values);
     }
-    public List<RadioStation> getAllRadioStations() {
+    public List<RadioStation> getAllRadioStations(int limit,int offset) {
         List<RadioStation> radioStationsList = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.TABLE_RADIO_STATION,
                 new String[]{
@@ -79,7 +79,12 @@ public class RadioStationRepository {
                         DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION, DatabaseHelper.COLUMN_GEO_DISTANCE_STATION, DatabaseHelper.COLUMN_HAS_EXTENDED_INFO_STATION,
                         DatabaseHelper.COLUMN_ISPLAYING_STATION
                 },
-                null, null, null, null, null);
+                null,
+                null,
+                null,
+                null,
+                null,
+                offset + "," + limit);
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -299,12 +304,12 @@ public class RadioStationRepository {
         String[] selectionArgs = {"1"};
         db.update(DatabaseHelper.TABLE_RADIO_STATION, values, selection, selectionArgs);
     }
-    public List<RadioStation> getRadioStationWithFilter(){
+    public List<RadioStation> getRadioStationWithFilter(int limit, int offset){
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgsList = new ArrayList<>();
         String countryF = null;
         String langF = null;
-        String styleF = null;
+        String tagsF = null;
         int sort = 0;
         String orderBy;
         Cursor cursor1 = db.query(DatabaseHelper.TABLE_FILTER,
@@ -318,12 +323,12 @@ public class RadioStationRepository {
         if (cursor1 != null && cursor1.moveToFirst()) {
             int countryIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_COUNTRY_FILTER);
             int langIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_LANG_FILTER);
-            int styleIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_TAGS_FILTER);
+            int tagsIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_TAGS_FILTER);
             int sortIndex = cursor1.getColumnIndex(DatabaseHelper.COLUMN_SORT_FILTER);
 
             if (countryIndex != -1) countryF = cursor1.getString(countryIndex);
             if (langIndex != -1) langF = cursor1.getString(langIndex);
-            if (styleIndex != -1) styleF = cursor1.getString(styleIndex);
+            if (tagsIndex != -1) tagsF = cursor1.getString(tagsIndex);
             if (sortIndex != -1) sort = cursor1.getInt(sortIndex);
         }
         if (countryF != null) {
@@ -335,10 +340,10 @@ public class RadioStationRepository {
             selection.append(DatabaseHelper.COLUMN_LANGUAGE_STATION).append(" = ?");
             selectionArgsList.add(langF);
         }
-        if (styleF != null) {
+        if (tagsF != null) {
             if (selection.length() > 0) selection.append(" AND ");
-            selection.append(DatabaseHelper.COLUMN_TAGS_STATION).append(" = ?");
-            selectionArgsList.add(styleF);
+            selection.append(DatabaseHelper.COLUMN_TAGS_STATION).append(" LIKE ?");
+            selectionArgsList.add("%" + tagsF + "%");
         }
 
         switch (sort) {
@@ -376,11 +381,12 @@ public class RadioStationRepository {
                         DatabaseHelper.COLUMN_CLICK_TREND_STATION,DatabaseHelper.COLUMN_SSL_ERROR_STATION,DatabaseHelper.COLUMN_GEO_LATITUDE_STATION,
                         DatabaseHelper.COLUMN_GEO_LONGITUDE_STATION,DatabaseHelper.COLUMN_GEO_DISTANCE_STATION,
                         DatabaseHelper.COLUMN_HAS_EXTENDED_INFO_STATION,DatabaseHelper.COLUMN_ISPLAYING_STATION},
-                selection.length() > 0 ? selection.toString() : null,
+                selection.length() > 0 ? selection.toString() : null, // your where condition
                 selectionArgsList.isEmpty() ? null : selectionArgsList.toArray(new String[0]),
                 null,
                 null,
-                orderBy);
+                orderBy,
+                offset + "," + limit);
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -479,18 +485,13 @@ public class RadioStationRepository {
                             clickTrend, sslError, latitude, longitude, geoDistance,
                             hasExtendedInfo, isPlaying
                     );
-                    if(radioStationList.size() <= 100){
-                        radioStationList.add(station);
-                    } else {
-                        cursor.close();
-                        return radioStationList;
-                    }
+                    radioStationList.add(station);
                 }
             }
 
         }
         return radioStationList;
-    } // TODO: теги
+    }
     public int getRadioStationCountWithFilter() {
         StringBuilder selection = new StringBuilder();
         List<String> selectionArgsList = new ArrayList<>();
@@ -529,8 +530,8 @@ public class RadioStationRepository {
         }
         if (tagsF != null) {
             if (selection.length() > 0) selection.append(" AND ");
-            selection.append(DatabaseHelper.COLUMN_TAGS_STATION).append(" = ?");
-            selectionArgsList.add(tagsF);
+            selection.append(DatabaseHelper.COLUMN_TAGS_STATION).append(" LIKE ?");
+            selectionArgsList.add("%" + tagsF + "%");
         }
 
         Cursor cursor2 = db.query(DatabaseHelper.TABLE_RADIO_STATION,
@@ -547,7 +548,7 @@ public class RadioStationRepository {
         }
         cursor2.close();
         return count;
-    } // TODO: теги
+    }
     public String getActiveStationUrl() {
         String streamUrl = null;
         String query = "SELECT " + DatabaseHelper.COLUMN_URL_STATION + " FROM " + DatabaseHelper.TABLE_RADIO_STATION

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -82,10 +83,12 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
     public int getItemCount() {
         return cards.size();
     }
-    public void updateData(List<RadioStation> newList) {
-        cards = newList;
-        notifyDataSetChanged();
+    public void loadMoreData(List<RadioStation> newStations) {
+        int startPosition = cards.size();
+        cards.addAll(newStations);
+        notifyItemRangeInserted(startPosition, newStations.size());
     }
+
     public void offIsPlaying() {
         for (RadioStation station : cards) {
             if (station.getIsPlaying() == 1) {
@@ -106,3 +109,4 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
         }
     }
 }
+

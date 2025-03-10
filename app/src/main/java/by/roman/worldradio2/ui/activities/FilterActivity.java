@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -147,11 +148,12 @@ public class    FilterActivity extends AppCompatActivity {
             actvCountry.setText(savedCountry);
             deleteCountry.setVisibility(VISIBLE);
         } else deleteCountry.setVisibility(INVISIBLE);
-        String savedStyle = filterRepository.getTagsFilter(userRepository.getUserIdInSystem());
-        if (savedStyle != null && !savedStyle.isEmpty()) {
-            actvTags.setText(savedStyle);
+        String savedTags = filterRepository.getTagsFilter(userRepository.getUserIdInSystem());
+        if (savedTags != null && !savedTags.isEmpty()) {
+            actvTags.setText(savedTags);
             deleteTags.setVisibility(VISIBLE);
         } else deleteTags.setVisibility(INVISIBLE);
+        System.out.println(savedTags);
         String savedLang = filterRepository.getLangFilter(userRepository.getUserIdInSystem());
         if (savedLang != null && !savedLang.isEmpty()) {
             actvLang.setText(savedLang);
@@ -176,9 +178,9 @@ public class    FilterActivity extends AppCompatActivity {
         });
         setAutoCompleteTextViewFocusListener(actvCountry);
 
-        ArrayAdapter<String> styleAdapter = new ArrayAdapter<>(this,
+        ArrayAdapter<String> tagsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, radioStationRepository.getTags());
-        actvTags.setAdapter(styleAdapter);
+        actvTags.setAdapter(tagsAdapter);
         actvTags.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -186,6 +188,7 @@ public class    FilterActivity extends AppCompatActivity {
                 filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_TAGS_FILTER,selectedStyle);
                 hideKeyboard(actvTags);
                 deleteTags.setVisibility(VISIBLE);
+                updateCount();
                 actvTags.clearFocus();
             }
         });

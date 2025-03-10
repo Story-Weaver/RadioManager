@@ -52,7 +52,7 @@ public class FilterRepository {
                 null
         );
         if (cursor.moveToFirst()) {
-            int tagsIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_STATION);
+            int tagsIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAGS_FILTER);
             if (tagsIndex != -1) {
                 tagsFilter = cursor.getString(tagsIndex);
             }

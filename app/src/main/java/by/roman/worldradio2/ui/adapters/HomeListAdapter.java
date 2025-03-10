@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -19,6 +20,7 @@ import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+
 
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
     private Context context;
@@ -84,6 +86,11 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     public int getItemCount() {
         return cards.size();
     }
+    public void loadMoreData(List<RadioStation> newStations) {
+        int startPosition = cards.size();
+        cards.addAll(newStations);
+        notifyItemRangeInserted(startPosition, newStations.size());
+    }
     public void offIsPlaying() {
         for (RadioStation station : cards) {
             if (station.getIsPlaying() == 1) {
@@ -104,3 +111,4 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         }
     }
 }
+

@@ -34,6 +34,8 @@ public class HomeFragment extends Fragment {
     private List<RadioStation> radioStationList;
     private RadioStationRepository radioStationRepository;
     private  int position;
+    private final static int limit = 20;
+    private int offset = 0;
     private ImageView timerButton;
     private RadioService radioService;
     private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
@@ -77,13 +79,33 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getContext(), TimerActivity.class);
             startActivity(intent);
         });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                        getData();
+                    }
+                }
+            }
+        });
         return view;
     }
-    private void getData(){
+    private void getData() {
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         radioStationRepository = new RadioStationRepository(db);
-        radioStationList = radioStationRepository.getAllRadioStations();
+        radioStationList = radioStationRepository.getAllRadioStations(limit, offset);
+        offset += limit;
+
+        if (adapter != null) {
+            adapter.loadMoreData(radioStationList);
+        }
     }
     private void findAllId(View view){
         timerButton = view.findViewById(R.id.timerButtonView);

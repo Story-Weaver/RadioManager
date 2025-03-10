@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +36,8 @@ public class TopFragment extends Fragment {
     private List<RadioStation> radioStationList;
     private RadioStationRepository radioStationRepository;
     private  int position;
+    private final static int limit = 20;
+    private int offset = 0;
     private ImageView filterButton;
     private RadioService radioService;
 
@@ -86,19 +89,36 @@ public class TopFragment extends Fragment {
             Intent intent = new Intent(getContext(), FilterActivity.class);
             startActivity(intent);
         });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (layoutManager != null) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                        getData();
+                    }
+                }
+            }
+        });
         return view;
     }
     private void findAllId(View view){
         filterButton = view.findViewById(R.id.filterButtonView);
         recyclerView = view.findViewById(R.id.cardTopView);
     }
-    private void getData(){
+    private void getData() {
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         radioStationRepository = new RadioStationRepository(db);
-        radioStationList = radioStationRepository.getRadioStationWithFilter();
+        radioStationList = radioStationRepository.getRadioStationWithFilter(limit, offset);
+        offset += limit;
+
         if (adapter != null) {
-            adapter.updateData(radioStationList);
+            adapter.loadMoreData(radioStationList); // Загружаем новые данные в адаптер
         }
     }
     public void updateDataInAdapter() {
