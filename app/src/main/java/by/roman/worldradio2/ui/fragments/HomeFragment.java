@@ -65,6 +65,11 @@ public class HomeFragment extends Fragment {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(timerFinishedReceiver);
     }
     @Override
+    public void onResume() {
+        super.onResume();
+        timerButton.setEnabled(true);
+    }
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
@@ -77,6 +82,7 @@ public class HomeFragment extends Fragment {
         }, radioStationRepository);
         recyclerView.setAdapter(adapter);
         timerButton.setOnClickListener(v->{
+            timerButton.setEnabled(false);
             Intent intent = new Intent(getContext(), TimerActivity.class);
             startActivity(intent);
         });

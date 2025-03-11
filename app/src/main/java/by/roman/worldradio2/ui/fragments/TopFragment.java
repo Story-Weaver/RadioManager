@@ -72,6 +72,7 @@ public class TopFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateDataInAdapter();
+        filterButton.setEnabled(true);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,6 +88,7 @@ public class TopFragment extends Fragment {
         },radioStationRepository);
         recyclerView.setAdapter(adapter);
         filterButton.setOnClickListener(v->{
+            filterButton.setEnabled(false);
             Intent intent = new Intent(getContext(), FilterActivity.class);
             startActivity(intent);
         });

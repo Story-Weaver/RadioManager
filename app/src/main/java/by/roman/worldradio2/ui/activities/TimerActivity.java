@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -49,6 +50,7 @@ public class TimerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        long startTime = System.nanoTime();  // Начало измерения времени
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_timer);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -56,9 +58,21 @@ public class TimerActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        long initTime = System.nanoTime() - startTime;  // Время после инициализации
+        Log.d("TimerActivity", "Initialization Time: " + initTime + "ns");
+        startTime = System.nanoTime();  // Начало измерения для findAllId и adapterInit
         findAllId();
+        long findAllIdTime = System.nanoTime() - startTime;
+        Log.d("TimerActivity", "findAllId execution time: " + findAllIdTime + "ns");
+        startTime = System.nanoTime();  // Начало измерения для adapterInit
         adapterInit();
+        long adapterInitTime = System.nanoTime() - startTime;
+        Log.d("TimerActivity", "adapterInit execution time: " + adapterInitTime + "ns");
+
+        startTime = System.nanoTime();  // Начало измерения для updateTotalTime
         updateTotalTime();
+        long updateTotalTimeTime = System.nanoTime() - startTime;
+        Log.d("TimerActivity", "updateTotalTime execution time: " + updateTotalTimeTime + "ns");
         backButton.setOnClickListener(v ->{finish();});
         startButton.setOnClickListener(v ->{
             startTimer(totalTime);

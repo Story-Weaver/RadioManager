@@ -28,6 +28,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
@@ -47,7 +48,6 @@ public class    FilterActivity extends AppCompatActivity {
     private ImageView deleteCountry;
     private ImageView deleteTags;
     private ImageView deleteLang;
-    private ImageView confirmButton;
     private ImageView savedButton;
     private ImageView topButton;
     private ImageView recomendedButton;
@@ -56,7 +56,6 @@ public class    FilterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_filter);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -64,51 +63,10 @@ public class    FilterActivity extends AppCompatActivity {
 
             return insets;
         });
-        findAllId();
-        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        radioStationRepository = new RadioStationRepository(db);
-        filterRepository = new FilterRepository(db);
-        userRepository = new UserRepository(db);
+        initAll();
         loadSavedFilters();
-        updateCount();
-        setupSortOptions();
-        setupAutoComplete();
-        setAutoCompleteTextViewFocusListener(actvLang);
-        backButton.setOnClickListener(v ->{
-            finish();
-        });
-        confirmButton.setOnTouchListener((v,event) ->{
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, "alpha", 0.5f);
-                fadeOut.setDuration(100);
-                fadeOut.start();
-            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                ObjectAnimator fadeIn = ObjectAnimator.ofFloat(v, "alpha", 1.0f);
-                fadeIn.setDuration(100);
-                fadeIn.start();
-            }
-            finish();
-            return false;
-        });
-        deleteCountry.setOnClickListener(v->{
-            filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_COUNTRY_FILTER,null);
-            updateCount();
-            actvCountry.setText("");
-            deleteCountry.setVisibility(INVISIBLE);
-        });
-        deleteTags.setOnClickListener(v->{
-            filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_TAGS_FILTER,null);
-            updateCount();
-            actvTags.setText("");
-            deleteTags.setVisibility(INVISIBLE);
-        });
-        deleteLang.setOnClickListener(v->{
-            filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_LANG_FILTER,null);
-            updateCount();
-            actvLang.setText("");
-            deleteLang.setVisibility(INVISIBLE);
-        });
+        setupUI();
+        backButton.setOnClickListener(v -> finish());
         savedButton.setOnClickListener(v -> {
 
         });
@@ -118,6 +76,14 @@ public class    FilterActivity extends AppCompatActivity {
         recomendedButton.setOnClickListener(v -> {
 
         });
+    }
+    private void initAll(){
+        findAllId();
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        radioStationRepository = new RadioStationRepository(db);
+        filterRepository = new FilterRepository(db);
+        userRepository = new UserRepository(db);
     }
     private void setupSortOptions() {
         List<String> sortOptions = new ArrayList<>();
@@ -143,72 +109,52 @@ public class    FilterActivity extends AppCompatActivity {
         count.setText("Подходит " + radioStationRepository.getRadioStationCountWithFilter() + " радиостанций");
     }
     private void loadSavedFilters(){
-        String savedCountry = filterRepository.getCountryFilter(userRepository.getUserIdInSystem());
-        if (savedCountry != null && !savedCountry.isEmpty()) {
-            actvCountry.setText(savedCountry);
-            deleteCountry.setVisibility(VISIBLE);
-        } else deleteCountry.setVisibility(INVISIBLE);
-        String savedTags = filterRepository.getTagsFilter(userRepository.getUserIdInSystem());
-        if (savedTags != null && !savedTags.isEmpty()) {
-            actvTags.setText(savedTags);
-            deleteTags.setVisibility(VISIBLE);
-        } else deleteTags.setVisibility(INVISIBLE);
-        System.out.println(savedTags);
-        String savedLang = filterRepository.getLangFilter(userRepository.getUserIdInSystem());
-        if (savedLang != null && !savedLang.isEmpty()) {
-            actvLang.setText(savedLang);
-            deleteLang.setVisibility(VISIBLE);
-        } else deleteLang.setVisibility(INVISIBLE);
+        loadFilter(actvCountry, deleteCountry, filterRepository.getCountryFilter(userRepository.getUserIdInSystem()));
+        loadFilter(actvTags, deleteTags, filterRepository.getTagsFilter(userRepository.getUserIdInSystem()));
+        loadFilter(actvLang, deleteLang, filterRepository.getLangFilter(userRepository.getUserIdInSystem()));
         savedSort = filterRepository.getSortFilter(userRepository.getUserIdInSystem());
     }
-    private void setupAutoComplete(){
-        ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, radioStationRepository.getCountry());
-        actvCountry.setAdapter(countryAdapter);
-        actvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCountry = (String) parent.getItemAtPosition(position);
-                filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_COUNTRY_FILTER,selectedCountry);
-                hideKeyboard(actvCountry);
-                deleteCountry.setVisibility(VISIBLE);
-                updateCount();
-                actvCountry.clearFocus();
-            }
-        });
-        setAutoCompleteTextViewFocusListener(actvCountry);
+    private void loadFilter(MaterialAutoCompleteTextView actv, View deleteButton, String value) {
+        if (value != null && !value.isEmpty()) {
+            actv.setText(value);
+            deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            deleteButton.setVisibility(View.INVISIBLE);
+        }
+    }
+    private void setupAutoCompleteAsync(MaterialAutoCompleteTextView actv, View deleteButton, String column, Supplier<List<String>> dataSupplier) {
+        new Thread(() -> {
+            List<String> items = dataSupplier.get(); // Загружаем данные в фоне
+            runOnUiThread(() -> {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(actv.getContext(), android.R.layout.simple_dropdown_item_1line, items);
+                actv.setAdapter(adapter);
+            });
+        }).start();
 
-        ArrayAdapter<String> tagsAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, radioStationRepository.getTags());
-        actvTags.setAdapter(tagsAdapter);
-        actvTags.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedStyle = (String) parent.getItemAtPosition(position);
-                filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_TAGS_FILTER,selectedStyle);
-                hideKeyboard(actvTags);
-                deleteTags.setVisibility(VISIBLE);
-                updateCount();
-                actvTags.clearFocus();
-            }
+        actv.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedValue = (String) parent.getItemAtPosition(position);
+            filterRepository.setFilter(userRepository.getUserIdInSystem(), column, selectedValue);
+            hideKeyboard(actv);
+            deleteButton.setVisibility(View.VISIBLE);
+            updateCount();
+            actv.clearFocus();
         });
-        setAutoCompleteTextViewFocusListener(actvTags);
 
-        ArrayAdapter<String> langAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, radioStationRepository.getLang());
-        actvLang.setAdapter(langAdapter);
-        actvLang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedLang = (String) parent.getItemAtPosition(position);
-                filterRepository.setFilter(userRepository.getUserIdInSystem(),DatabaseHelper.COLUMN_LANG_FILTER,selectedLang);
-                deleteLang.setVisibility(VISIBLE);
-                hideKeyboard(actvLang);
-                updateCount();
-                actvLang.clearFocus();
-
-            }
+        deleteButton.setOnClickListener(v -> {
+            filterRepository.setFilter(userRepository.getUserIdInSystem(), column, null);
+            actv.setText("");
+            deleteButton.setVisibility(View.INVISIBLE);
+            updateCount();
         });
+    }
+
+    private void setupUI(){
+        updateCount();
+        setupSortOptions();
+        setupAutoCompleteAsync(actvCountry, deleteCountry, DatabaseHelper.COLUMN_COUNTRY_FILTER, () -> radioStationRepository.getCountry());
+        setupAutoCompleteAsync(actvTags, deleteTags, DatabaseHelper.COLUMN_TAGS_FILTER, () -> radioStationRepository.getTags());
+        setupAutoCompleteAsync(actvLang, deleteLang, DatabaseHelper.COLUMN_LANG_FILTER, () -> radioStationRepository.getLang());
+
     }
     private void findAllId(){
         actvCountry = findViewById(R.id.actvCountry);
@@ -219,7 +165,6 @@ public class    FilterActivity extends AppCompatActivity {
         deleteCountry = findViewById(R.id.deleteCountryFilter);
         deleteTags = findViewById(R.id.deleteStyleFilter);
         deleteLang = findViewById(R.id.deleteLangFilter);
-        confirmButton = findViewById(R.id.confirmButtonView);
         savedButton = findViewById(R.id.savedButtonFilter);
         topButton = findViewById(R.id.topButtonFilter);
         recomendedButton = findViewById(R.id.recomendedButtonFilter);

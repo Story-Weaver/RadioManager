@@ -131,7 +131,7 @@
             android:id="@+id/countStation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="120dp"
+            android:layout_marginBottom="30dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -172,26 +172,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/delete_save" />
-
-        <ImageView
-            android:id="@+id/confirmButtonView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/confirmbutton_filter" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/confirm_filter"
-            app:layout_constraintBottom_toBottomOf="@+id/confirmButtonView"
-            app:layout_constraintEnd_toEndOf="@+id/confirmButtonView"
-            app:layout_constraintStart_toStartOf="@+id/confirmButtonView"
-            app:layout_constraintTop_toTopOf="@+id/confirmButtonView" />
 
         <Spinner
             android:id="@+id/sortType"
