@@ -27,6 +27,7 @@ import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
 import by.roman.worldradio2.ui.activities.FilterActivity;
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.ui.activities.MainActivity;
 import by.roman.worldradio2.ui.adapters.TopListAdapter;
 
 
@@ -76,7 +77,7 @@ public class TopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_top, container, false);
-        radioService = RadioService.getInstance(getContext());
+        radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
         findAllId(view);
         getData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

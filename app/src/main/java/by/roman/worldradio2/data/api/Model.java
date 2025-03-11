@@ -149,6 +149,7 @@ public class Model {
     public double getGeoLong() { return geoLong; }
     public double getGeoDistance() { return geoDistance; }
     public boolean getIsHasExtendedInfo() { return hasExtendedInfo; }
+    public int getPlay(){ return 0; }
 
 
 

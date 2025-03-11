@@ -10,5 +10,6 @@
     <color name="gray">#B0BEC5</color>
     <color name="lightGray">#D1D1D1</color>
     <color name="red">#7C0000</color>
+    <color name="bottom_player">#281E50</color>
 
 </resources>

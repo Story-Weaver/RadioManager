@@ -20,6 +20,7 @@ import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.ui.activities.MainActivity;
 
 
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
@@ -34,7 +35,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         this.cards = cards;
         this.listener = listener;
         this.radioStationRepository = radioStationRepository;
-        this.radioService = RadioService.getInstance(context);
+        this.radioService = RadioService.getInstance(context,(MainActivity) context);
     }
     @Override
     @NonNull

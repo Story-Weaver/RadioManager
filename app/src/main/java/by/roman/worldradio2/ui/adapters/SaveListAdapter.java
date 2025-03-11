@@ -19,28 +19,38 @@ import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.FavoriteRepository;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.data.repository.UserRepository;
+import by.roman.worldradio2.ui.activities.MainActivity;
 
 public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHolder>{
     private Context context;
     private List<RadioStation> cards;
     private RadioStationRepository radioStationRepository;
     private FavoriteRepository favoriteRepository;
+    private UserRepository userRepository;
     private OnItemClickListener listener;
     private RadioService radioService;
+    private OnItemRemovedListener itemRemovedListener;
 
-    public SaveListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener, RadioStationRepository radioStationRepository, FavoriteRepository favoriteRepository) {
+    public interface OnItemRemovedListener {
+        void onItemRemoved();
+    }
+    public SaveListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener, RadioStationRepository radioStationRepository,
+                           FavoriteRepository favoriteRepository,UserRepository userRepository,OnItemRemovedListener listener2) {
         this.context = context;
         this.cards = cards;
         this.listener = listener;
         this.radioStationRepository = radioStationRepository;
         this.favoriteRepository = favoriteRepository;
-        this.radioService = RadioService.getInstance(context);
+        this.radioService = RadioService.getInstance(context,(MainActivity) context);
+        this.userRepository = userRepository;
+        this.itemRemovedListener = listener2;
     }
     @Override
     @NonNull
     public SaveListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_card_save,parent,false);
-        return new SaveListAdapter.ViewHolder(view);//***************//
+        return new SaveListAdapter.ViewHolder(view);
     }
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -73,8 +83,12 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
             }
         });
         holder.deleteButton.setOnClickListener(v -> {
-            //TODO: удаление всего
-            notifyDataSetChanged();
+            favoriteRepository.removeFavorite(userRepository.getUserIdInSystem(),card.getStationUuid());
+            cards.remove(position);
+            notifyItemRemoved(position);
+            if (itemRemovedListener != null) {
+                itemRemovedListener.onItemRemoved();
+            }
         });
     }
     @Override

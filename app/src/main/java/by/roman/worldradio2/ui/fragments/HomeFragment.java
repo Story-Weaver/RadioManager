@@ -24,6 +24,7 @@ import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.ui.activities.MainActivity;
 import by.roman.worldradio2.ui.activities.TimerActivity;
 import by.roman.worldradio2.ui.adapters.HomeListAdapter;
 import by.roman.worldradio2.R;
@@ -66,7 +67,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        radioService = RadioService.getInstance(getContext());
+        radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
         findAllId(view);
         getData();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

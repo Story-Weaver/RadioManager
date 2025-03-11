@@ -26,19 +26,29 @@ import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FavoriteRepository;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.data.repository.UserRepository;
+import by.roman.worldradio2.ui.activities.MainActivity;
 import by.roman.worldradio2.ui.adapters.SaveListAdapter;
 
 
 public class SaveFragment extends Fragment {
     private FavoriteRepository favoriteRepository;
     private RadioStationRepository radioStationRepository;
+    private UserRepository userRepository;
     private List<RadioStation> favoriteRadioStationList;
     private RecyclerView recyclerView;
     private SaveListAdapter adapter;
     private ImageView deleteButton;
     private int position;
     private RadioService radioService;
-
+    SaveListAdapter.OnItemRemovedListener onItemRemovedListener = new SaveListAdapter.OnItemRemovedListener() {
+        @Override
+        public void onItemRemoved() {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).reloadPlayerFragment();
+            }
+        }
+    };
     private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -64,25 +74,24 @@ public class SaveFragment extends Fragment {
         super.onStop();
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(timerFinishedReceiver);
     }
-
    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
        View view = inflater.inflate(R.layout.fragment_save, container, false);
+       radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
        findAllId(view);
        getData();
        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
        adapter = new SaveListAdapter(getContext(), favoriteRadioStationList, position -> {
-           Toast.makeText(getContext(), "Нажат элемент " + position, Toast.LENGTH_SHORT).show();
            this.position = position;
-       }, radioStationRepository,favoriteRepository);
+       }, radioStationRepository,favoriteRepository,userRepository,onItemRemovedListener);
        recyclerView.setAdapter(adapter);
        deleteButton.setOnClickListener(v -> {
-           favoriteRepository.removeAllFavorites(1);
            updateFavoritesList();
        });
-        return view;
-    } // TODO: debug
+
+       return view;
+    }
     private void updateFavoritesList(){
         favoriteRadioStationList = favoriteRepository.getFavoriteStationByUser(1);
         adapter.updateList(favoriteRadioStationList);
@@ -92,7 +101,8 @@ public class SaveFragment extends Fragment {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         radioStationRepository = new RadioStationRepository(db);
         favoriteRepository = new FavoriteRepository(db);
-        favoriteRadioStationList = favoriteRepository.getFavoriteStationByUser(1);
+        userRepository = new UserRepository(db);
+        favoriteRadioStationList = favoriteRepository.getFavoriteStationByUser(userRepository.getUserIdInSystem());
     }
     private void findAllId(View view){
         recyclerView = view.findViewById(R.id.recyclerView_Save);

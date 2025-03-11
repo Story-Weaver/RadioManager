@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.data.api.Model;
 import by.roman.worldradio2.data.api.RadioAPI;
 import by.roman.worldradio2.data.api.StationsCallback;
 import by.roman.worldradio2.data.dto.RadioStationDTO;
@@ -42,10 +43,10 @@ public class SettingsFragment extends Fragment {
 
 //        radioAPI.fetchStations(new StationsCallback() {
 //            @Override
-//            public void onStationsFetched(List<RadioStation> stations) {
+//            public void onStationsFetched(List<Model> stations) {
 //                getActivity().runOnUiThread(() -> {
 //                    StringBuilder sb = new StringBuilder();
-//                    for (RadioStation station : stations) {
+//                    for (Model station : stations) {
 //                        sb.append(station.getName()).append(" - ").append(station.getCountry()).append("\n");
 //                        radioStationDTO = null;
 //                        radioStationDTO = new RadioStationDTO(station.getChangeUuid(),station.getStationUuid(),station.getName(),
@@ -57,7 +58,7 @@ public class SettingsFragment extends Fragment {
 //                                station.getLastCheckOkTime(),station.getLastCheckOkTimeIso8601(),station.getLastLocalCheckTime(),
 //                                station.getLastLocalCheckTimeIso8601(),station.getClickTimestamp(),station.getClickTimestampIso8601(),
 //                                station.getClickCount(),station.getClickTrend(),station.getSslError(),station.getGeoLat(),
-//                                station.getGeoLong(),station.getGeoDistance(),station.isHasExtendedInfo(),station.getIsPlaying());
+//                                station.getGeoLong(),station.getGeoDistance(),station.getIsHasExtendedInfo(),station.getPlay());
 //                        radioStationRepository.addRadioStation(radioStationDTO);
 //                    }
 //                    text.setText(sb.toString());

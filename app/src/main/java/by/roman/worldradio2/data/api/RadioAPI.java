@@ -50,11 +50,11 @@ public class RadioAPI {
                                 .registerTypeAdapter(new TypeToken<List<String>>(){}.getType(), new TagsAdapter())
                                 .create();
 
-                        List<RadioStation> stationList = new ArrayList<>();
+                        List<Model> stationList = new ArrayList<>();
 
                         try {
                             if (jsonResponse.startsWith("[")) {
-                                RadioStation[] stations = gson.fromJson(jsonResponse, RadioStation[].class);
+                                Model[] stations = gson.fromJson(jsonResponse, Model[].class);
                                 stationList.addAll(Arrays.asList(stations));
                                 callback.onStationsFetched(stationList);
                             } else {
