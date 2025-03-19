@@ -57,7 +57,9 @@ public class RadioService {
             handler.post(checkDatabaseRunnable);
         }
     }
-
+    public boolean statusPlaying(){
+        return radioManager.isPlaying();
+    }
     public void stopMonitoring() {
         isMonitoring = false;
         handler.removeCallbacks(checkDatabaseRunnable);

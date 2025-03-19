@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WorldRadio2</string>
+    <string name="app_name">RadioManager</string>
     <string name="country_filter">Country</string>
     <string name="lang_filter">Language</string>
     <string name="style_filter">Style</string>

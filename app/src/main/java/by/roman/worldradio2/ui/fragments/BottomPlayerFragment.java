@@ -1,9 +1,9 @@
 package by.roman.worldradio2.ui.fragments;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +21,8 @@ import com.bumptech.glide.Glide;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
-import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FavoriteRepository;
-import by.roman.worldradio2.data.repository.RadioStationRepository;
 import by.roman.worldradio2.data.repository.UserRepository;
 import by.roman.worldradio2.ui.activities.MainActivity;
 
@@ -43,9 +41,9 @@ public class BottomPlayerFragment extends Fragment {
     private ConstraintLayout player;
     private RadioService radioService;
     private boolean saveFlag = false;
-    private boolean saveStatus = false;
+    private boolean saveStatus;
     private String stationUuid;
-    private OnFavoriteChangedListener mListener;
+    private OnChangedListener mListener;
     public static BottomPlayerFragment newInstance(String name, String favicon, String uuid) {
         BottomPlayerFragment fragment = new BottomPlayerFragment();
         Bundle args = new Bundle();
@@ -58,15 +56,16 @@ public class BottomPlayerFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnFavoriteChangedListener) {
-            mListener = (OnFavoriteChangedListener) context;
+        if (context instanceof OnChangedListener) {
+            mListener = (OnChangedListener) context;
         } else {
-            throw new ClassCastException(context.toString() + " must implement OnFavoriteChangedListener");
+            throw new ClassCastException(context.toString() + " must implement OnChangedListener");
         }
     }
 
-    public interface OnFavoriteChangedListener {
+    public interface OnChangedListener {
         void onFavoriteChanged();
+        void onPlayerOpen();
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,6 +87,9 @@ public class BottomPlayerFragment extends Fragment {
         View view = inflater.inflate(R.layout.bottom_player, container, false);
         findById(view);
         radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
+        saveStatus = radioService.statusPlaying();
+        Log.e("BottomPlayer","saveStatus = " + saveStatus);
+        updateStatusIcon();
         if (getArguments() != null) {
             stationName.setText(getArguments().getString(ARG_NAME));
             String favicon = getArguments().getString(ARG_FAVICON);
@@ -133,7 +135,9 @@ public class BottomPlayerFragment extends Fragment {
         updateStatusIcon();
     }
     private void togglePlayer(){
-        Toast.makeText(requireContext(), "Развернуть", Toast.LENGTH_SHORT).show();
+        if (mListener != null) {
+            mListener.onPlayerOpen();
+        }
     }
     private void updateFavoriteIcon() {
         favorite.setImageDrawable(AppCompatResources.getDrawable(requireContext(),
@@ -141,7 +145,7 @@ public class BottomPlayerFragment extends Fragment {
     }
     private void updateStatusIcon() {
         status.setImageDrawable(AppCompatResources.getDrawable(requireContext(),
-                saveStatus ? R.drawable.play_player : R.drawable.pause_player));
+                saveStatus ? R.drawable.pause_player : R.drawable.play_player));
     }
 
 }

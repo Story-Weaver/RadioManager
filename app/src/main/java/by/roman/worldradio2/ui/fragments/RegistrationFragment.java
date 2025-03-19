@@ -27,7 +27,7 @@ import by.roman.worldradio2.data.repository.FilterRepository;
 import by.roman.worldradio2.data.repository.UserRepository;
 
 
-public class FragmentRegistration extends Fragment {
+public class RegistrationFragment extends Fragment {
 
     private Button enter;
     private Button create;
@@ -48,7 +48,7 @@ public class FragmentRegistration extends Fragment {
         userRepository = new UserRepository(db);
         findAll(view);
         enter.setOnClickListener(v -> {
-            change(new FragmentEntrance());
+            change(new EntranceFragment());
         });
         create.setOnClickListener(v -> {
             login = loginText.getText().toString();
@@ -74,7 +74,7 @@ public class FragmentRegistration extends Fragment {
     }
     private void change(Fragment f){
         FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.fragment_fade_in,R.anim.fragment_fade_out);
+        ft.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
         ft.replace(R.id.accountEntranceView,f);
         ft.commit();
     }

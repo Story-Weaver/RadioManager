@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <!-- Основные цвета -->
     <color name="background">#100E1B</color>
     <color name="navigateBar">#080613</color>
     <color name="backgroundcard">#231D30</color>
@@ -11,5 +10,7 @@
     <color name="lightGray">#D1D1D1</color>
     <color name="red">#7C0000</color>
     <color name="bottom_player">#281E50</color>
+    <color name="backgroundfilter">#231D30</color>
+    <color name="filterbackground">#7B6C9C</color>
 
 </resources>

@@ -7,12 +7,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +18,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import com.bumptech.glide.Glide;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
@@ -39,7 +33,7 @@ import by.roman.worldradio2.ui.fragments.SaveFragment;
 import by.roman.worldradio2.ui.fragments.SettingsFragment;
 import by.roman.worldradio2.ui.fragments.TopFragment;
 
-public class MainActivity extends AppCompatActivity implements BottomPlayerFragment.OnFavoriteChangedListener{
+public class MainActivity extends AppCompatActivity implements BottomPlayerFragment.OnChangedListener{
 
     private int frame = 2;
     private ImageView button_country;
@@ -47,17 +41,8 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
     private ImageView button_save;
     private ImageView button_top;
     private ImageView button_home;
-
-    private ImageView logo;
-    private ImageView save_unsave;
-    private ImageView play_pause;
-    private TextView name;
     private FrameLayout bottomPlayerContainer;
     private RadioStationRepository radioStationRepository;
-    private BottomPlayerFragment bottomPlayerFragment;
-    private SaveFragment saveFragment;
-    private boolean save_flag = false;
-    private boolean play_flag = false;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -70,32 +55,23 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        bottomPlayerFragment = new BottomPlayerFragment();
         initObjects();
-        saveFragment = new SaveFragment();
-
 
         DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-
         FavoriteRepository favoriteRepository = new FavoriteRepository(db);
-
-
         UserRepository userRepository = new UserRepository(db);
-
-
         radioStationRepository = new RadioStationRepository(db);
+        RadioService radioService = RadioService.getInstance(getApplicationContext(),this);
+
         radioStationRepository.removeIsPlaying();
 
+        if(userRepository.getUserIdInSystem() == -1){
+            Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
+            startActivity(intent);
+        }
 
-        Intent intent = new Intent(getApplicationContext(), AccountActivity.class);
-        startActivity(intent);
-
-
-        RadioService radioService = RadioService.getInstance(getApplicationContext(),this);
         radioService.startMonitoring();
-
 
         button_country.setOnClickListener(v -> FragmentChange(new FindCountryFragment(), 0));
         button_save.setOnClickListener(v -> FragmentChange(new SaveFragment(), 1));
@@ -126,10 +102,6 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
         button_top = findViewById(R.id.topButton);
         button_home = findViewById(R.id.homeButton);
 
-        logo = findViewById(R.id.station_logo_player);
-        name = findViewById(R.id.station_name_player);
-        save_unsave = findViewById(R.id.save_unsave);
-        play_pause = findViewById(R.id.play_pause);
         bottomPlayerContainer = findViewById(R.id.bottomPlayerContainer);
     }
     private void FragmentChange(Fragment fragment, int fragmentId) {
@@ -153,10 +125,15 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
     public void onFavoriteChanged() {
         reloadFragmentIfNeeded();
     }
+    @Override
+    public void onPlayerOpen(){
+
+        hideBottomPlayerFragment();
+    }
 
     public void change(Fragment f){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.fragment_fade_in,R.anim.fragment_fade_out);
+        ft.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
         ft.replace(R.id.fragmentMenuView,f);
         ft.commit();
     }
@@ -187,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
                 station.getFavicon(),
                 station.getStationUuid()
         );
-        transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out);
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         transaction.replace(R.id.bottomPlayerContainer, bottomPlayerFragment);
         transaction.commit();
         bottomPlayerContainer.setVisibility(VISIBLE);
@@ -210,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.bottomPlayerContainer);
         if (fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out);
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
             transaction.remove(fragment);
             transaction.commit();
         }

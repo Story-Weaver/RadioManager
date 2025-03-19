@@ -59,4 +59,7 @@ public class RadioManager {
             player = null;
         }
     }
+    public boolean isPlaying(){
+        return player != null;
+    }
 }
