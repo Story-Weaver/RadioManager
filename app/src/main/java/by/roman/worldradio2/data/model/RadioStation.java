@@ -1,6 +1,5 @@
 package by.roman.worldradio2.data.model;
 
-
 import com.google.gson.annotations.SerializedName;
 
 public class RadioStation {
@@ -17,7 +16,7 @@ public class RadioStation {
     @SerializedName("favicon")
     private String favicon;
     @SerializedName("tags")
-    private String tags; // Строка с тегами, разделенными запятыми
+    private String tags;
     @SerializedName("country")
     private String country;
     @SerializedName("countrycode")

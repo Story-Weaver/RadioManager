@@ -44,7 +44,6 @@ public class RadioService {
     private void updateUI() {
         MainActivity mainActivity = mainActivityRef.get();
         if (mainActivity != null) {
-            // Безопасно обновляем UI без риска утечек памяти
             mainActivity = mainActivityRef.get();
             if (mainActivity != null) {
                 mainActivity.showBottomPlayerFragment(radioStationRepository.getActiveStation());
@@ -85,7 +84,7 @@ public class RadioService {
                 radioManager.stop();
                 radioManager.play(currentStreamUrl);
                 updateUI();
-            } else {
+            } else if(newStreamUrl == null){
                 radioManager.stop();
                 MainActivity mainActivity = mainActivityRef.get();
                 if (mainActivity != null) {

@@ -92,6 +92,7 @@ public class BottomPlayerFragment extends Fragment {
         updateStatusIcon();
         if (getArguments() != null) {
             stationName.setText(getArguments().getString(ARG_NAME));
+            stationName.setSelected(true);
             String favicon = getArguments().getString(ARG_FAVICON);
             if (favicon != null && !favicon.isEmpty()) {
                 Glide.with(requireContext()).load(favicon).into(stationLogo);
@@ -126,7 +127,7 @@ public class BottomPlayerFragment extends Fragment {
         updateFavoriteIcon();
     }
     private void toggleStatus() {
-        if (!saveStatus) {
+        if (saveStatus) {
             radioService.pause();
         } else {
             radioService.play();

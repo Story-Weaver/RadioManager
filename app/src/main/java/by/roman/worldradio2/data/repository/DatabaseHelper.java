@@ -102,7 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TAGS_FILTER = "style_f";
     public static final String COLUMN_COUNTRY_FILTER = "country_f";
     public static final String COLUMN_LANG_FILTER = "lang_f";
-    protected static final String COLUMN_SORT_FILTER = "sort_f";
+    public static final String COLUMN_SORT_FILTER = "sort_f";
     protected static final String CREATE_TABLE_FILTER = "CREATE TABLE " + TABLE_FILTER + " (" +
             COLUMN_USER_ID_FILTER + " INTEGER, "+
             COLUMN_COUNTRY_FILTER + " TEXT, "+
@@ -113,11 +113,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ");";
     protected static final String TABLE_SETTINGS = "settings";
     protected static final String COLUMN_USER_ID_SETTINGS = "id";
-    protected static final String COLUMN_THEME_SETTINGS = "theme";
-    protected static final String COLUMN_MAP_SETTINGS = "map";
-    protected static final String COLUMN_TIMER_SECONDS_SETTINGS = "seconds";
-    protected static final String COLUMN_TIMER_DOTS_SETTINGS = "dots";
-    protected static final String COLUMN_FILTER_SETTINGS = "filter";
+    public static final String COLUMN_THEME_SETTINGS = "theme";
+    public static final String COLUMN_MAP_SETTINGS = "map";
+    public static final String COLUMN_TIMER_SECONDS_SETTINGS = "seconds";
+    public static final String COLUMN_TIMER_DOTS_SETTINGS = "dots";
+    public static final String COLUMN_FILTER_SETTINGS = "filter";
 
     protected static final String CREATE_TABLE_SETTINGS = "CREATE TABLE " + TABLE_SETTINGS + " (" +
             COLUMN_USER_ID_SETTINGS +       " INTEGER, " +

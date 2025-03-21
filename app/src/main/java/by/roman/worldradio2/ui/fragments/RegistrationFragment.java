@@ -21,9 +21,11 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.data.dto.FilterDTO;
+import by.roman.worldradio2.data.dto.SettingsDTO;
 import by.roman.worldradio2.data.dto.UserDTO;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FilterRepository;
+import by.roman.worldradio2.data.repository.SettingsRepository;
 import by.roman.worldradio2.data.repository.UserRepository;
 
 
@@ -58,8 +60,11 @@ public class RegistrationFragment extends Fragment {
                     UserDTO dto = new UserDTO(login,password,1);
                     userRepository.addUser(dto);
                     FilterDTO dto2 = new FilterDTO(userRepository.getUserIdInSystem(),null,null,null,0);
+                    SettingsDTO dto3 = new SettingsDTO(userRepository.getUserIdInSystem(),0,0,1,0,0);
                     FilterRepository filterRepository = new FilterRepository(db);
                     filterRepository.addFilter(dto2);
+                    SettingsRepository settingsRepository = new SettingsRepository(db);
+                    settingsRepository.addSettings(dto3);
                     requireActivity().finish();
                 } else {
                     error.setText("same");

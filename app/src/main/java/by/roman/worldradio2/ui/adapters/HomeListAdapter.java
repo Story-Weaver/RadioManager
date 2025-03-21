@@ -50,6 +50,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RadioStation card = cards.get(position);
         holder.nameStation.setText(card.getName());
+        holder.nameStation.setSelected(true);
         Glide.with(context)
                 .load(card.getFavicon())
                 .into(holder.logoStation);

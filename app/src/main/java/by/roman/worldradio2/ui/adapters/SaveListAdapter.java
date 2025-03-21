@@ -59,6 +59,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
     public void onBindViewHolder(@NonNull SaveListAdapter.ViewHolder holder, int position) {
         RadioStation card = cards.get(position);
         holder.nameStation.setText(cards.get(position).getName());
+        holder.nameStation.setSelected(true);
         Glide.with(context)
                 .load(card.getFavicon())
                 .into(holder.logoStation);
@@ -115,7 +116,6 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameStation;
         ImageView logoStation,deleteButton;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameStation = itemView.findViewById(R.id.nameStationView_Save);

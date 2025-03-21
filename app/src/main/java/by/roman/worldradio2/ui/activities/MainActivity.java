@@ -21,10 +21,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
+import by.roman.worldradio2.data.dto.SettingsDTO;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FavoriteRepository;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.data.repository.SettingsRepository;
 import by.roman.worldradio2.data.repository.UserRepository;
 import by.roman.worldradio2.ui.fragments.BottomPlayerFragment;
 import by.roman.worldradio2.ui.fragments.FindCountryFragment;
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
         FavoriteRepository favoriteRepository = new FavoriteRepository(db);
         UserRepository userRepository = new UserRepository(db);
         radioStationRepository = new RadioStationRepository(db);
+        SettingsRepository settingsRepository = new SettingsRepository(db);
+
         RadioService radioService = RadioService.getInstance(getApplicationContext(),this);
 
         radioStationRepository.removeIsPlaying();

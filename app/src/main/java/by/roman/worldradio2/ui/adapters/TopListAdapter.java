@@ -48,6 +48,7 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.ViewHold
     public void onBindViewHolder(@NonNull TopListAdapter.ViewHolder holder, int position) {
         RadioStation card = cards.get(position);
         holder.nameStation.setText(cards.get(position).getName());
+        holder.nameStation.setSelected(true);
         Glide.with(context)
                 .load(card.getFavicon())
                 .into(holder.logoStation);

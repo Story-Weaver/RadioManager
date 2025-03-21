@@ -71,6 +71,7 @@ public class TopFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        offset = 0;
         updateDataInAdapter();
         filterButton.setEnabled(true);
     }

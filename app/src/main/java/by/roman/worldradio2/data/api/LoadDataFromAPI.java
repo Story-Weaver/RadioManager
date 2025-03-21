@@ -41,7 +41,7 @@ public class LoadDataFromAPI {
                             station.getClickTrend(), station.getSslError(), station.getGeoLat(),
                             station.getGeoLong(), station.getGeoDistance(),
                             station.getIsHasExtendedInfo(), station.getPlay());
-
+// TODO: валидация станций
                     radioStationRepository.addRadioStation(radioStationDTO);
                 }
 
