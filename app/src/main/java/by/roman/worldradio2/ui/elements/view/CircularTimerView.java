@@ -14,6 +14,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import by.roman.worldradio2.data.repository.SettingsRepository;
+import by.roman.worldradio2.data.repository.UserRepository;
+
 public class CircularTimerView extends View {
     private long maxTimeMillis = 10 * 60_000L;
     private long currentTimeMillis = maxTimeMillis;

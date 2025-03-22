@@ -1,5 +1,8 @@
 package by.roman.worldradio2.ui.fragments;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +28,8 @@ import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
+import by.roman.worldradio2.data.repository.SettingsRepository;
+import by.roman.worldradio2.data.repository.UserRepository;
 import by.roman.worldradio2.ui.activities.MainActivity;
 import by.roman.worldradio2.ui.activities.TimerActivity;
 import by.roman.worldradio2.ui.adapters.HomeListAdapter;
@@ -34,11 +40,14 @@ public class HomeFragment extends Fragment {
     private HomeListAdapter adapter;
     private List<RadioStation> radioStationList;
     private RadioStationRepository radioStationRepository;
+    private SettingsRepository settingsRepository;
+    private UserRepository userRepository;
     private  int position;
     private final static int limit = 20;
     private int offset = 0;
     private ImageView timerButton;
     private RadioService radioService;
+    private ConstraintLayout mapView;
     private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -75,6 +84,11 @@ public class HomeFragment extends Fragment {
         radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
         findAllId(view);
         getData();
+        if(settingsRepository.getMapSetting(userRepository.getUserIdInSystem()) == 1){
+            mapView.setVisibility(GONE);
+        } else {
+            mapView.setVisibility(VISIBLE);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new HomeListAdapter(getContext(), radioStationList, position -> {
             Toast.makeText(getContext(), "Нажат элемент " + position, Toast.LENGTH_SHORT).show();
@@ -107,6 +121,8 @@ public class HomeFragment extends Fragment {
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         radioStationRepository = new RadioStationRepository(db);
+        userRepository = new UserRepository(db);
+        settingsRepository = new SettingsRepository(db);
         radioStationList = radioStationRepository.getAllRadioStations(limit, offset);
         offset += limit;
 
@@ -115,6 +131,7 @@ public class HomeFragment extends Fragment {
         }
     }
     private void findAllId(View view){
+        mapView = view.findViewById(R.id.mapView);
         timerButton = view.findViewById(R.id.timerButtonView);
         recyclerView = view.findViewById(R.id.cardView);
     }

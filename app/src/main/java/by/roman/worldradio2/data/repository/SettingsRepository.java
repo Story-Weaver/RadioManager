@@ -39,8 +39,8 @@ public class SettingsRepository {
         return theme;
     }
     public int getMapSetting(int id) {
-        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_SETTINGS +
-                " WHERE " + DatabaseHelper.COLUMN_MAP_SETTINGS + " = ?";
+        String query = "SELECT " + DatabaseHelper.COLUMN_MAP_SETTINGS + " FROM " + DatabaseHelper.TABLE_SETTINGS +
+                " WHERE " + DatabaseHelper.COLUMN_USER_ID_SETTINGS + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
 
         int map = 0;
@@ -54,8 +54,8 @@ public class SettingsRepository {
         return map;
     }
     public int getTimerSecSetting(int id) {
-        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_SETTINGS +
-                " WHERE " + DatabaseHelper.COLUMN_TIMER_SECONDS_SETTINGS + " = ?";
+        String query = "SELECT " + DatabaseHelper.COLUMN_TIMER_SECONDS_SETTINGS + " FROM " + DatabaseHelper.TABLE_SETTINGS +
+                " WHERE " + DatabaseHelper.COLUMN_USER_ID_SETTINGS + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
 
         int sec = 0;
@@ -69,8 +69,8 @@ public class SettingsRepository {
         return sec;
     }
     public int getTimerDotsSetting(int id) {
-        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_SETTINGS +
-                " WHERE " + DatabaseHelper.COLUMN_TIMER_DOTS_SETTINGS + " = ?";
+        String query = "SELECT " + DatabaseHelper.COLUMN_TIMER_DOTS_SETTINGS + " FROM " + DatabaseHelper.TABLE_SETTINGS +
+                " WHERE " + DatabaseHelper.COLUMN_USER_ID_SETTINGS + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
 
         int dot = 0;
@@ -84,8 +84,8 @@ public class SettingsRepository {
         return dot;
     }
     public int getFilterSetting(int id) {
-        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_SETTINGS +
-                " WHERE " + DatabaseHelper.COLUMN_FILTER_SETTINGS + " = ?";
+        String query = "SELECT " + DatabaseHelper.COLUMN_FILTER_SETTINGS + " FROM " + DatabaseHelper.TABLE_SETTINGS +
+                " WHERE " + DatabaseHelper.COLUMN_USER_ID_SETTINGS + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
 
         int filt = 0;

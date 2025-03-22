@@ -72,6 +72,36 @@ public class UserRepository {
         }
         return userId;
     }
+    public String getUserLogin(int id){
+        String query = "SELECT " + DatabaseHelper.COLUMN_LOGIN_USER + " FROM " + DatabaseHelper.TABLE_USER +
+                " WHERE " + DatabaseHelper.COLUMN_ID_USER + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+
+        String log = null;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                log = cursor.getString(0);
+            }
+            cursor.close();
+        }
+
+        return log;
+    }
+    public String getUserPassword(int id){ //TODO: query
+        String query = "SELECT " + DatabaseHelper.COLUMN_PASSWORD_USER + " FROM " + DatabaseHelper.TABLE_USER +
+                " WHERE " + DatabaseHelper.COLUMN_ID_USER + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
+
+        String log = null;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                log = cursor.getString(0);
+            }
+            cursor.close();
+        }
+
+        return log;
+    }
     public boolean checkUserData(String login) {
         String query = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_USER +
                 " WHERE " + DatabaseHelper.COLUMN_LOGIN_USER + " = ?";

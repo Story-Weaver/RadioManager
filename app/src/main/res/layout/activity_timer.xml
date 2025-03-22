@@ -72,7 +72,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/setTime"
-            android:layout_width="250dp"
+            android:layout_width="wrap_content"
             android:layout_height="141dp"
             android:layout_marginBottom="290dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -92,15 +92,16 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <!-- Первая колонка (часы) -->
+
+                <!-- Разделитель (точка) между часами и минутами -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerHour"
-                    android:layout_width="0dp"
+                    android:layout_width="76dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:clipToPadding="false"
                     android:paddingVertical="50dp" />
 
-                <!-- Разделитель (точка) между часами и минутами -->
                 <ImageView
                     android:id="@+id/dotDivider1"
                     android:layout_width="wrap_content"
@@ -112,7 +113,7 @@
                 <!-- Вторая колонка (минуты) -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerMinute"
-                    android:layout_width="0dp"
+                    android:layout_width="76dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:clipToPadding="false"
@@ -130,7 +131,7 @@
                 <!-- Третья колонка (секунды) -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerSecond"
-                    android:layout_width="0dp"
+                    android:layout_width="76dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:clipToPadding="false"

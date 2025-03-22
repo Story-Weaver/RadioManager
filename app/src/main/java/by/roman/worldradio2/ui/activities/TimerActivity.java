@@ -1,5 +1,6 @@
 package by.roman.worldradio2.ui.activities;
 
+import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
@@ -7,6 +8,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -26,6 +29,9 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.data.repository.DatabaseHelper;
+import by.roman.worldradio2.data.repository.SettingsRepository;
+import by.roman.worldradio2.data.repository.UserRepository;
 import by.roman.worldradio2.ui.adapters.TimerWheelAdapter;
 import by.roman.worldradio2.ui.elements.view.CircularTimerView;
 
@@ -36,12 +42,16 @@ public class TimerActivity extends AppCompatActivity {
     private TimerWheelAdapter hourAdapter, minuteAdapter, secondAdapter;
     private CircularTimerView circularTimerView;
     private CountDownTimer countDownTimer;
+    private UserRepository userRepository;
+    private SettingsRepository settingsRepository;
 
     private ImageView pauseButton;
     private ImageView playButton;
     private ImageView startButton;
     private ImageView stopButton;
     private ImageView backButton;
+    private ImageView divider1;
+    private ImageView divider2;
 
     private long totalTime; // Суммарное время
     private boolean isStart = false; // Отслеживание паузы
@@ -58,21 +68,10 @@ public class TimerActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        long initTime = System.nanoTime() - startTime;  // Время после инициализации
-        Log.d("TimerActivity", "Initialization Time: " + initTime + "ns");
-        startTime = System.nanoTime();  // Начало измерения для findAllId и adapterInit
         findAllId();
-        long findAllIdTime = System.nanoTime() - startTime;
-        Log.d("TimerActivity", "findAllId execution time: " + findAllIdTime + "ns");
-        startTime = System.nanoTime();  // Начало измерения для adapterInit
+        initDatabase();
         adapterInit();
-        long adapterInitTime = System.nanoTime() - startTime;
-        Log.d("TimerActivity", "adapterInit execution time: " + adapterInitTime + "ns");
-
-        startTime = System.nanoTime();  // Начало измерения для updateTotalTime
         updateTotalTime();
-        long updateTotalTimeTime = System.nanoTime() - startTime;
-        Log.d("TimerActivity", "updateTotalTime execution time: " + updateTotalTimeTime + "ns");
         backButton.setOnClickListener(v ->{finish();});
         startButton.setOnClickListener(v ->{
             startTimer(totalTime);
@@ -109,6 +108,12 @@ public class TimerActivity extends AppCompatActivity {
             animateMoveUp(circularTimerView);
         });
     }
+    private void initDatabase(){
+        DatabaseHelper dHelper = new DatabaseHelper(getApplicationContext());
+        SQLiteDatabase db = dHelper.getWritableDatabase();
+        userRepository = new UserRepository(db);
+        settingsRepository = new SettingsRepository(db);
+    }
     private void findAllId(){
         circularTimerView = findViewById(R.id.circularTimerView);
         pauseButton = findViewById(R.id.pauseButtonView);
@@ -119,17 +124,36 @@ public class TimerActivity extends AppCompatActivity {
         recyclerHour = findViewById(R.id.recyclerHour);
         recyclerMinute = findViewById(R.id.recyclerMinute);
         recyclerSecond = findViewById(R.id.recyclerSecond);
+        divider1 = findViewById(R.id.dotDivider1);
+        divider2 = findViewById(R.id.dotDivider2);
     }
     private void adapterInit(){
         hourAdapter = new TimerWheelAdapter(this, 24);
-        minuteAdapter = new TimerWheelAdapter(this, 60);
-        secondAdapter = new TimerWheelAdapter(this, 60);
         setupRecyclerView(recyclerHour, hourAdapter);
-        setupRecyclerView(recyclerMinute, minuteAdapter);
-        setupRecyclerView(recyclerSecond, secondAdapter);
         hourAdapter.setSelectedPosition(hourAdapter.getItemCount() / 2);
+
+        minuteAdapter = new TimerWheelAdapter(this, 60);
+        setupRecyclerView(recyclerMinute, minuteAdapter);
         minuteAdapter.setSelectedPosition(minuteAdapter.getItemCount() / 2);
-        secondAdapter.setSelectedPosition(secondAdapter.getItemCount() / 2);
+
+        recyclerSecond.setVisibility(GONE);
+        divider2.setVisibility(GONE);
+        if(settingsRepository.getTimerDotsSetting(userRepository.getUserIdInSystem()) == 1){
+            divider1.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.romb));
+            divider2.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.romb));
+        } else {
+            divider1.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.circle));
+            divider2.setImageDrawable(AppCompatResources.getDrawable(getApplicationContext(),R.drawable.circle));
+        }
+
+        if(settingsRepository.getTimerSecSetting(userRepository.getUserIdInSystem()) == 1){
+            recyclerSecond.setVisibility(VISIBLE);
+            divider2.setVisibility(VISIBLE);
+            secondAdapter = new TimerWheelAdapter(this, 60);
+            setupRecyclerView(recyclerSecond, secondAdapter);
+            secondAdapter.setSelectedPosition(secondAdapter.getItemCount() / 2);
+        }
+
     }
     private void startVisible(){
         startButton.setVisibility(INVISIBLE);
@@ -203,8 +227,11 @@ public class TimerActivity extends AppCompatActivity {
         if(!isStart){
             int hours = hourAdapter.getSelectedPosition() % 24;
             int minutes = minuteAdapter.getSelectedPosition() % 60;
-            int seconds = secondAdapter.getSelectedPosition() % 60;
-            totalTime = (hours * 3600000L) + (minutes * 60000L) + (seconds * 1000L);
+            totalTime = (hours * 3600000L) + (minutes * 60000L);
+            if(settingsRepository.getTimerSecSetting(userRepository.getUserIdInSystem()) == 1){
+                int seconds = secondAdapter.getSelectedPosition() % 60;
+                totalTime = totalTime + (seconds * 1000L);
+            }
             circularTimerView.setMaxTimeMillis(totalTime);
             circularTimerView.setCurrentTimeMillis(totalTime);
         }

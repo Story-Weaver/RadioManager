@@ -36,7 +36,15 @@ public class SettingsFragment extends Fragment {
     protected UserRepository userRepository;
     protected SettingsRepository settingsRepository;
     private ExampleAdapter adapter;
+    private ImageView editAccount;
+    private ImageView exit;
+    private TextView nameAccount;
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        //editAccount.setEnabled(true);
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,10 +55,17 @@ public class SettingsFragment extends Fragment {
         settingsRepository = new SettingsRepository(db);
 
         listView = rootView.findViewById(R.id.listView);
+        nameAccount = rootView.findViewById(R.id.nameAccountView);
+        //editAccount = rootView.findViewById(R.id);
+        //exit = rootView.findViewById(R.id);
+
         adapter = new ExampleAdapter(requireContext());
 
         List<GroupItem> items = new ArrayList<>();
         items = createItems();
+
+        String Hi = "Hi, " + userRepository.getUserLogin(userRepository.getUserIdInSystem());
+        nameAccount.setText(Hi);
 
         adapter.setData(items);
         listView.setAdapter(adapter);
@@ -65,7 +80,16 @@ public class SettingsFragment extends Fragment {
             }
             return true;
         });
-
+//        exit.setOnClickListener(v -> {
+//            editAccount.setEnabled(false);
+//            userRepository.removeUserFromSystem();
+//            //TODO: reboot
+//        });
+//
+//        editAccount.setOnClickListener(v -> {
+//            editAccount.setEnabled(false);
+//
+//        });
         return rootView;
     }
     private static class GroupItem {
@@ -133,19 +157,19 @@ public class SettingsFragment extends Fragment {
                     break;
                 case "swc_m":
                     holder.swc.setVisibility(VISIBLE);
-                    holder.swc.setChecked(settingsRepository.getMapSetting(userRepository.getUserIdInSystem()) != 1);
+                    holder.swc.setChecked(settingsRepository.getMapSetting(userRepository.getUserIdInSystem()) == 1);
                     break;
                 case "swc_s":
                     holder.swc.setVisibility(VISIBLE);
-                    holder.swc.setChecked(settingsRepository.getTimerSecSetting(userRepository.getUserIdInSystem()) != 1);
+                    holder.swc.setChecked(settingsRepository.getTimerSecSetting(userRepository.getUserIdInSystem()) == 1);
                     break;
                 case "chs_s":
                     holder.chs.setVisibility(VISIBLE);
                     holder.img1.setVisibility(VISIBLE);
-                    holder.img1.setImageDrawable(AppCompatResources.getDrawable(getContext(),R.drawable.romb));
+                    holder.img1.setImageDrawable(AppCompatResources.getDrawable(getContext(),R.drawable.circle));
                     holder.img2.setVisibility(VISIBLE);
                     holder.img2.setImageDrawable(AppCompatResources.getDrawable(getContext(),R.drawable.romb));
-                    holder.swc.setChecked(settingsRepository.getTimerDotsSetting(userRepository.getUserIdInSystem()) != 1);
+                    holder.chs.setChecked(settingsRepository.getTimerDotsSetting(userRepository.getUserIdInSystem()) == 1);
                     break;
 
             }
