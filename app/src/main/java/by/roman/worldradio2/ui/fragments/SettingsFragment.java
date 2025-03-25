@@ -64,7 +64,7 @@ public class SettingsFragment extends Fragment {
         List<GroupItem> items = new ArrayList<>();
         items = createItems();
 
-        String Hi = "Hi, " + userRepository.getUserLogin(userRepository.getUserIdInSystem());
+        String Hi = "Hi, \n" + userRepository.getUserLogin(userRepository.getUserIdInSystem());
         nameAccount.setText(Hi);
 
         adapter.setData(items);
@@ -300,4 +300,5 @@ public class SettingsFragment extends Fragment {
 
         return items;
     }
+    //TODO: переделать без разворота
 }

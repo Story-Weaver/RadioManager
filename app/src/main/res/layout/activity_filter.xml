@@ -156,6 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="45dp"
             android:layout_marginTop="70dp"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@+id/topButtonFilter"
             app:layout_constraintTop_toBottomOf="@+id/tilStyle"
             app:srcCompat="@drawable/back_timer" />
@@ -166,6 +167,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="57dp"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilStyle"
             app:srcCompat="@drawable/back_timer" />
@@ -176,6 +178,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:layout_marginTop="70dp"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@+id/savedButtonFilter"
             app:layout_constraintTop_toBottomOf="@+id/tilStyle"
             app:srcCompat="@drawable/back_timer" />

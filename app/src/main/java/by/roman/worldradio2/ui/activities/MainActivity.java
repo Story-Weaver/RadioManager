@@ -1,12 +1,20 @@
 package by.roman.worldradio2.ui.activities;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -21,7 +29,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
-import by.roman.worldradio2.data.dto.SettingsDTO;
 import by.roman.worldradio2.data.model.RadioStation;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FavoriteRepository;
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+
             return insets;
         });
         initObjects();
@@ -82,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
         button_home.setOnClickListener(v -> FragmentChange(new HomeFragment(), 2));
         button_top.setOnClickListener(v -> FragmentChange(new TopFragment(), 3));
         button_settings.setOnClickListener(v -> FragmentChange(new SettingsFragment(), 4));
+        //button_settings.setOnClickListener(v -> FragmentChange(new testFragment(), 4));
 
         RadioStation station = radioStationRepository.getActiveStation();
         if (station != null && station.getIsPlaying() == 1) {
@@ -129,11 +138,79 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
     public void onFavoriteChanged() {
         reloadFragmentIfNeeded();
     }
-    @Override
-    public void onPlayerOpen(){
+    public void onPlayerExpanded() {
+        final View smallPlayer = findViewById(R.id.small_player);
+        final View largePlayer = findViewById(R.id.large_player);
+        final View Player = findViewById(R.id.player_player);
 
-        hideBottomPlayerFragment();
+        smallPlayer.setVisibility(VISIBLE);
+        largePlayer.setVisibility(VISIBLE);
+
+        final int targetHeight = getResources().getDisplayMetrics().heightPixels;
+
+        ValueAnimator animator = ValueAnimator.ofInt(Player.getHeight(), targetHeight-120);//TODO: выровнять
+        animator.setDuration(500);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = smallPlayer.getLayoutParams();
+                layoutParams.height = value;
+                smallPlayer.setLayoutParams(layoutParams);
+            }
+        });
+        animator.start();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                smallPlayer.setVisibility(INVISIBLE);
+            }
+        });
+
     }
+
+    public void onPlayerCollapsed() {
+        final View smallPlayer = findViewById(R.id.small_player);
+        final View largePlayer = findViewById(R.id.large_player);
+        smallPlayer.setVisibility(INVISIBLE);
+
+
+        final int initialHeight = 70; // Начальная высота маленького плеера
+
+        // Анимация с изменением высоты
+        ValueAnimator animator = ValueAnimator.ofInt(smallPlayer.getHeight(), initialHeight);
+        animator.setDuration(500);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = smallPlayer.getLayoutParams();
+                layoutParams.height = value;
+                smallPlayer.setLayoutParams(layoutParams); // Применяем новые параметры
+            }
+        });
+
+        // После завершения анимации скрываем большой плеер
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                // smallPlayer уже видим, так что это не нужно делать снова
+                largePlayer.setVisibility(INVISIBLE); // Скрываем большой плеер
+                smallPlayer.setVisibility(VISIBLE);
+            }
+        });
+
+        animator.start();
+    }
+
+
+
 
     public void change(Fragment f){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

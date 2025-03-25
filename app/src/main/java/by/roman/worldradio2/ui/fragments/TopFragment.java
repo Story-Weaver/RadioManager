@@ -120,7 +120,6 @@ public class TopFragment extends Fragment {
         radioStationRepository = new RadioStationRepository(db);
         radioStationList = radioStationRepository.getRadioStationWithFilter(limit, offset);
         offset += limit;
-
         if (adapter != null) {
             adapter.loadMoreData(radioStationList); // Загружаем новые данные в адаптер
         }
@@ -128,6 +127,11 @@ public class TopFragment extends Fragment {
     public void updateDataInAdapter() {
         getData();
         if (adapter != null) {
+            adapter = new TopListAdapter(getContext(), radioStationList, position -> {
+                Toast.makeText(getContext(), "Нажат элемент " + position, Toast.LENGTH_SHORT).show();
+                this.position = position;
+            },radioStationRepository);
+            recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
     }

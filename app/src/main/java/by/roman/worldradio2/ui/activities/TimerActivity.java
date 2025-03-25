@@ -53,14 +53,13 @@ public class TimerActivity extends AppCompatActivity {
     private ImageView divider1;
     private ImageView divider2;
 
-    private long totalTime; // Суммарное время
-    private boolean isStart = false; // Отслеживание паузы
-    private long timeRemaining; // Оставшееся время для отправки в сервис
+    private long totalTime;
+    private boolean isStart = false;
+    private long timeRemaining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        long startTime = System.nanoTime();  // Начало измерения времени
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_timer);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

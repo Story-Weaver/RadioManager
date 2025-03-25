@@ -60,6 +60,6 @@ public class RadioManager {
         }
     }
     public boolean isPlaying(){
-        return player != null;
+        return player != null && player.isPlaying();
     }
 }

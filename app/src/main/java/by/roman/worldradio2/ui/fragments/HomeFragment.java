@@ -22,6 +22,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import by.roman.worldradio2.RadioService;
@@ -46,6 +48,7 @@ public class HomeFragment extends Fragment {
     private final static int limit = 20;
     private int offset = 0;
     private ImageView timerButton;
+    private ImageView map;
     private RadioService radioService;
     private ConstraintLayout mapView;
     private final BroadcastReceiver timerFinishedReceiver = new BroadcastReceiver() {
@@ -84,6 +87,7 @@ public class HomeFragment extends Fragment {
         radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
         findAllId(view);
         getData();
+        Glide.with(requireContext()).load("https://bigkarta.ru/belarus/belarus-dorogi-small.jpg").into(map);
         if(settingsRepository.getMapSetting(userRepository.getUserIdInSystem()) == 1){
             mapView.setVisibility(GONE);
         } else {
@@ -131,6 +135,7 @@ public class HomeFragment extends Fragment {
         }
     }
     private void findAllId(View view){
+        map = view.findViewById(R.id.map);
         mapView = view.findViewById(R.id.mapView);
         timerButton = view.findViewById(R.id.timerButtonView);
         recyclerView = view.findViewById(R.id.cardView);

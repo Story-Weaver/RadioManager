@@ -42,14 +42,21 @@ public class RadioService {
     }
 
     private void updateUI() {
-        MainActivity mainActivity = mainActivityRef.get();
-        if (mainActivity != null) {
-            mainActivity = mainActivityRef.get();
-            if (mainActivity != null) {
-                mainActivity.showBottomPlayerFragment(radioStationRepository.getActiveStation());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (radioManager.isPlaying()) {
+                    MainActivity mainActivity = mainActivityRef.get();
+                    if (mainActivity != null) {
+                        mainActivity.showBottomPlayerFragment(radioStationRepository.getActiveStation());
+                    }
+                } else {
+                    handler.postDelayed(this, 500);
+                }
             }
-        }
+        }, 500);
     }
+
     public void startMonitoring() {
         if (!isMonitoring) {
             isMonitoring = true;
