@@ -6,15 +6,19 @@ import android.content.res.ColorStateList;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -31,16 +35,18 @@ import by.roman.worldradio2.data.repository.UserRepository;
 
 public class RegistrationFragment extends Fragment {
 
-    private Button enter;
-    private Button create;
+    private ImageView create;
     private EditText loginText;
     private EditText passwordText;
-    private TextView error;
-    private TextInputLayout loginHolder;
-    private TextInputLayout passwordHolder;
+    private EditText passwordRepText;
     private String login = null;
     private String password = null;
     private UserRepository userRepository;
+
+    private ImageView passStatus1;
+    private ImageView passStatus2;
+    private boolean status1 = false;
+    private boolean status2 = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,9 +55,6 @@ public class RegistrationFragment extends Fragment {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         userRepository = new UserRepository(db);
         findAll(view);
-        enter.setOnClickListener(v -> {
-            change(new EntranceFragment());
-        });
         create.setOnClickListener(v -> {
             login = loginText.getText().toString();
             password = passwordText.getText().toString();
@@ -67,42 +70,40 @@ public class RegistrationFragment extends Fragment {
                     settingsRepository.addSettings(dto3);
                     requireActivity().finish();
                 } else {
-                    error.setText("same");
-                    err();
+                    //error.setText("Уже существует");
                 }
             } else {
-                error.setText("null");
-                err();
+                //error.setText("Пустое поле");
             }
+        });
+        passStatus1.setOnClickListener(v -> {
+            if(status1){
+                passwordText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                passStatus1.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.eye));
+            } else {
+                passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                passStatus1.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.eye_closed));
+            }
+            status1 = !status1;
+        });
+        passStatus2.setOnClickListener(v -> {
+            if(status2){
+                passwordRepText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                passStatus2.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.eye));
+            } else {
+                passwordRepText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                passStatus2.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.eye_closed));
+            }
+            status2 = !status2;
         });
         return view;
     }
-    private void change(Fragment f){
-        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
-        ft.replace(R.id.accountEntranceView,f);
-        ft.commit();
-    }
-    private void err(){
-        int redColor = ContextCompat.getColor(requireContext(), R.color.red);
-        ColorStateList errorColorStateList = new ColorStateList(
-                new int[][] {new int[] { android.R.attr.state_enabled }, new int[] { -android.R.attr.state_enabled }},
-                new int[] {redColor, redColor}
-        );
-        error.setVisibility(VISIBLE);
-        loginText.setText("");
-        passwordText.setText("");
-        loginHolder.setBoxStrokeColorStateList(errorColorStateList);
-        passwordHolder.setBoxStrokeColorStateList(errorColorStateList);
-        error.setTextColor(redColor);
-    }
     private void findAll(View view){
-        enter = view.findViewById(R.id.enterButton_Registration);
-        create = view.findViewById(R.id.createButton_Registration);
+        create = view.findViewById(R.id.regButton);
         loginText = view.findViewById(R.id.loginInput_Registration);
-        passwordText = view.findViewById(R.id.passwordInput_Registration);
-        loginHolder = view.findViewById(R.id.loginHolderView_Registration);
-        passwordHolder = view.findViewById(R.id.passwordHolderView_Registration);
-        error = view.findViewById(R.id.errorText_Registration);
+        passwordText = view.findViewById(R.id.password1Input_Registration);
+        passwordRepText = view.findViewById(R.id.password2Input_Registration);
+        passStatus1 = view.findViewById(R.id.pass1Status_Registration);
+        passStatus2 = view.findViewById(R.id.pass2Status_Registration);
     }
 }

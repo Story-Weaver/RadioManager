@@ -88,8 +88,8 @@ public class    FilterActivity extends AppCompatActivity {
     private void setupSortOptions() {
         List<String> sortOptions = new ArrayList<>();
         sortOptions.add("Никак");
-        sortOptions.add("По имени");
         sortOptions.add("По популярности");
+        sortOptions.add("По имени");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sortOptions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

@@ -8,14 +8,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -87,11 +91,14 @@ public class HomeFragment extends Fragment {
         radioService = RadioService.getInstance(getContext(),(MainActivity) requireContext());
         findAllId(view);
         getData();
-        Glide.with(requireContext()).load("https://bigkarta.ru/belarus/belarus-dorogi-small.jpg").into(map);
+
         if(settingsRepository.getMapSetting(userRepository.getUserIdInSystem()) == 1){
             mapView.setVisibility(GONE);
+            map.setVisibility(GONE);
         } else {
             mapView.setVisibility(VISIBLE);
+            map.setVisibility(VISIBLE);
+            map.setImageDrawable(AppCompatResources.getDrawable(requireContext(),R.drawable.frame4));
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new HomeListAdapter(getContext(), radioStationList, position -> {
@@ -104,6 +111,10 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getContext(), TimerActivity.class);
             startActivity(intent);
         });
+
+            map.setOnClickListener(v -> openGoogleMaps(radioStationRepository.getActiveStation().getGeoLat(),radioStationRepository.getActiveStation().getGeoLong()));
+
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -120,6 +131,20 @@ public class HomeFragment extends Fragment {
             }
         });
         return view;
+    }
+    private void openGoogleMaps(double latitude, double longitude) {
+        // Формируем URL для Google Maps с маркером
+        String mapUrl = "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude + "&zoom=13";
+        // zoom=13 — уровень масштабирования, можно изменить
+
+        try {
+            // Создаем Intent для открытия URL в браузере или приложении Google Maps
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "Unable to open Google Maps", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
     private void getData() {
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());

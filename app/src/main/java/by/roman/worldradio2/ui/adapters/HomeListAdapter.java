@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 
 
@@ -51,6 +53,10 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         RadioStation card = cards.get(position);
         holder.nameStation.setText(card.getName());
         holder.nameStation.setSelected(true);
+        Glide.with(context)
+                .load("https://flagsapi.com/"+ card.getCountryCode() +"/flat/64.png")
+                .into(holder.flag);
+        holder.country.setText(card.getCountry());
         Glide.with(context)
                 .load(card.getFavicon())
                 .into(holder.logoStation);
@@ -102,14 +108,16 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
         radioStationRepository.removeIsPlaying();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameStation;
-        ImageView logoStation, sound;
+        TextView nameStation,country;
+        ImageView logoStation, sound,flag;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameStation = itemView.findViewById(R.id.nameStationView_Home);
             logoStation = itemView.findViewById(R.id.logoStationView_Home);
             sound = itemView.findViewById(R.id.soundView_Home);
+            flag = itemView.findViewById(R.id.flagStation_CardHome);
+            country = itemView.findViewById(R.id.countryName_CardHome);
         }
     }
 }

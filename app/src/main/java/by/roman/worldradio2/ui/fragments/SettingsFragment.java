@@ -5,11 +5,13 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Switch;
@@ -29,6 +31,7 @@ import by.roman.worldradio2.R;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.SettingsRepository;
 import by.roman.worldradio2.data.repository.UserRepository;
+import by.roman.worldradio2.ui.activities.MainActivity;
 import by.roman.worldradio2.ui.elements.view.AnimatedExpandableListView;
 
 public class SettingsFragment extends Fragment {
@@ -36,14 +39,13 @@ public class SettingsFragment extends Fragment {
     protected UserRepository userRepository;
     protected SettingsRepository settingsRepository;
     private ExampleAdapter adapter;
-    private ImageView editAccount;
-    private ImageView exit;
+    private Button exit;
+    private Button del;
     private TextView nameAccount;
 
     @Override
     public void onResume(){
         super.onResume();
-        //editAccount.setEnabled(true);
     }
     @Nullable
     @Override
@@ -56,8 +58,8 @@ public class SettingsFragment extends Fragment {
 
         listView = rootView.findViewById(R.id.listView);
         nameAccount = rootView.findViewById(R.id.nameAccountView);
-        //editAccount = rootView.findViewById(R.id);
-        //exit = rootView.findViewById(R.id);
+        exit = rootView.findViewById(R.id.button_exit);
+        del = rootView.findViewById(R.id.button_del);
 
         adapter = new ExampleAdapter(requireContext());
 
@@ -80,17 +82,30 @@ public class SettingsFragment extends Fragment {
             }
             return true;
         });
-//        exit.setOnClickListener(v -> {
-//            editAccount.setEnabled(false);
-//            userRepository.removeUserFromSystem();
-//            //TODO: reboot
-//        });
-//
-//        editAccount.setOnClickListener(v -> {
-//            editAccount.setEnabled(false);
-//
-//        });
+        exit.setOnClickListener(v -> {
+            userRepository.removeUserFromSystem();
+            restartApplication();
+        });
+
+        del.setOnClickListener(v -> {
+            userRepository.deleteUser(userRepository.getUserIdInSystem());
+            restartApplication();
+        });
         return rootView;
+    }
+    private void restartApplication() {
+        // Получаем Intent для стартовой активности приложения
+        Intent intent = new Intent(requireContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Очищаем стек активностей
+
+        // Завершаем текущий процесс
+        requireActivity().finish();
+
+        // Запускаем приложение заново
+        startActivity(intent);
+
+        // Завершаем процесс текущего приложения
+        System.exit(0); // или android.os.Process.killProcess(android.os.Process.myPid());
     }
     private static class GroupItem {
         String title;

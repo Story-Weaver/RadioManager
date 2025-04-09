@@ -1,8 +1,11 @@
 package by.roman.worldradio2.data.repository;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -14,8 +17,26 @@ public class UserRepository {
     public UserRepository(SQLiteDatabase db) {
         this.db = db;
     }
+    private long getNextUserId() {
+        long nextId = 1;
+        String query = "SELECT MAX(" + DatabaseHelper.COLUMN_ID_USER + ") FROM " + DatabaseHelper.TABLE_USER;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int maxId = cursor.getInt(0);
+            if (maxId > 0) {
+                nextId = maxId + 1;
+            }
+            cursor.close();
+        } else {
+            Log.d(TAG, "Table is empty or cursor is null, starting with id = 1");
+        }
+
+        return nextId;
+    }
     public long addUser(@NonNull UserDTO dto) {
+        long newId = getNextUserId();
         ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_ID_USER, newId);
         values.put(DatabaseHelper.COLUMN_LOGIN_USER, dto.getLogin());
         values.put(DatabaseHelper.COLUMN_PASSWORD_USER,dto.getPassword());
         values.put(DatabaseHelper.COLUMN_IN_SYSTEM_USER, dto.getInSystem());

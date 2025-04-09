@@ -3,7 +3,7 @@
     <string name="app_name">RadioManager</string>
     <string name="country_filter">Страна</string>
     <string name="lang_filter">Язык</string>
-    <string name="style_filter">Стиль</string>
+    <string name="style_filter">Теги</string>
     <string name="sort_filter">Сортировка</string>
     <string name="confirm_filter">Применить</string>
     <string name="entrance">Вход</string>

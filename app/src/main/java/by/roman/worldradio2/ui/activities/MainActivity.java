@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
         button_home.setOnClickListener(v -> FragmentChange(new HomeFragment(), 2));
         button_top.setOnClickListener(v -> FragmentChange(new TopFragment(), 3));
         button_settings.setOnClickListener(v -> FragmentChange(new SettingsFragment(), 4));
-        //button_settings.setOnClickListener(v -> FragmentChange(new testFragment(), 4));
 
         RadioStation station = radioStationRepository.getActiveStation();
         if (station != null && station.getIsPlaying() == 1) {
@@ -194,14 +193,11 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
                 smallPlayer.setLayoutParams(layoutParams); // Применяем новые параметры
             }
         });
-
-        // После завершения анимации скрываем большой плеер
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                // smallPlayer уже видим, так что это не нужно делать снова
-                largePlayer.setVisibility(INVISIBLE); // Скрываем большой плеер
+                largePlayer.setVisibility(INVISIBLE);
                 smallPlayer.setVisibility(VISIBLE);
             }
         });

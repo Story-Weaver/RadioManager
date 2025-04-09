@@ -3,7 +3,7 @@
     <string name="app_name">RadioManager</string>
     <string name="country_filter">Country</string>
     <string name="lang_filter">Language</string>
-    <string name="style_filter">Style</string>
+    <string name="style_filter">Tags</string>
     <string name="sort_filter">Sort</string>
     <string name="confirm_filter">Confirm</string>
     <string name="entrance">Entrance</string>
