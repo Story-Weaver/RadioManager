@@ -33,6 +33,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.media3.common.util.UnstableApi;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -40,6 +41,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.target.Target;
 
 import by.roman.worldradio2.R;
+import by.roman.worldradio2.RadioManager;
 import by.roman.worldradio2.RadioService;
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.FavoriteRepository;
@@ -47,17 +49,19 @@ import by.roman.worldradio2.data.repository.RadioStationRepository;
 import by.roman.worldradio2.data.repository.UserRepository;
 import by.roman.worldradio2.ui.activities.MainActivity;
 
-public class BottomPlayerFragment extends Fragment {
+@UnstableApi
+public class BottomPlayerFragment extends Fragment implements RadioManager.TrackUpdateListener{
     private static final String ARG_NAME = "name";
     private static final String ARG_FAVICON = "favicon";
     private static final String ARG_UUID = "uuid";
 
     private UserRepository userRepository;
     private FavoriteRepository favoriteRepository;
-
+    private RadioManager radioManager;
     private ImageView smallFavorite;
     private ImageView smallStationLogo;
     private TextView smallStationName;
+    private TextView smallTrack;
     private ImageView smallStatus;
     private ConstraintLayout smallPlayer;
     private ImageView largeFavorite;
@@ -66,6 +70,7 @@ public class BottomPlayerFragment extends Fragment {
     private ImageView largeVolume;
     private ImageView largeEnternet;
     private TextView largeStationName;
+    private TextView largeTrack;
     private ImageView largeStatus;
     private ConstraintLayout largePlayer;
     private ConstraintLayout Player;
@@ -77,7 +82,6 @@ public class BottomPlayerFragment extends Fragment {
     private OnChangedListener mListener;
     private RadioStationRepository radioStationRepository;
     private AudioManager audioManager;
-    private int previousVolume = -1;
     private boolean isMuted = false;
     public static BottomPlayerFragment newInstance(String name, String favicon, String uuid) {
         BottomPlayerFragment fragment = new BottomPlayerFragment();
@@ -114,6 +118,7 @@ public class BottomPlayerFragment extends Fragment {
 
         DatabaseHelper dbHelper = new DatabaseHelper(requireContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
         userRepository = new UserRepository(db);
         favoriteRepository = new FavoriteRepository(db);
     }
@@ -127,10 +132,16 @@ public class BottomPlayerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_player, container, false);
+        radioManager = RadioManager.getInstance(requireContext());
+        radioManager.setTrackUpdateListener(() -> {
+            requireActivity().runOnUiThread(this::updateTrackInfo);
+        });
         findById(view);
         updateImageBasedOnVolume();
         radioService = RadioService.getInstance(getContext(), (MainActivity) requireContext());
         radioService.checkNow();
+        smallTrack.setSelected(true);
+        largeTrack.setSelected(true);
         DatabaseHelper dHelper = new DatabaseHelper(getContext());
         SQLiteDatabase db = dHelper.getWritableDatabase();
         radioStationRepository = new RadioStationRepository(db);
@@ -152,15 +163,14 @@ public class BottomPlayerFragment extends Fragment {
             saveStatus = radioService.statusPlaying();
             Log.e("BottomPlayer", "saveStatus = " + saveStatus);
             updateStatusIcon();
-
         }
+        updateTrackInfo();
         smallFavorite.setOnClickListener(v -> toggleFavorite());
         largeFavorite.setOnClickListener(v -> toggleFavorite());
         smallStatus.setOnClickListener(v -> toggleStatus());
         largeStatus.setOnClickListener(v -> toggleStatus());
         smallPlayer.setOnClickListener(v -> togglePlayer());
         largeBack.setOnClickListener(v -> togglePlayer());
-        largeVolume.setOnClickListener(v -> toggleMute());
         largeEnternet.setOnClickListener(v -> {openUrlInBrowser();largeEnternet.setEnabled(false);});
 
         requireActivity().getContentResolver().registerContentObserver(
@@ -209,24 +219,14 @@ public class BottomPlayerFragment extends Fragment {
             Log.e("BottomPlayer", "Error opening URL: " + e.getMessage());
         }
     }
-    private void toggleMute() {
-        if (!isMuted) {
-            previousVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-            largeVolume.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.mute));
-            isMuted = true;
-        } else {
-            if (previousVolume == -1) {
-                int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                previousVolume = maxVolume / 2;
-            }
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, previousVolume, 0);
-            updateImageBasedOnVolume();
-            isMuted = false;
-        }
+    @Override
+    public void onTrackUpdated(){
+        updateTrackInfo();
     }
-    public void setMuted(boolean muted) {
-        this.isMuted = muted;
+    private void updateTrackInfo() {
+        Log.d("BottomPlayer","update");
+        smallTrack.setText(radioManager.getCurrentTrack());
+        largeTrack.setText(radioManager.getCurrentTrack());
     }
     public void updateImageBasedOnVolume() {
         int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -266,6 +266,7 @@ private void findById(View view) {
         smallStatus = view.findViewById(R.id.play_pause);
         smallPlayer = view.findViewById(R.id.small_player);
         smallPlayer.setVisibility(VISIBLE);
+        smallTrack = view.findViewById(R.id.track_small_player);
 
         largeStationLogo = view.findViewById(R.id.large_station_logo);
         largeStationName = view.findViewById(R.id.large_station_name);
@@ -275,6 +276,7 @@ private void findById(View view) {
         largeVolume = view.findViewById(R.id.large_volume);
         largeEnternet = view.findViewById(R.id.large_enternet);
         largeFavorite = view.findViewById(R.id.large_save_unsave);
+        largeTrack = view.findViewById(R.id.large_track_name);
         Player = view.findViewById(R.id.player_player);
         largeStationLogo.setVisibility(INVISIBLE);
         largePlayer.setVisibility(INVISIBLE);

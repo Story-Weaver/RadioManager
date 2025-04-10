@@ -6,12 +6,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.media3.common.util.UnstableApi;
+
 import java.lang.ref.WeakReference;
 
 import by.roman.worldradio2.data.repository.DatabaseHelper;
 import by.roman.worldradio2.data.repository.RadioStationRepository;
 import by.roman.worldradio2.ui.activities.MainActivity;
 
+@UnstableApi
 public class RadioService {
     private final Context context;
     private final RadioManager radioManager;
@@ -34,7 +37,7 @@ public class RadioService {
     private RadioService(Context context, MainActivity activity) {
         this.context = context.getApplicationContext();
         this.mainActivityRef = new WeakReference<>(activity);  // Используем WeakReference, чтобы избежать утечек памяти
-        this.radioManager = new RadioManager(context);
+        this.radioManager = RadioManager.getInstance(context);
         this.dbHelper = new DatabaseHelper(context);
         this.handler = new Handler(Looper.getMainLooper());
         this.db = dbHelper.getWritableDatabase();
@@ -66,11 +69,6 @@ public class RadioService {
     public boolean statusPlaying(){
         return radioManager.isPlaying();
     }
-    public void stopMonitoring() {
-        isMonitoring = false;
-        handler.removeCallbacks(checkDatabaseRunnable);
-        radioManager.stop();
-    }
     public void checkNow() {
         handler.post(checkDatabaseRunnable);
     }
@@ -79,6 +77,12 @@ public class RadioService {
     }
     public void pause(){
         radioManager.stop();
+    }
+    public String getCurrentTrack() {
+        if (radioManager != null) {
+            return radioManager.getCurrentTrack();
+        }
+        return null;
     }
     private final Runnable checkDatabaseRunnable = new Runnable() {
         @Override

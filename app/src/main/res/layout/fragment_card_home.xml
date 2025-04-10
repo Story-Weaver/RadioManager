@@ -79,7 +79,7 @@
                 android:layout_marginStart="10dp"
                 android:ellipsize="marquee"
                 android:focusable="true"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 android:focusableInTouchMode="true"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"

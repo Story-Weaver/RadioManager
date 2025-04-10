@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +27,7 @@ import by.roman.worldradio2.data.repository.RadioStationRepository;
 import by.roman.worldradio2.ui.activities.MainActivity;
 
 
+@UnstableApi
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHolder> {
     private Context context;
     private List<RadioStation> cards;
@@ -32,6 +35,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     private OnItemClickListener listener;
     private RadioService radioService;
 
+    @OptIn(markerClass = UnstableApi.class)
     public HomeListAdapter(Context context, List<RadioStation> cards, OnItemClickListener listener, RadioStationRepository radioStationRepository) {
         this.context = context;
         this.cards = cards;
@@ -48,6 +52,8 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ViewHo
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
+
+    @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RadioStation card = cards.get(position);

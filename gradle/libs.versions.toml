@@ -21,9 +21,12 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 glide = "com.github.bumptech.glide:glide:4.16.0"
 glide-compiler = "com.github.bumptech.glide:compiler:4.16.0"
-exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version = "2.19.1" }
-exoplayer-ui = { module = "com.google.android.exoplayer:exoplayer-ui", version = "2.19.1" }
-exoplayer-hls = { module = "com.google.android.exoplayer:exoplayer-hls", version = "2.19.1" }
+exoplayer = { module = "androidx.media3:media3-exoplayer", version = "1.6.0" }
+ui = { module = "androidx.media3:media3-ui", version = "1.6.0" }
+exoplayerhls = { module = "androidx.media3:media3-exoplayer-hls", version = "1.6.0" }
+extractor  = { module = "androidx.media3:media3-extractor", version = "1.6.0" }
+
+
 localbroadcastmanager = { group = "androidx.localbroadcastmanager", name = "localbroadcastmanager", version = "1.1.0" }
 lombok = {group = "org.projectlombok",name = "lombok", version = "1.18.30"}
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }

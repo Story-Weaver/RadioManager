@@ -26,6 +26,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.media3.common.util.UnstableApi;
 
 import by.roman.worldradio2.R;
 import by.roman.worldradio2.RadioService;
@@ -42,6 +43,7 @@ import by.roman.worldradio2.ui.fragments.SaveFragment;
 import by.roman.worldradio2.ui.fragments.SettingsFragment;
 import by.roman.worldradio2.ui.fragments.TopFragment;
 
+@UnstableApi
 public class MainActivity extends AppCompatActivity implements BottomPlayerFragment.OnChangedListener{
 
     private int frame = 2;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements BottomPlayerFragm
     private FrameLayout bottomPlayerContainer;
     private RadioStationRepository radioStationRepository;
 
+    @UnstableApi
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
